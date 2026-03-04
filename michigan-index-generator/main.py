@@ -358,7 +358,8 @@ class App(tk.Tk):
 
             self.after(0, lambda: self._done(out.name, data))
         except Exception as ex:
-            self.after(0, lambda: self._error(str(ex)))
+            msg = str(ex)
+            self.after(0, lambda m=msg: self._error(m))
 
     def _done(self, html_path, data):
         self.progress.stop()
