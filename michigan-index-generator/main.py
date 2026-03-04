@@ -1,36 +1,36 @@
 """
 Michigan Index of Authorities Generator
-Reads a DOCX brief directly (no LibreOffice needed), extracts all citations
-with page numbers, and generates a formatted Index of Authorities in the browser.
+Uses docx2pdf (Microsoft Word) + pdfplumber with footer-region cropping
+to get accurate printed page numbers.
 """
 
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-import threading
-import os
-import sys
-import re
-import webbrowser
-import tempfile
+import threading, os, sys, re, webbrowser, tempfile, shutil
 from collections import defaultdict
 
 try:
-    from docx import Document as DocxDocument
-    from lxml import etree
+    import pdfplumber
+    from docx2pdf import convert as docx2pdf_convert
 except ImportError as e:
     root = tk.Tk(); root.withdraw()
-    messagebox.showerror("Missing dependency", str(e))
+    messagebox.showerror("Missing dependency",
+        f"{e}\n\nRun:  pip install pdfplumber docx2pdf")
     sys.exit(1)
 
-REPORTER = r'(?:Mich\.?\s*App\.?|Mich\.?|U\.?S\.?|NW[23]?d|S\.?\s*Ct\.?|SCt\.?)'
-IN_RE_PAT = re.compile(r'(?<![A-Za-z])(In\s+re\s+[A-Z][A-Za-z/]+(?:\s+[A-Z][A-Za-z]+)?(?:\s+Minors)?)\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
-V_IN_RE_PAT = re.compile(r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,5}\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z]+){0,5}\s*\(In\s+re\s+[A-Za-z/]+\))\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
+# ── Regex patterns ────────────────────────────────────────────────────────────
+REPORTER     = r'(?:Mich\.?\s*App\.?|Mich\.?|U\.?S\.?|NW[23]?d|S\.?\s*Ct\.?|SCt\.?)'
+IN_RE_PAT    = re.compile(r'(?<![A-Za-z])(In\s+re\s+[A-Z][A-Za-z/]+(?:\s+[A-Z][A-Za-z]+)?(?:\s+Minors)?)\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
+V_IN_RE_PAT  = re.compile(r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,5}\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z]+){0,5}\s*\(In\s+re\s+[A-Za-z/]+\))\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
 SIMPLE_V_PAT = re.compile(r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z\.]+){0,3}\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z\.]+){0,3})\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
-MCL_PAT  = re.compile(r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)')
-MCR_PAT  = re.compile(r'(MCR\s+\d+\.\d+(?:\([A-Za-z0-9]+\))*)')
-SKIP_PAT = re.compile(r'TABLE OF CONTENTS|INDEX OF AUTHORITIES|CERTIFICATE OF COMP', re.IGNORECASE)
-BODY_PAT = re.compile(r'STATEMENT OF FACTS|STATEMENT OF JURISDICTION|ARGUMENT', re.IGNORECASE)
-MCL_SKIP = re.compile(r'MCL\s+7\.\d')
+MCL_PAT      = re.compile(r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)')
+MCR_PAT      = re.compile(r'(MCR\s+\d+\.\d+(?:\([A-Za-z0-9]+\))*)')
+SKIP_PAT     = re.compile(r'TABLE OF CONTENTS|INDEX OF AUTHORITIES|CERTIFICATE OF COMP', re.IGNORECASE)
+BODY_PAT     = re.compile(r'STATEMENT OF FACTS|STATEMENT OF JURISDICTION|ARGUMENT', re.IGNORECASE)
+MCL_SKIP     = re.compile(r'MCL\s+7\.\d')
+ROMAN_RE     = re.compile(r'^(i{1,3}|iv|v?i{0,3}|ix|x{1,3})$', re.IGNORECASE)
+ARABIC_RE    = re.compile(r'^\d+$')
+
 CANON_NAMES = {
     'Family Independence Agency v Boursaw (In re Boursaw)': 'Family Independent Agency v Boursaw (In re Boursaw)',
     'Family Independence Agency v Sours (In re Sours)':    'Family Independent Agency v Sours (In re Sours)',
@@ -42,93 +42,117 @@ def clean_name(raw):
     return CANON_NAMES.get(raw, raw)
 
 def sort_pages(pages):
-    roman = {'i':1,'ii':2,'iii':3,'iv':4,'v':5,'vi':6}
+    roman = {'i':1,'ii':2,'iii':3,'iv':4,'v':5,'vi':6,'vii':7,'viii':8,'ix':9,'x':10}
     def key(p):
-        if p.lower() in roman: return (0, roman[p.lower()])
+        pl = p.lower()
+        if pl in roman: return (0, roman[pl])
         try: return (1, int(p))
         except: return (2, p)
     return sorted(pages, key=key)
 
-def _has_pagebreak(para_elem):
-    xml = etree.tostring(para_elem, encoding='unicode')
-    return 'w:type="page"' in xml or 'lastRenderedPageBreak' in xml
+# ── Get printed page number from PDF footer region ───────────────────────────
+def get_page_label(pdf_page):
+    """
+    Crop the bottom 10% of the page (where Word puts footers) and
+    look for a roman numeral or arabic number there.
+    Falls back to scanning all lines bottom-up if footer crop finds nothing.
+    """
+    h = float(pdf_page.height)
+    w = float(pdf_page.width)
 
-def extract_pages_from_docx(docx_path):
-    doc = DocxDocument(docx_path)
-    pages_text = []
-    current = []
-    for para in doc.paragraphs:
-        if _has_pagebreak(para._element) and current:
-            pages_text.append('\n'.join(current))
-            current = []
-        text = para.text.strip()
-        if text:
-            current.append(text)
-    if current:
-        pages_text.append('\n'.join(current))
+    # Try footer strip first (bottom 10% of page)
+    footer = pdf_page.crop((0, h * 0.90, w, h))
+    footer_text = footer.extract_text() or ''
+    for line in footer_text.split('\n'):
+        token = line.strip()
+        if ROMAN_RE.match(token):
+            return token.lower()
+        if ARABIC_RE.match(token) and 1 <= int(token) <= 999:
+            return token
 
-    # Fallback: form-feed split
-    if len(pages_text) <= 1:
-        full = '\n'.join(p.text for p in doc.paragraphs)
-        if '\x0c' in full:
-            pages_text = full.split('\x0c')
+    # Fallback: walk all extracted lines bottom-up
+    full_text = pdf_page.extract_text() or ''
+    lines = [l.strip() for l in full_text.split('\n') if l.strip()]
+    for line in reversed(lines):
+        if ROMAN_RE.match(line):
+            return line.lower()
+        if ARABIC_RE.match(line) and 1 <= int(line) <= 999:
+            return line
 
-    roman_seq = ['i','ii','iii','iv','v','vi','vii','viii','ix','x']
-    roman_idx = arabic_idx = 0
-    in_body = False
-    labeled = []
-    for text in pages_text:
-        if not text.strip():
-            continue
-        if BODY_PAT.search(text):
-            in_body = True
-        if in_body:
-            arabic_idx += 1
-            label = str(arabic_idx)
-        else:
-            label = roman_seq[roman_idx] if roman_idx < len(roman_seq) else str(roman_idx+1)
-            roman_idx += 1
-        labeled.append((label, text))
-    return labeled
+    return None   # unknown — skip this page
 
+
+# ── Core extraction ───────────────────────────────────────────────────────────
 def extract_index(docx_path, progress_cb=None):
-    if progress_cb: progress_cb("Reading document…")
-    pages = extract_pages_from_docx(docx_path)
-    if progress_cb: progress_cb(f"Scanning {len(pages)} pages for citations…")
+    if progress_cb: progress_cb("Converting DOCX → PDF via Microsoft Word…")
 
-    cases = {}
+    tmp_dir  = tempfile.mkdtemp()
+    pdf_path = os.path.join(tmp_dir, "brief.pdf")
+
+    try:
+        docx2pdf_convert(docx_path, pdf_path)
+    except Exception as e:
+        raise RuntimeError(
+            f"Could not convert DOCX to PDF.\n"
+            f"Make sure Microsoft Word is installed and not currently open.\n\n{e}"
+        )
+
+    if not os.path.exists(pdf_path):
+        raise RuntimeError("PDF was not created. Is Microsoft Word installed?")
+
+    if progress_cb: progress_cb("Scanning pages for citations…")
+
+    cases    = {}
     statutes = defaultdict(set)
     rules    = defaultdict(set)
     mcl_bare = defaultdict(set)
     in_skip  = False
 
-    for page_label, raw in pages:
-        if SKIP_PAT.search(raw):
-            in_skip = not bool(BODY_PAT.search(raw))
-        if in_skip:
-            continue
-        flat = re.sub(r'[\n\r]+', ' ', raw)
-        flat = re.sub(r'\s+', ' ', flat)
-        seen = []
-        for pat in [V_IN_RE_PAT, IN_RE_PAT, SIMPLE_V_PAT]:
-            for m in pat.finditer(flat):
-                if not any(m.start() < e and m.end() > s for s, e in seen):
-                    name = clean_name(m.group(1))
-                    cite = m.group(2).strip().rstrip('.,;')
-                    if name not in cases:
-                        cases[name] = {'pages': set(), 'cite': cite}
-                    cases[name]['pages'].add(page_label)
-                    seen.append((m.start(), m.end()))
-        for m in MCL_PAT.finditer(flat):
-            val = m.group(1).strip()
-            if not MCL_SKIP.match(val):
-                if re.match(r'MCL\s+712A\.19b$', val):
-                    mcl_bare[val].add(page_label)
-                else:
-                    statutes[val].add(page_label)
-        for m in MCR_PAT.finditer(flat):
-            rules[m.group(1).strip()].add(page_label)
+    with pdfplumber.open(pdf_path) as pdf:
+        total = len(pdf.pages)
+        for i, page in enumerate(pdf.pages):
+            if progress_cb and i % 5 == 0:
+                progress_cb(f"Scanning page {i+1} of {total}…")
 
+            raw   = page.extract_text() or ''
+            label = get_page_label(page)
+
+            if label is None:
+                continue   # can't determine page number, skip
+
+            if SKIP_PAT.search(raw):
+                in_skip = not bool(BODY_PAT.search(raw))
+            if in_skip:
+                continue
+
+            flat = re.sub(r'[\n\r]+', ' ', raw)
+            flat = re.sub(r'\s+',    ' ', flat)
+
+            seen = []
+            for pat in [V_IN_RE_PAT, IN_RE_PAT, SIMPLE_V_PAT]:
+                for m in pat.finditer(flat):
+                    if not any(m.start() < e and m.end() > s for s, e in seen):
+                        name = clean_name(m.group(1))
+                        cite = m.group(2).strip().rstrip('.,;')
+                        if name not in cases:
+                            cases[name] = {'pages': set(), 'cite': cite}
+                        cases[name]['pages'].add(label)
+                        seen.append((m.start(), m.end()))
+
+            for m in MCL_PAT.finditer(flat):
+                val = m.group(1).strip()
+                if not MCL_SKIP.match(val):
+                    if re.match(r'MCL\s+712A\.19b$', val):
+                        mcl_bare[val].add(label)
+                    else:
+                        statutes[val].add(label)
+
+            for m in MCR_PAT.finditer(flat):
+                rules[m.group(1).strip()].add(label)
+
+    shutil.rmtree(tmp_dir, ignore_errors=True)
+
+    # Collapse bare MCL prefix pages into subsections
     mcl_keys = list(statutes.keys())
     filtered_statutes = {}
     for k in sorted(mcl_keys, key=len, reverse=True):
@@ -148,6 +172,7 @@ def extract_index(docx_path, progress_cb=None):
         'rules':    {k: sort_pages(v) for k, v in sorted(rules.items())},
     }
 
+# ── HTML output ───────────────────────────────────────────────────────────────
 def build_html(data):
     def ehtml(name, ps, italic=False):
         n = f'<em>{name}</em>' if italic else name
@@ -165,7 +190,7 @@ def build_html(data):
     for name, pages in data['rules'].items():
         ps = ', '.join(pages); rh += ehtml(name, ps); rj.append(ejs(name, ps))
 
-    cj_str = ',\n'.join(cj); sj_str = ',\n'.join(sj); rj_str = ',\n'.join(rj)
+    cj_s = ',\n'.join(cj); sj_s = ',\n'.join(sj); rj_s = ',\n'.join(rj)
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Index of Authorities</title>
@@ -193,9 +218,9 @@ h2{{font-size:12pt;font-weight:normal;text-decoration:underline;margin:20px 0 8p
 <h2>MICHIGAN COURT RULES</h2>
 {rh}
 <script>
-const CASES=[{cj_str}];
-const STATS=[{sj_str}];
-const RULES=[{rj_str}];
+const CASES=[{cj_s}];
+const STATS=[{sj_s}];
+const RULES=[{rj_s}];
 function fmt(n,p){{return n+'.'.repeat(Math.max(3,70-n.length-p.length))+p;}}
 function copyIndex(){{
   const L=['INDEX OF AUTHORITIES','','CASE LAW',''];
@@ -213,6 +238,7 @@ function copyIndex(){{
 }}
 </script></body></html>"""
 
+# ── GUI ───────────────────────────────────────────────────────────────────────
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
