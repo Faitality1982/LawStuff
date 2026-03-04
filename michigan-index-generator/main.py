@@ -32,11 +32,11 @@ SIMPLE_V_PAT = re.compile(
     r'\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z\.]+){0,3})'
     r'\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
 
-# MCL: capture full subsection spec
+# MCL: capture full subsection spec (no lookahead — we handle lists in code)
 MCL_PAT      = re.compile(
     r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?'
-    r'(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)'
-    r'(?!\s*,\s*\()')          # ← NOT followed by ", (" (list continuation)
+    r'(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)')
+MCL_LIST_FOLLOW = re.compile(r'\s*,\s*\(')   # ", (" after match → list form
 
 MCR_PAT      = re.compile(r'(MCR\s+\d+\.\d+(?:\([A-Za-z0-9]+\))*)')
 
@@ -175,7 +175,13 @@ def extract_index(docx_path, progress_cb=None):
                 val = m.group(1).strip()
                 if MCL_SKIP.match(val):
                     continue
-                if re.match(r'MCL\s+712A\.19b$', val):
+                # List form: "MCL 712A.19b(3)(a), (b), ..." → record bare parent only
+                is_list = bool(MCL_LIST_FOLLOW.match(flat[m.end():]))
+                if is_list:
+                    bare_m = re.match(r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?)', val)
+                    if bare_m:
+                        mcl_bare[bare_m.group(1).strip()].add(label)
+                elif re.match(r'MCL\s+712A\.19b$', val):
                     mcl_bare[val].add(label)
                 else:
                     statutes[val].add(label)
