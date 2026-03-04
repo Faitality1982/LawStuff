@@ -1,7 +1,6 @@
 """
 Michigan Index of Authorities Generator
-Uses docx2pdf (Microsoft Word) + pdfplumber with footer-region cropping
-to get accurate printed page numbers.
+Uses docx2pdf (Microsoft Word) + pdfplumber with footer-region page detection.
 """
 
 import tkinter as tk
@@ -20,20 +19,47 @@ except ImportError as e:
 
 # ── Regex patterns ────────────────────────────────────────────────────────────
 REPORTER     = r'(?:Mich\.?\s*App\.?|Mich\.?|U\.?S\.?|NW[23]?d|S\.?\s*Ct\.?|SCt\.?)'
-IN_RE_PAT    = re.compile(r'(?<![A-Za-z])(In\s+re\s+[A-Z][A-Za-z/]+(?:\s+[A-Z][A-Za-z]+)?(?:\s+Minors)?)\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
-V_IN_RE_PAT  = re.compile(r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,5}\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z]+){0,5}\s*\(In\s+re\s+[A-Za-z/]+\))\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
-SIMPLE_V_PAT = re.compile(r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z\.]+){0,3}\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z\.]+){0,3})\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
-MCL_PAT      = re.compile(r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)')
+IN_RE_PAT    = re.compile(
+    r'(?<![A-Za-z])(In\s+re\s+[A-Z][A-Za-z/]+(?:\s+[A-Z][A-Za-z]+)?(?:\s+Minors)?)'
+    r'\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
+V_IN_RE_PAT  = re.compile(
+    r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,5}'
+    r'\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z]+){0,5}'
+    r'\s*\(In\s+re\s+[A-Za-z/]+\))'
+    r'\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
+SIMPLE_V_PAT = re.compile(
+    r'(?<![A-Za-z])([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z\.]+){0,3}'
+    r'\s+v[s]?\.?\s+[A-Z][A-Za-z]+(?:\s+[A-Z]?[A-Za-z\.]+){0,3})'
+    r'\s*,\s*(\d+\s+' + REPORTER + r'[^(]{0,150}\(\d{4}\))')
+
+# MCL: capture full subsection spec
+MCL_PAT      = re.compile(
+    r'(MCL\s+\d+[A-Z]?\.\d+[A-Za-z]?'
+    r'(?:\(\d+\))?(?:\([a-z]\))?(?:\([ivxIVX]+\))?)'
+    r'(?!\s*,\s*\()')          # ← NOT followed by ", (" (list continuation)
+
 MCR_PAT      = re.compile(r'(MCR\s+\d+\.\d+(?:\([A-Za-z0-9]+\))*)')
-SKIP_PAT     = re.compile(r'TABLE OF CONTENTS|INDEX OF AUTHORITIES|CERTIFICATE OF COMP', re.IGNORECASE)
-BODY_PAT     = re.compile(r'STATEMENT OF FACTS|STATEMENT OF JURISDICTION|ARGUMENT', re.IGNORECASE)
+
+# Pages to skip entirely
+SKIP_PAT     = re.compile(
+    r'TABLE OF CONTENTS|INDEX OF AUTHORITIES|CERTIFICATE OF COMP'
+    r'|STATEMENT OF QUESTIONS INVOLVED',
+    re.IGNORECASE)
+# Pages that end the skip zone
+BODY_PAT     = re.compile(
+    r'STATEMENT OF FACTS|STATEMENT OF JURISDICTION', re.IGNORECASE)
+# Argument section starts body (but don't use plain "ARGUMENT" alone — too easy to false-trigger)
+ARG_PAT      = re.compile(r'^\s*ARGUMENT\s*$', re.MULTILINE)
+
 MCL_SKIP     = re.compile(r'MCL\s+7\.\d')
 ROMAN_RE     = re.compile(r'^(i{1,3}|iv|v?i{0,3}|ix|x{1,3})$', re.IGNORECASE)
 ARABIC_RE    = re.compile(r'^\d+$')
 
 CANON_NAMES = {
-    'Family Independence Agency v Boursaw (In re Boursaw)': 'Family Independent Agency v Boursaw (In re Boursaw)',
-    'Family Independence Agency v Sours (In re Sours)':    'Family Independent Agency v Sours (In re Sours)',
+    'Family Independence Agency v Boursaw (In re Boursaw)':
+        'Family Independent Agency v Boursaw (In re Boursaw)',
+    'Family Independence Agency v Sours (In re Sours)':
+        'Family Independent Agency v Sours (In re Sours)',
 }
 
 def clean_name(raw):
@@ -52,35 +78,26 @@ def sort_pages(pages):
 
 # ── Get printed page number from PDF footer region ───────────────────────────
 def get_page_label(pdf_page):
-    """
-    Crop the bottom 10% of the page (where Word puts footers) and
-    look for a roman numeral or arabic number there.
-    Falls back to scanning all lines bottom-up if footer crop finds nothing.
-    """
     h = float(pdf_page.height)
     w = float(pdf_page.width)
 
-    # Try footer strip first (bottom 10% of page)
+    # Crop bottom 10% where Word puts the footer page number
     footer = pdf_page.crop((0, h * 0.90, w, h))
-    footer_text = footer.extract_text() or ''
-    for line in footer_text.split('\n'):
+    for line in (footer.extract_text() or '').split('\n'):
         token = line.strip()
         if ROMAN_RE.match(token):
             return token.lower()
         if ARABIC_RE.match(token) and 1 <= int(token) <= 999:
             return token
 
-    # Fallback: walk all extracted lines bottom-up
-    full_text = pdf_page.extract_text() or ''
-    lines = [l.strip() for l in full_text.split('\n') if l.strip()]
-    for line in reversed(lines):
+    # Fallback: bottom-up full-page scan
+    for line in reversed([(l.strip()) for l in
+                          (pdf_page.extract_text() or '').split('\n') if l.strip()]):
         if ROMAN_RE.match(line):
             return line.lower()
         if ARABIC_RE.match(line) and 1 <= int(line) <= 999:
             return line
-
-    return None   # unknown — skip this page
-
+    return None
 
 # ── Core extraction ───────────────────────────────────────────────────────────
 def extract_index(docx_path, progress_cb=None):
@@ -94,8 +111,7 @@ def extract_index(docx_path, progress_cb=None):
     except Exception as e:
         raise RuntimeError(
             f"Could not convert DOCX to PDF.\n"
-            f"Make sure Microsoft Word is installed and not currently open.\n\n{e}"
-        )
+            f"Make sure Microsoft Word is installed and not currently open.\n\n{e}")
 
     if not os.path.exists(pdf_path):
         raise RuntimeError("PDF was not created. Is Microsoft Word installed?")
@@ -106,7 +122,10 @@ def extract_index(docx_path, progress_cb=None):
     statutes = defaultdict(set)
     rules    = defaultdict(set)
     mcl_bare = defaultdict(set)
-    in_skip  = False
+
+    # Track skip state: skip front-matter sections except jurisdiction
+    in_skip   = False
+    body_seen = False
 
     with pdfplumber.open(pdf_path) as pdf:
         total = len(pdf.pages)
@@ -116,18 +135,30 @@ def extract_index(docx_path, progress_cb=None):
 
             raw   = page.extract_text() or ''
             label = get_page_label(page)
-
             if label is None:
-                continue   # can't determine page number, skip
+                continue
 
-            if SKIP_PAT.search(raw):
-                in_skip = not bool(BODY_PAT.search(raw))
+            # --- Skip-zone management ---
+            # Once we've seen body content, never skip again
+            if BODY_PAT.search(raw) or ARG_PAT.search(raw):
+                body_seen = True
+                in_skip   = False
+
+            if not body_seen:
+                if SKIP_PAT.search(raw):
+                    in_skip = True
+                # Statement of Jurisdiction (page iii) contains MCR/MCL citations
+                # we DO want — let it through
+                if re.search(r'STATEMENT OF JURISDICTION', raw, re.IGNORECASE):
+                    in_skip = False
+
             if in_skip:
                 continue
 
             flat = re.sub(r'[\n\r]+', ' ', raw)
             flat = re.sub(r'\s+',    ' ', flat)
 
+            # ── Cases ──
             seen = []
             for pat in [V_IN_RE_PAT, IN_RE_PAT, SIMPLE_V_PAT]:
                 for m in pat.finditer(flat):
@@ -139,20 +170,23 @@ def extract_index(docx_path, progress_cb=None):
                         cases[name]['pages'].add(label)
                         seen.append((m.start(), m.end()))
 
+            # ── Statutes ──
             for m in MCL_PAT.finditer(flat):
                 val = m.group(1).strip()
-                if not MCL_SKIP.match(val):
-                    if re.match(r'MCL\s+712A\.19b$', val):
-                        mcl_bare[val].add(label)
-                    else:
-                        statutes[val].add(label)
+                if MCL_SKIP.match(val):
+                    continue
+                if re.match(r'MCL\s+712A\.19b$', val):
+                    mcl_bare[val].add(label)
+                else:
+                    statutes[val].add(label)
 
+            # ── Court Rules ──
             for m in MCR_PAT.finditer(flat):
                 rules[m.group(1).strip()].add(label)
 
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # Collapse bare MCL prefix pages into subsections
+    # Collapse bare MCL prefix: merge its pages INTO subsections, keep it too
     mcl_keys = list(statutes.keys())
     filtered_statutes = {}
     for k in sorted(mcl_keys, key=len, reverse=True):
@@ -163,46 +197,65 @@ def extract_index(docx_path, progress_cb=None):
             for o in mcl_keys:
                 if o != k and o.startswith(k+'('):
                     statutes[o].update(statutes[k])
+    # Always keep the bare 712A.19b entry (it represents the statute chapter itself)
     for k, v in mcl_bare.items():
         filtered_statutes[k] = v
 
     return {
-        'cases':    {k: {'pages': sort_pages(v['pages']), 'cite': v['cite']} for k, v in sorted(cases.items())},
+        'cases':    {k: {'pages': sort_pages(v['pages']), 'cite': v['cite']}
+                     for k, v in sorted(cases.items())},
         'statutes': {k: sort_pages(v) for k, v in sorted(filtered_statutes.items())},
         'rules':    {k: sort_pages(v) for k, v in sorted(rules.items())},
     }
 
 # ── HTML output ───────────────────────────────────────────────────────────────
 def build_html(data):
-    def ehtml(name, ps, italic=False):
-        n = f'<em>{name}</em>' if italic else name
-        return f'<div class="entry"><span class="entry-name">{n}</span><span class="dots"></span><span class="pages">{ps}</span></div>\n'
-    def ejs(name, ps):
-        return f"    ['{name.replace(chr(39), chr(92)+chr(39))}', '{ps}']"
+    def ehtml(display_name, ps, italic=False):
+        n = f'<em>{display_name}</em>' if italic else display_name
+        return (f'<div class="entry">'
+                f'<span class="entry-name">{n}</span>'
+                f'<span class="dots"></span>'
+                f'<span class="pages">{ps}</span>'
+                f'</div>\n')
+    def ejs(display_name, ps):
+        safe = display_name.replace("'", "\\'")
+        return f"    ['{safe}', '{ps}']"
 
     ch, cj = '', []
     for name, v in data['cases'].items():
-        ps = ', '.join(v['pages']); ch += ehtml(name, ps, True); cj.append(ejs(name, ps))
+        ps = ', '.join(v['pages'])
+        # Full entry: "Name, Citation"
+        display = f"{name}, {v['cite']}" if v['cite'] else name
+        ch += ehtml(display, ps, italic=True)
+        cj.append(ejs(display, ps))
+
     sh, sj = '', []
     for name, pages in data['statutes'].items():
-        ps = ', '.join(pages); sh += ehtml(name, ps); sj.append(ejs(name, ps))
+        ps = ', '.join(pages)
+        sh += ehtml(name, ps)
+        sj.append(ejs(name, ps))
+
     rh, rj = '', []
     for name, pages in data['rules'].items():
-        ps = ', '.join(pages); rh += ehtml(name, ps); rj.append(ejs(name, ps))
+        ps = ', '.join(pages)
+        rh += ehtml(name, ps)
+        rj.append(ejs(name, ps))
 
-    cj_s = ',\n'.join(cj); sj_s = ',\n'.join(sj); rj_s = ',\n'.join(rj)
+    cj_s = ',\n'.join(cj)
+    sj_s = ',\n'.join(sj)
+    rj_s = ',\n'.join(rj)
 
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <title>Index of Authorities</title>
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
-body{{font-family:Arial,sans-serif;font-size:12pt;max-width:740px;margin:30px auto;padding:20px 30px 50px;color:#000;background:#fff}}
+body{{font-family:Arial,sans-serif;font-size:12pt;max-width:760px;margin:30px auto;padding:20px 30px 50px;color:#000;background:#fff}}
 h1{{text-align:center;font-size:13pt;font-weight:bold;text-decoration:underline;margin-bottom:24px;letter-spacing:.04em}}
 h2{{font-size:12pt;font-weight:normal;text-decoration:underline;margin:20px 0 8px}}
 .entry{{display:flex;align-items:baseline;margin-bottom:5px;line-height:1.5}}
-.entry-name{{flex-shrink:0;max-width:75%}}
+.entry-name{{flex-shrink:0;max-width:78%}}
 .entry-name em{{font-style:italic}}
-.dots{{flex:1;border-bottom:1px dotted #000;margin:0 4px 3px;min-width:20px}}
+.dots{{flex:1;border-bottom:1px dotted #000;margin:0 4px 3px;min-width:12px}}
 .pages{{flex-shrink:0;white-space:nowrap}}
 .copy-btn{{display:block;margin:0 0 24px auto;padding:7px 18px;background:#1a3a6b;color:#fff;border:none;border-radius:4px;font-size:11pt;cursor:pointer;font-family:Arial,sans-serif}}
 .copy-btn:hover{{background:#0f2548}}
