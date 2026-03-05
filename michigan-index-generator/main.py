@@ -267,7 +267,7 @@ def extract_index(input_path, progress_cb=None):
             for m in MCR_PAT.finditer(flat):
                 rules[m.group(1).strip()].add(label)
 
-    shutil.rmtree(tmp_dir, ignore_errors=True)
+    if tmp_dir: shutil.rmtree(tmp_dir, ignore_errors=True)
 
     # Collapse bare MCL prefix: merge its pages INTO subsections, keep it too
     mcl_keys = list(statutes.keys())
