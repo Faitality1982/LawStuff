@@ -52,7 +52,7 @@ BODY_PAT     = re.compile(
 ARG_PAT      = re.compile(r'^\s*ARGUMENT\s*$', re.MULTILINE)
 
 MCL_SKIP     = re.compile(r'MCL\s+7\.\d')
-ROMAN_RE     = re.compile(r'^(i{1,3}|iv|v?i{0,3}|ix|x{1,3})$', re.IGNORECASE)
+ROMAN_RE     = re.compile(r'^(x{0,3}(?:ix|iv|v?i{0,3}))$', re.IGNORECASE)
 ARABIC_RE    = re.compile(r'^\d+$')
 
 CANON_NAMES = {
@@ -68,12 +68,18 @@ def clean_name(raw):
     return CANON_NAMES.get(raw, raw)
 
 def sort_pages(pages):
-    roman = {'i':1,'ii':2,'iii':3,'iv':4,'v':5,'vi':6,'vii':7,'viii':8,'ix':9,'x':10}
+    # Roman numeral values — covers i through xx (enough for any brief front matter)
+    ROMAN_VALS = {
+        'i':1,'ii':2,'iii':3,'iv':4,'v':5,'vi':6,'vii':7,'viii':8,'ix':9,
+        'x':10,'xi':11,'xii':12,'xiii':13,'xiv':14,'xv':15,
+        'xvi':16,'xvii':17,'xviii':18,'xix':19,'xx':20,
+    }
     def key(p):
         pl = p.lower()
-        if pl in roman: return (0, roman[pl])
-        try: return (1, int(p))
-        except: return (2, p)
+        rv = ROMAN_VALS.get(pl, 0)
+        if rv:                return (0, rv)   # roman first, in order
+        try:                  return (1, int(p)) # arabic second
+        except ValueError:    return (2, p)
     return sorted(pages, key=key)
 
 # ── Sorting keys per skill spec ───────────────────────────────────────────────
