@@ -172,23 +172,28 @@ def get_page_label(pdf_page):
     return None
 
 # ── Core extraction ───────────────────────────────────────────────────────────
-def extract_index(docx_path, progress_cb=None):
-    if progress_cb: progress_cb("Converting DOCX → PDF via Microsoft Word…")
+def extract_index(input_path, progress_cb=None):
+    ext = os.path.splitext(input_path)[1].lower()
 
-    tmp_dir  = tempfile.mkdtemp()
-    pdf_path = os.path.join(tmp_dir, "brief.pdf")
-
-    try:
-        docx2pdf_convert(docx_path, pdf_path)
-    except Exception as e:
-        raise RuntimeError(
-            f"Could not convert DOCX to PDF.\n"
-            f"Make sure Microsoft Word is installed and not currently open.\n\n{e}")
-
-    if not os.path.exists(pdf_path):
-        raise RuntimeError("PDF was not created. Is Microsoft Word installed?")
-
-    if progress_cb: progress_cb("Scanning pages for citations…")
+    if ext == ".pdf":
+        # Native PDF — use directly
+        pdf_path = input_path
+        tmp_dir  = None
+        if progress_cb: progress_cb("Scanning pages for citations…")
+    else:
+        # DOCX — convert via Microsoft Word first
+        if progress_cb: progress_cb("Converting DOCX → PDF via Microsoft Word…")
+        tmp_dir  = tempfile.mkdtemp()
+        pdf_path = os.path.join(tmp_dir, "brief.pdf")
+        try:
+            docx2pdf_convert(input_path, pdf_path)
+        except Exception as e:
+            raise RuntimeError(
+                f"Could not convert DOCX to PDF.\n"
+                f"Make sure Microsoft Word is installed and not currently open.\n\n{e}")
+        if not os.path.exists(pdf_path):
+            raise RuntimeError("PDF was not created. Is Microsoft Word installed?")
+        if progress_cb: progress_cb("Scanning pages for citations…")
 
     cases    = {}
     statutes = defaultdict(set)
@@ -386,7 +391,7 @@ class App(tk.Tk):
                  font=("Arial",15,"bold"), bg="#1a3a6b", fg="white", pady=14).pack(fill="x")
         frame = tk.Frame(self, bg="#f4f6fb", padx=30, pady=20)
         frame.pack(fill="both", expand=True)
-        tk.Label(frame, text="Select your appellate brief (.docx):",
+        tk.Label(frame, text="Select your appellate brief (.docx or .pdf):",
                  font=("Arial",11), bg="#f4f6fb").pack(anchor="w")
         row = tk.Frame(frame, bg="#f4f6fb"); row.pack(fill="x", pady=8)
         self.path_var = tk.StringVar()
@@ -401,14 +406,19 @@ class App(tk.Tk):
                   bg="#1a3a6b", fg="white", font=("Arial",12,"bold"), relief="flat", padx=20, pady=8).pack()
 
     def _browse(self):
-        path = filedialog.askopenfilename(title="Select DOCX Brief",
-            filetypes=[("Word Documents","*.docx"),("All files","*.*")])
+        path = filedialog.askopenfilename(title="Select Brief",
+            filetypes=[
+                ("Brief files", "*.docx *.pdf"),
+                ("Word Documents", "*.docx"),
+                ("PDF Files", "*.pdf"),
+                ("All files", "*.*"),
+            ])
         if path: self.path_var.set(path)
 
     def _run(self):
         path = self.path_var.get().strip()
         if not path or not os.path.exists(path):
-            messagebox.showerror("No file", "Please select a valid .docx file first.")
+            messagebox.showerror("No file", "Please select a valid .docx or .pdf file first.")
             return
         self.progress.start(12); self.status.set("Working…")
         threading.Thread(target=self._worker, args=(path,), daemon=True).start()
