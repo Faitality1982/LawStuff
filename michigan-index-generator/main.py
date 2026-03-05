@@ -381,7 +381,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Michigan Index of Authorities Generator")
-        self.geometry("560x300")
+        self.geometry("560x330")
         self.resizable(False, False)
         self.configure(bg="#f4f6fb")
         self._build_ui()
@@ -404,6 +404,20 @@ class App(tk.Tk):
         self.progress.pack(pady=(6,12))
         tk.Button(frame, text="Generate Index of Authorities", command=self._run,
                   bg="#1a3a6b", fg="white", font=("Arial",12,"bold"), relief="flat", padx=20, pady=8).pack()
+
+        # ── Donate button ──────────────────────────────────────────────────
+        donate_frame = tk.Frame(self, bg="#f4f6fb", pady=6)
+        donate_frame.pack(fill="x")
+        donate_lbl = tk.Label(
+            donate_frame,
+            text="💛  Support this tool — Donate via PayPal",
+            font=("Arial", 9, "underline"),
+            fg="#0070ba", bg="#f4f6fb", cursor="hand2"
+        )
+        donate_lbl.pack()
+        donate_lbl.bind("<Button-1>",
+            lambda e: webbrowser.open(
+                "https://www.paypal.com/donate/?hosted_button_id=4AM22J9AMNCEE"))
 
     def _browse(self):
         path = filedialog.askopenfilename(title="Select Brief",
