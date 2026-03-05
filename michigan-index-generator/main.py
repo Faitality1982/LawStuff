@@ -76,6 +76,72 @@ def sort_pages(pages):
         except: return (2, p)
     return sorted(pages, key=key)
 
+# ── Sorting keys per skill spec ───────────────────────────────────────────────
+
+def case_sort_key(name):
+    """Sort cases alphabetically by the meaningful part of the name.
+    'In re Archer' → 'archer'
+    'Family Independent Agency v Boursaw (In re Boursaw)' → 'boursaw'
+    'Santosky v Kramer' → 'santosky v kramer'
+    """
+    # "X (In re Y)" → sort by Y
+    m = re.search(r'\(In\s+re\s+([^)]+)\)', name, re.IGNORECASE)
+    if m:
+        return m.group(1).strip().lower()
+    # "In re X" → sort by X
+    m = re.match(r'In\s+re\s+(.*)', name, re.IGNORECASE)
+    if m:
+        return m.group(1).strip().lower()
+    # everything else → full name lowercased
+    return name.lower()
+
+def _subsection_token_key(token):
+    """Convert a subsection token like '(3)', '(c)', '(i)' to a numeric sort tuple."""
+    inner = token.strip('()')
+    # Roman numerals
+    roman = {'i':1,'ii':2,'iii':3,'iv':4,'v':5,'vi':6,'vii':7,'viii':8,'ix':9,'x':10}
+    if inner.lower() in roman:
+        return (2, roman[inner.lower()])
+    # Digits
+    if inner.isdigit():
+        return (0, int(inner))
+    # Letters
+    if inner.isalpha():
+        return (1, ord(inner.lower()))
+    return (3, inner)
+
+def mcl_sort_key(name):
+    """Sort MCL citations numerically: 712A.1 < 712A.19b < 712A.19b(3)(c)(i)."""
+    # Strip "MCL " prefix
+    rest = re.sub(r'^MCL\s+', '', name, flags=re.IGNORECASE).strip()
+    # Split base section from subsections: "712A.19b" + ["(3)","(c)","(i)"]
+    m = re.match(r'(\d+[Aa]?\.\d+[a-zA-Z]?)(.*)', rest)
+    if not m:
+        return (name,)
+    base_str, subs_str = m.group(1), m.group(2)
+    # Parse base: major.minor_alpha  e.g. "712A.19b" → (712, 'A', 19, 'b')
+    bm = re.match(r'(\d+)([A-Za-z]?)\.(\d+)([A-Za-z]?)', base_str)
+    if bm:
+        base_key = (int(bm.group(1)), bm.group(2).upper(),
+                    int(bm.group(3)), bm.group(4).lower())
+    else:
+        base_key = (0, '', 0, '')
+    # Parse subsection tokens
+    tokens = re.findall(r'\([^)]*\)', subs_str)
+    sub_keys = tuple(_subsection_token_key(t) for t in tokens)
+    return base_key + sub_keys
+
+def mcr_sort_key(name):
+    """Sort MCR citations numerically: 3.977 < 3.977(F) < 3.977(F)(1)(b) < 7.203."""
+    rest = re.sub(r'^MCR\s+', '', name, flags=re.IGNORECASE).strip()
+    m = re.match(r'(\d+)\.(\d+)(.*)', rest)
+    if not m:
+        return (name,)
+    major, minor, subs_str = int(m.group(1)), int(m.group(2)), m.group(3)
+    tokens = re.findall(r'\([^)]*\)', subs_str)
+    sub_keys = tuple(_subsection_token_key(t) for t in tokens)
+    return (major, minor) + sub_keys
+
 # ── Get printed page number from PDF footer region ───────────────────────────
 def get_page_label(pdf_page):
     h = float(pdf_page.height)
@@ -209,9 +275,11 @@ def extract_index(docx_path, progress_cb=None):
 
     return {
         'cases':    {k: {'pages': sort_pages(v['pages']), 'cite': v['cite']}
-                     for k, v in sorted(cases.items())},
-        'statutes': {k: sort_pages(v) for k, v in sorted(filtered_statutes.items())},
-        'rules':    {k: sort_pages(v) for k, v in sorted(rules.items())},
+                     for k, v in sorted(cases.items(), key=lambda x: case_sort_key(x[0]))},
+        'statutes': {k: sort_pages(v)
+                     for k, v in sorted(filtered_statutes.items(), key=lambda x: mcl_sort_key(x[0]))},
+        'rules':    {k: sort_pages(v)
+                     for k, v in sorted(rules.items(), key=lambda x: mcr_sort_key(x[0]))},
     }
 
 # ── HTML output ───────────────────────────────────────────────────────────────
