@@ -448,5 +448,293 @@ s5.addNotes(
   "And the promise that follows: no further authentication will be necessary."
 );
 
+// =====================================================================
+// Shared helpers for the Foreword-to-Second-Edition run
+// =====================================================================
+const BLUE_SOFT = "C7DEEC";
+const GREEN_SOFT = "D5E3CE";
+
+function header(s, title, sub, box) {
+  s.addText(title, {
+    x: 0.6, y: 0.35, w: 8.9, h: 0.62,
+    fontFace: HEAD, fontSize: 38, bold: true, color: NAVY, margin: 0, valign: "middle",
+  });
+  s.addText(sub, {
+    x: 0.6, y: 1.0, w: 8.9, h: 0.38,
+    fontFace: BODY, fontSize: 17, italic: true, color: MUTED, margin: 0, valign: "middle",
+  });
+  s.addShape(pres.ShapeType.roundRect, {
+    x: 9.7, y: 0.35, w: 3.03, h: 1.05, fill: { color: box.fill }, rectRadius: 0.1,
+  });
+  s.addText(
+    [
+      { text: box.title, options: { fontFace: HEAD, fontSize: 17, bold: true, color: "FFFFFF", breakLine: true, charSpacing: 1 } },
+      { text: box.sub, options: { fontFace: BODY, fontSize: 13, color: box.subColor } },
+    ],
+    { x: 9.7, y: 0.35, w: 3.03, h: 1.05, align: "center", valign: "middle", margin: 0 }
+  );
+}
+
+function marginNote(s, y, h, text) {
+  s.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: y, w: 12.13, h: h, fill: { color: NAVY }, rectRadius: 0.08,
+  });
+  s.addText("MARGIN NOTE", {
+    x: 1.0, y: y + 0.13, w: 11.33, h: 0.28,
+    fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+  });
+  s.addText(text, {
+    x: 1.0, y: y + 0.43, w: 11.33, h: h - 0.56,
+    fontFace: HEAD, fontSize: 22, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+  });
+}
+
+function cite(s, y, tail) {
+  s.addText(
+    [
+      { text: "Alcoholics Anonymous", options: { italic: true } },
+      { text: ", 4th ed., " + tail },
+    ],
+    { x: 0.6, y: y, w: 12.13, h: 0.32, fontFace: BODY, fontSize: 12, color: MUTED, valign: "middle", margin: 0 }
+  );
+}
+
+// =====================================================================
+// SLIDE 6 — The spark, Akron 1935 (pp. xi-xii)
+// =====================================================================
+const s6 = pres.addSlide();
+s6.background = { color: "FFFFFF" };
+header(s6, "The Spark", "Akron, Ohio — June 1935.",
+  { fill: BLUE, title: "FOREWORD", sub: "Second Ed.  ·  p. xi", subColor: BLUE_SOFT });
+
+s6.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 2.3, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s6.addText(
+  "The spark that was to flare into the first A.A. group was struck at Akron, Ohio, in June 1935, " +
+  "during a talk between a New York stockbroker and an Akron physician. Six months earlier, the " +
+  "broker had been relieved of his drink obsession by a sudden spiritual experience, following a " +
+  "meeting with an alcoholic friend who had been in contact with the Oxford Groups of that day.",
+  { x: 1.0, y: 1.6, w: 11.33, h: 2.3, fontFace: BODY, fontSize: 21, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s6, 4.2, 1.35, "Tell the history from Roland.");
+cite(s6, 5.75, "Foreword to the Second Edition, pp. xi–xii.");
+addFooter(s6);
+
+s6.addNotes(
+  "Stop here and tell the Roland story before reading on.\n\n" +
+  "Roland Hazard - the chain starts with him. He goes to Carl Jung, is told his case is\n" +
+  "hopeless short of a vital spiritual experience, finds the Oxford Groups, and carries it to\n" +
+  "Ebby. Ebby is the alcoholic friend in this paragraph. Ebby carries it to the broker.\n\n" +
+  "The broker is Bill W. The Akron physician is Dr. Bob. June 1935."
+);
+
+// =====================================================================
+// SLIDE 7 — What the broker had learned (p. xii)
+// =====================================================================
+const s7 = pres.addSlide();
+s7.background = { color: "FFFFFF" };
+header(s7, "The Grave Nature of Alcoholism", "What the broker had already learned.",
+  { fill: BLUE, title: "FOREWORD", sub: "Second Ed.  ·  p. xii", subColor: BLUE_SOFT });
+
+s7.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 1.95, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s7.addText(
+  "He had also been greatly helped by the late Dr. William D. Silkworth, a New York specialist in " +
+  "alcoholism who is now accounted no less than a medical saint by A.A. members, and whose story " +
+  "of the early days of our Society appears in the next pages. From this doctor, the broker had " +
+  "learned the grave nature of alcoholism.",
+  { x: 1.0, y: 1.55, w: 11.33, h: 1.95, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s7.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.7, w: 12.13, h: 2.0, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s7.addText(
+  [
+    { text: "Though he could not accept all the tenets of the Oxford Groups, he was convinced of the need for " },
+    { text: "moral inventory", options: { bold: true, color: BLUE } },
+    { text: ", " },
+    { text: "confession of personality defects", options: { bold: true, color: BLUE } },
+    { text: ", " },
+    { text: "restitution to those harmed", options: { bold: true, color: BLUE } },
+    { text: ", " },
+    { text: "helpfulness to others", options: { bold: true, color: BLUE } },
+    { text: ", and the necessity of " },
+    { text: "belief in and dependence upon God", options: { bold: true, color: BLUE } },
+    { text: "." },
+  ],
+  { x: 1.0, y: 3.7, w: 11.33, h: 2.0, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s7, 5.95, "Foreword to the Second Edition, p. xii.");
+addFooter(s7);
+
+s7.addNotes(
+  "Five things, and every one of them ends up in the Twelve Steps.\n\n" +
+  "Moral inventory - Step 4. Confession of personality defects - Step 5. Restitution to those\n" +
+  "harmed - Steps 8 and 9. Helpfulness to others - Step 12. Dependence upon God - Steps 3 and 11.\n\n" +
+  "He could not accept all of the Oxford Groups. He kept these."
+);
+
+// =====================================================================
+// SLIDE 8 — He must carry his message (p. xii)
+// =====================================================================
+const s8 = pres.addSlide();
+s8.background = { color: "FFFFFF" };
+header(s8, "He Must Carry His Message", "In order to save himself.",
+  { fill: GREEN, title: "FOREWORD", sub: "Second Ed.  ·  p. xii", subColor: GREEN_SOFT });
+
+s8.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 2.5, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s8.addText(
+  [
+    { text: "Prior to his journey to Akron, the broker had worked hard with many alcoholics on the theory " +
+            "that only an alcoholic could help an alcoholic, but he had succeeded only in keeping sober " +
+            "himself. The broker had gone to Akron on a business venture which had collapsed, leaving him " +
+            "greatly in fear that he might start drinking again. He suddenly realized that in order to " +
+            "save himself " },
+    { text: "he must carry his message to another alcoholic", options: { bold: true, color: MAGENTA } },
+    { text: ". That alcoholic turned out to be the Akron physician." },
+  ],
+  { x: 1.0, y: 1.55, w: 11.33, h: 2.5, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s8.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 4.3, w: 12.13, h: 1.35, fill: { color: MAGENTA }, rectRadius: 0.08,
+});
+s8.addText("A “MUST”", {
+  x: 1.0, y: 4.43, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: MAGENTA_SOFT, margin: 0, valign: "middle", charSpacing: 2,
+});
+s8.addText("…he must carry his message to another alcoholic.", {
+  x: 1.0, y: 4.73, w: 11.33, h: 0.75,
+  fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+cite(s8, 5.9, "Foreword to the Second Edition, p. xii.");
+addFooter(s8);
+
+s8.addNotes(
+  "He had it backwards for six months. He worked hard on other alcoholics on the theory that\n" +
+  "only an alcoholic could help an alcoholic - and all it did was keep him sober. Which,\n" +
+  "it turns out, was the point.\n\n" +
+  "Akron. Business venture collapsed. Afraid he is going to drink. And what he realizes is\n" +
+  "not that he needs a meeting or a drink or a plan - he must carry the message to another\n" +
+  "alcoholic in order to save himself.\n\n" +
+  "That alcoholic turned out to be Dr. Bob."
+);
+
+// =====================================================================
+// SLIDE 9 — Two things we learned (pp. xii-xiii)
+// =====================================================================
+const s9 = pres.addSlide();
+s9.background = { color: "FFFFFF" };
+header(s9, "Two Things We Learned", "From the first talk between the broker and the physician.",
+  { fill: NAVY, title: "FOREWORD", sub: "Second Ed.  ·  pp. xii–xiii", subColor: ON_NAVY });
+
+const lessons = [
+  { y: 1.75, h: 1.7, dark: BLUE, tint: BLUE_TINT, n: "1",
+    text: "This seemed to prove that one alcoholic could affect another as no nonalcoholic could." },
+  { y: 3.7, h: 1.7, dark: GREEN, tint: GREEN_TINT, n: "2",
+    text: "It also indicated that strenuous work, one alcoholic with another, was vital to permanent recovery." },
+];
+
+lessons.forEach((l) => {
+  s9.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: l.y, w: 12.13, h: l.h, fill: { color: l.tint }, rectRadius: 0.08,
+  });
+  s9.addShape(pres.ShapeType.ellipse, {
+    x: 1.0, y: l.y + l.h / 2 - 0.32, w: 0.64, h: 0.64, fill: { color: l.dark },
+  });
+  s9.addText(l.n, {
+    x: 1.0, y: l.y + l.h / 2 - 0.32, w: 0.64, h: 0.64,
+    fontFace: HEAD, fontSize: 22, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
+  });
+  s9.addText(l.text, {
+    x: 1.95, y: l.y, w: 10.4, h: l.h,
+    fontFace: BODY, fontSize: 22, color: NAVY, valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s9, 5.65, "Foreword to the Second Edition, pp. xii–xiii.");
+addFooter(s9);
+
+s9.addNotes(
+  "These two are numbered in the book for a reason. Everything A.A. does rests on them.\n\n" +
+  "One: an alcoholic reaches another alcoholic in a way that no nonalcoholic can. Not a\n" +
+  "doctor, not a preacher, not a spouse. That is why we have sponsors.\n\n" +
+  "Two: strenuous work, one alcoholic with another. Strenuous. Not casual, not when it is\n" +
+  "convenient. Vital to permanent recovery - vital meaning you do not live without it."
+);
+
+// =====================================================================
+// SLIDE 10 — A.A. Number Three (p. xiii)
+// =====================================================================
+const s10 = pres.addSlide();
+s10.background = { color: "FFFFFF" };
+header(s10, "A.A. Number Three", "Their very first case.",
+  { fill: GREEN, title: "FOREWORD", sub: "Second Ed.  ·  p. xiii", subColor: GREEN_SOFT });
+
+// Photo well - Will supplies the image on the desktop.
+s10.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 5.35, h: 4.0,
+  fill: { color: "F1F4F7" }, rectRadius: 0.08,
+  line: { color: "AEBBC9", width: 1.5, dashType: "dash" },
+});
+s10.addText(
+  [
+    { text: "PHOTOGRAPH", options: { fontSize: 11, bold: true, color: MUTED, charSpacing: 2, breakLine: true } },
+    { text: "\n", options: { fontSize: 8, breakLine: true } },
+    { text: "Bill D. in the hospital bed", options: { fontSize: 17, bold: true, color: NAVY, breakLine: true } },
+    { text: "Akron City Hospital, 1935", options: { fontSize: 15, color: MUTED, breakLine: true } },
+    { text: "\n", options: { fontSize: 8, breakLine: true } },
+    { text: "Drop the image into this frame in PowerPoint.", options: { fontSize: 13, italic: true, color: MUTED } },
+  ],
+  { x: 0.9, y: 1.6, w: 4.75, h: 4.0, fontFace: BODY, align: "center", valign: "middle", margin: 0 }
+);
+
+s10.addShape(pres.ShapeType.roundRect, {
+  x: 6.3, y: 1.6, w: 6.43, h: 2.25, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s10.addText(
+  [
+    { text: "Their very first case, a desperate one, recovered immediately and became A.A. number three.",
+      options: { bold: true, underline: { style: "sng" } } },
+    { text: " He never had another drink." },
+  ],
+  { x: 6.7, y: 1.6, w: 5.63, h: 2.25, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s10.addShape(pres.ShapeType.roundRect, {
+  x: 6.3, y: 4.05, w: 6.43, h: 1.55, fill: { color: NAVY }, rectRadius: 0.08,
+});
+s10.addText("MARGIN NOTE", {
+  x: 6.7, y: 4.2, w: 5.63, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+});
+s10.addText("Bill D. — A.A. Number Three", {
+  x: 6.7, y: 4.52, w: 5.63, h: 0.85,
+  fontFace: HEAD, fontSize: 22, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+cite(s10, 5.85, "Foreword to the Second Edition, p. xiii.");
+addFooter(s10);
+
+s10.addNotes(
+  "The first man they worked on. A desperate case, in a bed at Akron City Hospital, summer 1935.\n" +
+  "He recovered immediately and never had another drink.\n\n" +
+  "Bill D. - A.A. number three. The man in the photograph.\n\n" +
+  "Two men who could not stay sober alone stayed sober by working on a third."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));

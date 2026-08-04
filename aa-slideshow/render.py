@@ -18,6 +18,14 @@ def color_of(cf):
         pass
     return None
 
+def radius(sp):
+    try:
+        if "OVAL" in str(sp.shape_type) or "OVAL" in str(sp.auto_shape_type):
+            return "50%"
+    except Exception:
+        pass
+    return "8px"
+
 def shape_fill(sp):
     try:
         f = sp.fill
@@ -52,10 +60,10 @@ def main(path, out):
             fill = shape_fill(sp)
             if fill and not (sp.has_text_frame and sp.text_frame.text.strip()):
                 parts.append('<div class="b" style="left:%.1fpx;top:%.1fpx;width:%.1fpx;height:%.1fpx;'
-                             'background:%s;border-radius:8px"></div>' % (x, y, w, h, fill))
+                             'background:%s;border-radius:%s"></div>' % (x, y, w, h, fill, radius(sp)))
             elif fill:
                 parts.append('<div class="b" style="left:%.1fpx;top:%.1fpx;width:%.1fpx;height:%.1fpx;'
-                             'background:%s;border-radius:8px"></div>' % (x, y, w, h, fill))
+                             'background:%s;border-radius:%s"></div>' % (x, y, w, h, fill, radius(sp)))
             if not sp.has_text_frame:
                 continue
             tf = sp.text_frame

@@ -114,7 +114,39 @@ Margin note: "Authored this book, originally 87 raised to one hundred at
 printing time." Labeled MARGIN NOTE on the slide — it is fellowship history, not
 text from the book, and is marked as such so nobody quotes it as scripture.
 
-## Slide 6 onward
+## Slides 6–10 — Foreword to the Second Edition (pp. xi–xiii)
+
+Source photos: three pages. Highlight convention holds — blue and green for
+emphasis, **pink for a "must"** (rendered in the deck's magenta, same thread as
+slides 2–3).
+
+- **Slide 6 — The Spark.** Blue passage, p. xi into p. xii: Akron, June 1935, the
+  broker and the physician, the sudden spiritual experience six months earlier.
+  Margin note: "Tell the history from Roland" — Roland Hazard. Speaker notes
+  carry the Hazard → Jung → Ebby → Bill chain so the presenter has it.
+- **Slide 7 — The Grave Nature of Alcoholism.** Rest of the blue passage on
+  p. xii: Silkworth, and the five Oxford Group tenets the broker kept. The five
+  are bolded; speaker notes map each to its Step.
+- **Slide 8 — He Must Carry His Message.** Green paragraph, p. xii, with the
+  pink-highlighted must pulled out into a magenta callout:
+  "…he must carry his message to another alcoholic."
+- **Slide 9 — Two Things We Learned.** The margin note is the title. Items 1
+  (blue) and 2 (green), numbered as they are circled in the book.
+- **Slide 10 — A.A. Number Three.** The underlined sentence about the first
+  case, plus a dashed photo frame on the left for the hospital-bed picture.
+
+### Open item — the photograph on slide 10
+
+Slide 10 ships with an empty, correctly sized frame, not an image. The A.A.W.S.
+permission covers screen-sharing **literature** from aa.org and authorized
+e-books; it says nothing about archival photographs, which are separately
+copyrighted. Will supplies the image himself on the desktop.
+
+Note on the name: the margin note reads "Bill Dodson." The usual spelling in
+A.A. history is **Dotson**. The slide says "Bill D." — traditional, and sidesteps
+the spelling entirely.
+
+## Slide 11 onward
 
 Pending. Next photo.
 
