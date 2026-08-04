@@ -175,7 +175,38 @@ Two readings resolved from the photographs:
   newcomer talking point — but it is a judgment call, and it could just as
   easily belong to the green paragraph above it.
 
-## Slide 15 onward
+## Slides 15–16 — The Doctor's Opinion (p. xxi)
+
+- **Slide 15 — The Doctor's Opinion.** "OPINION" is highlighted in the title and
+  "(just an opinion)" written beneath it — that subtitle carries onto the slide.
+  Two cards for the physicians in the top margin note, plus the bottom note:
+  "Page 1 in every first edition. Moved to the front matter in the second."
+- **Slide 16 — Two Musts.** Both pink-highlighted passages, in magenta-tinted
+  cards. Pink highlighter → magenta, same rule as slide 8.
+
+### Dates changed from the margin note — check before presenting
+
+The margin note reads "Dr. Benjamin Rush 1776" and "Dr. Thomas Trotter 1782."
+Neither date matches the landmark each man is known for, so the slide carries the
+publication dates instead:
+
+| Margin note | On the slide | Why |
+|---|---|---|
+| Rush, 1776 | Rush, **1784** | *An Inquiry into the Effects of Ardent Spirits upon the Human Body and Mind* was published 1784. 1776 is the Declaration. |
+| Trotter, 1782 | Trotter, **1804** | *An Essay… on Drunkenness* was published 1804 (from his 1788 Edinburgh MD thesis, *De ebrietate*). |
+
+Also unstated on the slide: the note's claim that Trotter's essay "is still used
+in medical schools today." It is a landmark in addiction medicine and is still
+reprinted and cited, but no source was found for it being current course
+material, so it was left off rather than asserted.
+
+Rush's title is given as "Surgeon General of the Continental Army," which is what
+he held. The federal office of Surgeon General of the United States dates to
+1871, well after his death.
+
+Will can restore the original dates — the speaker notes say so.
+
+## Slide 17 onward
 
 Pending. Next photo.
 

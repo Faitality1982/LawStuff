@@ -921,5 +921,121 @@ s14.addNotes(
   "They used the book. The numbers were higher."
 );
 
+// =====================================================================
+// SLIDE 15 — The Doctor's Opinion (p. xxi)
+// =====================================================================
+const MAGENTA_TINT = "F9E3EE";
+
+const s15 = pres.addSlide();
+s15.background = { color: "FFFFFF" };
+header(s15, "The Doctor’s Opinion", "“Just an opinion.”",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxi", subColor: BLUE_SOFT });
+
+const doctors = [
+  {
+    x: 0.6,
+    name: "Dr. Benjamin Rush",
+    role: "Surgeon General of the Continental Army",
+    body: [
+      { text: "In 1784 he published " },
+      { text: "An Inquiry into the Effects of Ardent Spirits upon the Human Body and Mind",
+        options: { italic: true } },
+      { text: " — the first American physician to argue in print that alcoholism is a disease." },
+    ],
+  },
+  {
+    x: 6.78,
+    name: "Dr. Thomas Trotter",
+    role: "Physician to the British Fleet",
+    body: [
+      { text: "His " },
+      { text: "Essay on Drunkenness, and its Effects on the Human Body",
+        options: { italic: true } },
+      { text: ", published in 1804, was the first book-length medical study of alcohol dependence." },
+    ],
+  },
+];
+
+doctors.forEach((d) => {
+  s15.addShape(pres.ShapeType.roundRect, {
+    x: d.x, y: 1.7, w: 5.95, h: 2.9, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+  });
+  s15.addText(d.name, {
+    x: d.x + 0.35, y: 2.0, w: 5.25, h: 0.45,
+    fontFace: HEAD, fontSize: 24, bold: true, color: NAVY, margin: 0, valign: "middle",
+  });
+  s15.addText(d.role, {
+    x: d.x + 0.35, y: 2.45, w: 5.25, h: 0.3,
+    fontFace: BODY, fontSize: 14, bold: true, color: BLUE, margin: 0, valign: "middle", charSpacing: 1,
+  });
+  s15.addText(d.body, {
+    x: d.x + 0.35, y: 2.85, w: 5.25, h: 1.5,
+    fontFace: BODY, fontSize: 17, color: NAVY, margin: 0, valign: "top", lineSpacingMultiple: 1.15,
+  });
+});
+
+marginNote(s15, 4.9, 1.1,
+  "Page 1 in every first edition. Moved to the front matter in the second.");
+cite(s15, 6.2, "“The Doctor’s Opinion,” p. xxi.");
+addFooter(s15);
+
+s15.addNotes(
+  "Note what is written under the title: just an opinion. The chapter is a doctor's letter,\n" +
+  "not doctrine, and the book presents it that way.\n\n" +
+  "But the disease idea did not start with A.A. Rush was writing about it in 1784, Trotter in\n" +
+  "1804 - a hundred and fifty years before this book. Silkworth is standing on that.\n\n" +
+  "Dates on this slide are the landmark publications. If you have a source for the 1776 and\n" +
+  "1782 dates from the margin, use those instead.\n\n" +
+  "And this chapter was page 1 in every first edition. It was moved to the front matter in the\n" +
+  "second - which is how Bill's Story became page 1."
+);
+
+// =====================================================================
+// SLIDE 16 — Two musts from The Doctor's Opinion (p. xxi)
+// =====================================================================
+const s16 = pres.addSlide();
+s16.background = { color: "FFFFFF" };
+header(s16, "Two Musts", "The Doctor’s Opinion.",
+  { fill: MAGENTA, title: "THE “MUSTS”", sub: "p. xxi", subColor: MAGENTA_SOFT });
+
+const xxiMusts = [
+  { y: 1.7, h: 1.65,
+    text: "Convincing testimony must surely come from medical men who have had experience with the " +
+          "sufferings of our members and have witnessed our return to health." },
+  { y: 3.6, h: 1.65,
+    text: "As part of his rehabilitation he commenced to present his conceptions to other alcoholics, " +
+          "impressing upon them that they must do likewise with still others." },
+];
+
+xxiMusts.forEach((q, i) => {
+  s16.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: q.y, w: 12.13, h: q.h, fill: { color: MAGENTA_TINT }, rectRadius: 0.08,
+  });
+  s16.addShape(pres.ShapeType.ellipse, {
+    x: 1.0, y: q.y + q.h / 2 - 0.3, w: 0.6, h: 0.6, fill: { color: MAGENTA },
+  });
+  s16.addText(String(i + 1), {
+    x: 1.0, y: q.y + q.h / 2 - 0.3, w: 0.6, h: 0.6,
+    fontFace: HEAD, fontSize: 21, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
+  });
+  s16.addText(q.text, {
+    x: 1.9, y: q.y, w: 10.45, h: q.h,
+    fontFace: BODY, fontSize: 21, color: NAVY, valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s16, 5.55, "“The Doctor’s Opinion,” p. xxi.");
+addFooter(s16);
+
+s16.addNotes(
+  "Both of these are highlighted pink in the study copy - both are musts.\n\n" +
+  "The first is about where the testimony has to come from. Not from us saying we feel better.\n" +
+  "From medical men who watched us suffer and then watched us recover.\n\n" +
+  "The second is Silkworth describing his patient. Rehabilitation was not finished when the man\n" +
+  "stopped drinking. Part of it was carrying it to other alcoholics - and impressing on them\n" +
+  "that they must do the same with still others.\n\n" +
+  "That is the chain. It is in the doctor's letter before the book even starts."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
