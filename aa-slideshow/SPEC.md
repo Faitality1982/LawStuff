@@ -146,7 +146,36 @@ Note on the name: the margin note reads "Bill Dodson." The usual spelling in
 A.A. history is **Dotson**. The slide says "Bill D." — traditional, and sidesteps
 the spelling entirely.
 
-## Slide 11 onward
+## Slides 11–14 — Foreword to the Second Edition (pp. xiv–xvii)
+
+- **Slide 11 — Hang Together or Die Separately.** The blue passage running from
+  p. xiv onto p. xv: the adolescent period, the four questions, and the
+  conviction that came out of it. Margin notes on p. xv ("Alcoholic Anonyms" at
+  the top, "Fellowship was named by the book" inline) are combined into one:
+  "The Fellowship was named by the book — Alcoholics Anonymous."
+- **Slide 12 — Came to A.A. and Really Tried.** The green run from the bottom of
+  p. xv through the first paragraph of p. xvi. 50%, 25%, and "about two out of
+  three" are bolded in green rather than pulled into stat tiles — the deck's
+  visual language is tinted card / navy bar / magenta bar, and a KPI row would
+  read as a business deck.
+- **Slide 13 — Not a Religious Organization.** The blue middle paragraph on
+  p. xvi, set large. Margin note: "Newcomers."
+- **Slide 14 — December 1941.** Not book text — the handwritten National
+  Directory figures on p. xvii. NYC 450, Akron 225, Detroit 175, Cleveland
+  1,100. Cleveland's row is filled solid because it is the whole point. Note:
+  "Clarence Snyder was using the book — is why the #'s were higher."
+
+Two readings resolved from the photographs:
+
+- The p. xvii note was hard to make out. Enlarged and contrast-stretched, it
+  reads "Clarence ~~Schnieder~~ Snyder ★ **was using the book** — is why the #'s
+  were higher." The surname is struck through once and rewritten.
+- The "Newcomers" note sits at the foot of p. xvi with no leader line. Attached
+  to the blue "not a religious organization" paragraph, which is the usual
+  newcomer talking point — but it is a judgment call, and it could just as
+  easily belong to the green paragraph above it.
+
+## Slide 15 onward
 
 Pending. Next photo.
 

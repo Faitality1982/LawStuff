@@ -736,5 +736,190 @@ s10.addNotes(
   "Two men who could not stay sober alone stayed sober by working on a third."
 );
 
+// =====================================================================
+// SLIDE 11 — Hang together or die separately (pp. xiv-xv)
+// =====================================================================
+const s11 = pres.addSlide();
+s11.background = { color: "FFFFFF" };
+header(s11, "Hang Together or Die Separately", "The adolescent period, and the test it faced.",
+  { fill: BLUE, title: "FOREWORD", sub: "Second Ed.  ·  pp. xiv–xv", subColor: BLUE_SOFT });
+
+s11.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 1.8, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s11.addText(
+  "Our Society then entered a fearsome and exciting adolescent period. The test that it faced was " +
+  "this: Could these large numbers of erstwhile erratic alcoholics successfully meet and work " +
+  "together? Would there be quarrels over membership, leadership, and money? Would there be " +
+  "strivings for power and prestige? Would there be schisms which would split A.A. apart?",
+  { x: 1.0, y: 1.55, w: 11.33, h: 1.8, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s11.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.55, w: 12.13, h: 1.45, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s11.addText(
+  [
+    { text: "Soon A.A. was beset by these very problems on every side and in every group. But out of this " +
+            "frightening and at first disrupting experience the conviction grew that " },
+    { text: "A.A.’s had to hang together or die separately", options: { bold: true, color: BLUE } },
+    { text: ". We had to unify our Fellowship or pass off the scene." },
+  ],
+  { x: 1.0, y: 3.55, w: 11.33, h: 1.45, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s11, 5.3, 1.0, "The Fellowship was named by the book — Alcoholics Anonymous.");
+cite(s11, 6.45, "Foreword to the Second Edition, pp. xiv–xv.");
+addFooter(s11);
+
+s11.addNotes(
+  "Everything in this paragraph is a question, and every one of them got answered the hard way.\n" +
+  "Quarrels over membership, leadership, money. Strivings for power and prestige. Schisms.\n" +
+  "A.A. had all of it.\n\n" +
+  "What came out of it was the Twelve Traditions - and the conviction underneath them:\n" +
+  "hang together or die separately.\n\n" +
+  "Note the order of events. The book came first, in 1939. The Fellowship took its name\n" +
+  "from the book, not the other way around."
+);
+
+// =====================================================================
+// SLIDE 12 — Really tried (pp. xv-xvi)
+// =====================================================================
+const s12 = pres.addSlide();
+s12.background = { color: "FFFFFF" };
+header(s12, "Came to A.A. and Really Tried", "Why public acceptance grew.",
+  { fill: GREEN, title: "FOREWORD", sub: "Second Ed.  ·  pp. xv–xvi", subColor: GREEN_SOFT });
+
+s12.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 1.5, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s12.addText(
+  "While the internal difficulties of our adolescent period were being ironed out, public " +
+  "acceptance of A.A. grew by leaps and bounds. For this there were two principal reasons: the " +
+  "large numbers of recoveries, and reunited homes. These made their impressions everywhere.",
+  { x: 1.0, y: 1.55, w: 11.33, h: 1.5, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s12.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.25, w: 12.13, h: 2.2, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s12.addText(
+  [
+    { text: "Of alcoholics who came to A.A. and " },
+    { text: "really tried", options: { bold: true, italic: true } },
+    { text: ", " },
+    { text: "50%", options: { bold: true, color: GREEN } },
+    { text: " got sober at once and remained that way; " },
+    { text: "25%", options: { bold: true, color: GREEN } },
+    { text: " sobered up after some relapses, and among the remainder, those who stayed on with A.A. " +
+            "showed improvement. Other thousands came to a few A.A. meetings and at first decided they " +
+            "didn’t want the program. But great numbers of these—" },
+    { text: "about two out of three", options: { bold: true, color: GREEN } },
+    { text: "—began to return as time passed." },
+  ],
+  { x: 1.0, y: 3.25, w: 11.33, h: 2.2, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s12, 5.75, "Foreword to the Second Edition, pp. xv–xvi.");
+addFooter(s12);
+
+s12.addNotes(
+  "Two principal reasons the public came around: recoveries, and reunited homes. Not\n" +
+  "advertising. Not argument. Results people could see in their own neighborhoods.\n\n" +
+  "Watch the qualifier - came to A.A. and really tried. The numbers are attached to that\n" +
+  "phrase, not to attendance.\n\n" +
+  "And the last line is the one to sit on: of the thousands who came, decided they did not\n" +
+  "want it, and left - about two out of three came back."
+);
+
+// =====================================================================
+// SLIDE 13 — Not a religious organization (p. xvi)
+// =====================================================================
+const s13 = pres.addSlide();
+s13.background = { color: "FFFFFF" };
+header(s13, "Not a Religious Organization", "What A.A. is not.",
+  { fill: BLUE, title: "FOREWORD", sub: "Second Ed.  ·  p. xvi", subColor: BLUE_SOFT });
+
+s13.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.9, w: 12.13, h: 2.4, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s13.addText(
+  [
+    { text: "Alcoholics Anonymous is not a religious organization.", options: { bold: true } },
+    { text: " Neither does A.A. take any particular medical point of view, though we cooperate widely " +
+            "with the men of medicine as well as with the men of religion." },
+  ],
+  { x: 1.0, y: 1.9, w: 11.33, h: 2.4, fontFace: BODY, fontSize: 26, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s13, 4.65, 1.0, "Newcomers.");
+cite(s13, 6.05, "Foreword to the Second Edition, p. xvi.");
+addFooter(s13);
+
+s13.addNotes(
+  "This is the paragraph for the person sitting in the back who has been told all his life\n" +
+  "that A.A. is a religion, or a cult, or a hospital program.\n\n" +
+  "Not a religious organization. No particular medical point of view. We cooperate with\n" +
+  "both and we are neither.\n\n" +
+  "Ninety words that have kept more newcomers in the room than any argument ever has."
+);
+
+// =====================================================================
+// SLIDE 14 — December 1941 membership (margin note, p. xvii)
+// =====================================================================
+const s14 = pres.addSlide();
+s14.background = { color: "FFFFFF" };
+header(s14, "December 1941", "National Directory — members by city.",
+  { fill: NAVY, title: "FOREWORD", sub: "Second Ed.  ·  p. xvii", subColor: ON_NAVY });
+
+const cities = [
+  { name: "New York City", n: "450", lead: false },
+  { name: "Akron", n: "225", lead: false },
+  { name: "Detroit", n: "175", lead: false },
+  { name: "Cleveland", n: "1,100", lead: true },
+];
+
+cities.forEach((c, i) => {
+  const y = 1.5 + i * 0.86;
+  s14.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: y, w: 12.13, h: 0.76,
+    fill: { color: c.lead ? GREEN : "F1F4F7" }, rectRadius: 0.08,
+  });
+  s14.addText(c.name, {
+    x: 1.0, y: y, w: 7.0, h: 0.76,
+    fontFace: BODY, fontSize: 22, bold: c.lead, color: c.lead ? "FFFFFF" : NAVY,
+    valign: "middle", margin: 0,
+  });
+  s14.addText(c.n, {
+    x: 8.2, y: y, w: 4.13, h: 0.76,
+    fontFace: HEAD, fontSize: 28, bold: true, color: c.lead ? "FFFFFF" : NAVY,
+    align: "right", valign: "middle", margin: 0,
+  });
+});
+
+marginNote(s14, 5.25, 1.05, "Clarence Snyder was using the book — is why the #’s were higher.");
+
+s14.addText("Handwritten margin note, Foreword to the Second Edition, p. xvii.", {
+  x: 0.6, y: 6.45, w: 12.13, h: 0.3, fontFace: BODY, fontSize: 12, color: MUTED,
+  valign: "middle", margin: 0,
+});
+addFooter(s14);
+
+s14.addNotes(
+  "These figures are the margin note, not text from the book. Read them as such.\n\n" +
+  "Look at the shape of it. New York, where Bill was, 450. Akron, where it started, 225.\n" +
+  "Detroit, 175. Cleveland - 1,100. More than the other three put together.\n\n" +
+  "Clarence Snyder started the Cleveland group in 1939, the first to call itself Alcoholics\n" +
+  "Anonymous. Cleveland took newcomers straight through the book and built sponsorship\n" +
+  "around it. That is fellowship history rather than book text, but the numbers are hard\n" +
+  "to argue with.\n\n" +
+  "They used the book. The numbers were higher."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
