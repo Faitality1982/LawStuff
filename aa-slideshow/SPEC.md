@@ -251,7 +251,30 @@ he "acquired" and "put into practical application at once" were Silkworth's —
 the allergy and the obsession. So the doctor writing this letter is the doctor
 who explained the illness to the man who wrote the book.
 
-## Slide 24 onward
+## Slides 24–28 — The Doctor's Opinion continued (pp. xxiv–xxv)
+
+- **Slide 24 — The Phenomenon of Craving.** Green half then blue half of the
+  first paragraph. Margin note: "Crave = physical, in this book."
+- **Slide 25 — Frothy Emotional Appeal.** Pink paragraph; the must pulled into a
+  magenta bar.
+- **Slide 26 — The Effect Produced by Alcohol.** Green then blue, running from
+  p. xxiv onto p. xxv.
+- **Slide 27 — An Entire Psychic Change.** The blue continuation. Margin note:
+  "Psychic = thinking" — the word is circled three times across the spread and
+  annotated "thinking" each time.
+- **Slide 28 — Doctor, I Cannot Go On Like This.** Three pink stretches on one
+  slide: the patient's appeal, the doctor's private inadequacy, and the
+  profession's admission. Ends at "…the problem as a whole" per Will — the
+  "Many types do not respond…" sentence is left out.
+
+### Presenter cue not yet resolved
+
+The star at the top of p. xxv reads **"Show Sheet."** It is an instruction to the
+presenter, not content, so it sits in slide 27's speaker notes as "SHOW SHEET
+here" rather than on the slide. Which sheet is meant is still unknown — if it is
+a handout that should live in the deck, it needs its own slide.
+
+## Slide 29 onward
 
 Pending. Next photo.
 

@@ -1341,5 +1341,253 @@ s23.addNotes(
   "The doctor who explained the illness to him is the same doctor writing this letter."
 );
 
+// =====================================================================
+// SLIDE 24 — The phenomenon of craving (p. xxiv)
+// =====================================================================
+const s24 = pres.addSlide();
+s24.background = { color: "FFFFFF" };
+header(s24, "The Phenomenon of Craving", "A manifestation of an allergy.",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "p. xxiv", subColor: GREEN_SOFT });
+
+s24.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 1.5, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s24.addText(
+  [
+    { text: "We believe, and so suggested a few years ago, that the action of alcohol on these chronic " +
+            "alcoholics is a manifestation of an allergy; that the " },
+    { text: "phenomenon of craving is limited to this class", options: { bold: true, color: GREEN } },
+    { text: " and never occurs in the average temperate drinker." },
+  ],
+  { x: 1.0, y: 1.55, w: 11.33, h: 1.5, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s24.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.25, w: 12.13, h: 1.7, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s24.addText(
+  [
+    { text: "These allergic types can " },
+    { text: "never safely use alcohol in any form at all", options: { bold: true, color: BLUE } },
+    { text: "; and once having formed the habit and found they cannot break it, once having lost their " +
+            "self-confidence, their reliance upon things human, their problems pile up on them and " +
+            "become astonishingly difficult to solve." },
+  ],
+  { x: 1.0, y: 3.25, w: 11.33, h: 1.7, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s24, 5.2, 0.95, "Crave = physical, in this book.");
+cite(s24, 6.35, "“The Doctor’s Opinion,” p. xxiv.");
+addFooter(s24);
+
+s24.addNotes(
+  "Craving in this book means the physical thing. Not wanting a drink - the body's reaction\n" +
+  "once alcohol is in it.\n\n" +
+  "And it is limited to this class. It never occurs in the average temperate drinker. That is\n" +
+  "why the normal drinker cannot understand us and why his advice never helps.\n\n" +
+  "Never safely use alcohol in any form at all. Not less. Not carefully. Not at all.\n\n" +
+  "Then watch the order of the collapse: form the habit, cannot break it, lose self-confidence,\n" +
+  "lose reliance upon things human. The problems pile up after that, not before."
+);
+
+// =====================================================================
+// SLIDE 25 — Frothy emotional appeal (p. xxiv)
+// =====================================================================
+const s25 = pres.addSlide();
+s25.background = { color: "FFFFFF" };
+header(s25, "Frothy Emotional Appeal", "Seldom suffices.",
+  { fill: MAGENTA, title: "THE “MUSTS”", sub: "p. xxiv", subColor: MAGENTA_SOFT });
+
+s25.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 1.9, fill: { color: MAGENTA_TINT }, rectRadius: 0.08,
+});
+s25.addText(
+  [
+    { text: "Frothy emotional appeal seldom suffices. The message which can interest and hold these " +
+            "alcoholic people " },
+    { text: "must have depth and weight", options: { bold: true, color: MAGENTA } },
+    { text: ". In nearly all cases, their ideals " },
+    { text: "must be grounded in a power greater than themselves", options: { bold: true, color: MAGENTA } },
+    { text: ", if they are to re-create their lives." },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 1.9, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s25.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.8, w: 12.13, h: 1.5, fill: { color: MAGENTA }, rectRadius: 0.08,
+});
+s25.addText("A “MUST”", {
+  x: 1.0, y: 3.95, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: MAGENTA_SOFT, margin: 0, valign: "middle", charSpacing: 2,
+});
+s25.addText("…their ideals must be grounded in a power greater than themselves.", {
+  x: 1.0, y: 4.25, w: 11.33, h: 0.85,
+  fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+cite(s25, 5.55, "“The Doctor’s Opinion,” p. xxiv.");
+addFooter(s25);
+
+s25.addNotes(
+  "Frothy emotional appeal seldom suffices. A doctor wrote that, about pep talks and\n" +
+  "sentiment and getting people fired up. It does not hold.\n\n" +
+  "Depth and weight. That is what he says the message needs, and it is why this book reads\n" +
+  "the way it does rather than like a motivational pamphlet.\n\n" +
+  "And there is Step Two, stated by a physician in the front matter: a power greater than\n" +
+  "themselves. Re-create their lives - not improve, not manage. Re-create."
+);
+
+// =====================================================================
+// SLIDE 26 — The effect produced by alcohol (pp. xxiv-xxv)
+// =====================================================================
+const s26 = pres.addSlide();
+s26.background = { color: "FFFFFF" };
+header(s26, "The Effect Produced by Alcohol", "Restless, irritable and discontented.",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "pp. xxiv–xxv", subColor: GREEN_SOFT });
+
+s26.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 1.55, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s26.addText(
+  [
+    { text: "Men and women drink essentially because they " },
+    { text: "like the effect produced by alcohol", options: { bold: true, color: GREEN } },
+    { text: ". The sensation is so elusive that, while they admit it is injurious, they cannot after " +
+            "a time differentiate the true from the false." },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 1.55, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s26.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.35, w: 12.13, h: 1.95, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s26.addText(
+  [
+    { text: "To them, their alcoholic life seems the only normal one. They are " },
+    { text: "restless, irritable and discontented", options: { bold: true, color: BLUE } },
+    { text: ", unless they can again experience the sense of ease and comfort which comes at once by " +
+            "taking a few drinks—drinks which they see others taking with impunity." },
+  ],
+  { x: 1.0, y: 3.35, w: 11.33, h: 1.95, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s26, 5.6, "“The Doctor’s Opinion,” pp. xxiv–xxv.");
+addFooter(s26);
+
+s26.addNotes(
+  "Not because of the wife, the job, the childhood. Because they like the effect. Start there.\n\n" +
+  "Cannot differentiate the true from the false - he is describing a man who no longer knows\n" +
+  "which of his own thoughts to trust.\n\n" +
+  "Restless, irritable and discontented. Anyone who has been around a while can say that line\n" +
+  "from memory, and it is in a doctor's letter before page 1.\n\n" +
+  "And the last clause is the whole trouble: drinks which they see others taking with impunity."
+);
+
+// =====================================================================
+// SLIDE 27 — An entire psychic change (p. xxv)
+// =====================================================================
+const s27 = pres.addSlide();
+s27.background = { color: "FFFFFF" };
+header(s27, "An Entire Psychic Change", "Or very little hope of recovery.",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxv", subColor: BLUE_SOFT });
+
+s27.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.7, w: 12.13, h: 2.25, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s27.addText(
+  [
+    { text: "After they have succumbed to the desire again, as so many do, and the phenomenon of craving " +
+            "develops, they pass through the well-known stages of a spree, emerging remorseful, with a " +
+            "firm resolution not to drink again. This is repeated over and over, and unless this person " +
+            "can experience " },
+    { text: "an entire psychic change", options: { bold: true, color: BLUE } },
+    { text: " there is very little hope of his recovery." },
+  ],
+  { x: 1.0, y: 1.7, w: 11.33, h: 2.25, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s27, 4.25, 1.05, "Psychic = thinking.");
+cite(s27, 5.5, "“The Doctor’s Opinion,” p. xxv.");
+addFooter(s27);
+
+s27.addNotes(
+  "SHOW SHEET here - that is the star in the margin.\n\n" +
+  "Psychic change means a change in thinking. Circled three times on this page in the study\n" +
+  "copy, so it is worth saying out loud: not mystical, not spooky. Thinking.\n\n" +
+  "The cycle first: succumb, craving develops, the spree runs its stages, remorse, firm\n" +
+  "resolution. Repeated over and over. Everyone in this room has run that lap.\n\n" +
+  "The resolution is not the way out. An entire change in thinking is. And on the next page\n" +
+  "Silkworth says that once it happens, the man who seemed doomed finds he can follow a few\n" +
+  "simple rules."
+);
+
+// =====================================================================
+// SLIDE 28 — Doctor, I cannot go on like this (p. xxv)
+// =====================================================================
+const s28 = pres.addSlide();
+s28.background = { color: "FFFFFF" };
+header(s28, "Doctor, I Cannot Go On Like This", "Where medicine runs out.",
+  { fill: MAGENTA, title: "THE “MUSTS”", sub: "p. xxv", subColor: MAGENTA_SOFT });
+
+const xxvMusts = [
+  { y: 1.6, h: 1.4, size: 19,
+    runs: [
+      { text: "Men have cried out to me in sincere and despairing appeal: “Doctor, I cannot go on like " +
+              "this! I have everything to live for! " },
+      { text: "I must stop, but I cannot!", options: { bold: true, color: MAGENTA } },
+      { text: " You must help me!”" },
+    ] },
+  { y: 3.2, h: 1.2, size: 19,
+    runs: [
+      { text: "Faced with this problem, if a doctor is honest with himself, " },
+      { text: "he must sometimes feel his own inadequacy", options: { bold: true, color: MAGENTA } },
+      { text: "." },
+    ] },
+  { y: 4.6, h: 1.2, size: 19,
+    runs: [
+      { text: "…" },
+      { text: "we physicians must admit we have made little impression upon the problem as a whole",
+        options: { bold: true, color: MAGENTA } },
+      { text: "." },
+    ] },
+];
+
+xxvMusts.forEach((q, i) => {
+  s28.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: q.y, w: 12.13, h: q.h, fill: { color: MAGENTA_TINT }, rectRadius: 0.08,
+  });
+  s28.addShape(pres.ShapeType.ellipse, {
+    x: 1.0, y: q.y + q.h / 2 - 0.28, w: 0.56, h: 0.56, fill: { color: MAGENTA },
+  });
+  s28.addText(String(i + 1), {
+    x: 1.0, y: q.y + q.h / 2 - 0.28, w: 0.56, h: 0.56,
+    fontFace: HEAD, fontSize: 20, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0,
+  });
+  s28.addText(q.runs, {
+    x: 1.85, y: q.y, w: 10.5, h: q.h,
+    fontFace: BODY, fontSize: q.size, color: NAVY, valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s28, 5.95, "“The Doctor’s Opinion,” p. xxv.");
+addFooter(s28);
+
+s28.addNotes(
+  "Three musts, and all three are the doctor admitting he is beaten.\n\n" +
+  "First, the patient: I must stop, but I cannot. That sentence is Step One in a man's own\n" +
+  "words, said to a doctor, years before there were Steps.\n\n" +
+  "Second, the physician: if he is honest with himself, he must sometimes feel his own\n" +
+  "inadequacy. He gives all that is in him and it often is not enough.\n\n" +
+  "Third: we physicians must admit we have made little impression upon the problem as a whole.\n\n" +
+  "That is the man who signed this letter, with a hospital and thousands of cases behind him,\n" +
+  "saying medicine could not do it. Something more than human power is needed."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
