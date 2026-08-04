@@ -1,0 +1,3 @@
+# QR-code access only. Nothing links here and it should not be indexed.
+User-agent: *
+Disallow: /

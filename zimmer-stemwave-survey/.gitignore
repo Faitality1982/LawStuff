@@ -1,0 +1,12 @@
+node_modules/
+.wrangler/
+.dev.vars
+
+# Generated analysis outputs — regenerate from an export, never commit real
+# response data to the repo.
+*.csv
+price-sensitivity.png
+fixture.csv
+
+# Printable card renders; regenerate from print/counter-card.html
+*.pdf

@@ -1,0 +1,15 @@
+name = "zimmer-stemwave-survey"
+compatibility_date = "2026-08-04"
+pages_build_output_dir = "public"
+
+# D1 binding. Create the database first:
+#   npx wrangler d1 create stemwave-survey
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "stemwave-survey"
+database_id = "REPLACE_WITH_DATABASE_ID"
+
+# EXPORT_KEY is a secret, not a var. Set it with:
+#   npx wrangler pages secret put EXPORT_KEY
+# Do NOT put it in this file.
