@@ -14,9 +14,30 @@ deck has to print without eating a toner cartridge. Highlighter colors from the
 book are preserved as the grouping colors (green / blue), with the pink
 "MUSTS" annotation carried through as the accent.
 
+## Permission and required notice
+
+A.A.W.S. granted permission by email — Drew Deetz, Intellectual Property
+Administrator, General Service Office of Alcoholics Anonymous. A.A.W.S. stated
+it has no objection to screen-sharing A.A. literature found on aa.org or from
+authorized e-books during an A.A. meeting, and asked that this disclaimer be
+displayed when screen-sharing:
+
+> "These materials are copyright © by Alcoholics Anonymous World Services, Inc.
+> ("A.A.W.S."). All rights reserved. Individual printing or photocopying of a
+> single copy is permitted. Intended for personal use only, and not to be
+> reproduced further or distributed for resale."
+
+It appears in full on slide 1 and in short form as a footer on every content
+slide.
+
 ---
 
-## Slide 1 — Contents / roadmap
+## Slide 1 — Title and copyright notice
+
+Dark navy title slide. Deck title, edition line, the required disclaimer in a
+white card, and a line stating who asked for it and why.
+
+## Slide 2 — Contents / roadmap
 
 Source photo: Contents page, hand-annotated.
 
@@ -35,7 +56,26 @@ Also on the slide:
 - Ch. 8 "To Wives" struck, rewritten **To Al-Anons** (104)
 - Ch. 9 "The Family Afterward" struck, rewritten **The Alateens Afterward** (122)
 
-## Slide 2 — page 142, "The MUSTS"
+## Slide 3 — page 142, "Check out the newcomer"
+
+Source photo: p. 142, margin note "Start here with newcomer", brace at the foot
+of the page labeled "Check out the Newcomer". Three yellow-highlighted passages,
+reproduced in the order they appear:
+
+1. "Will he take every necessary step, submit to anything to get well, to stop
+   drinking forever?"
+2. "…does he think he is fooling you, and that after rest and treatment he will
+   be able to get away with a few drinks now and then? We believe a man should
+   be thoroughly probed on these points. Be satisfied he is not deceiving
+   himself or you."
+3. "Either you are dealing with a man who can and will get well or you are not.
+   If not, why waste time with him? This may seem severe, but it is usually the
+   best course."
+
+Note: p. 142 falls inside chapter 10, "To Employers" — cited that way on the
+slide, since someone in the room will look it up.
+
+## Slide 4 onward
 
 Pending. Next photo.
 

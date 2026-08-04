@@ -38,8 +38,14 @@ def main(path, out):
     .t>span{width:100%%}
     </style>""" % (W, H)]
 
+    ns = {"p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+          "a": "http://schemas.openxmlformats.org/drawingml/2006/main"}
     for si, slide in enumerate(prs.slides):
-        parts.append('<div class="slide">')
+        bg = "#fff"
+        el = slide._element.find("p:cSld/p:bg//a:srgbClr", ns)
+        if el is not None and el.get("val"):
+            bg = "#" + el.get("val")
+        parts.append('<div class="slide" style="background:%s">' % bg)
         for sp in slide.shapes:
             x, y = inches(sp.left) * PX, inches(sp.top) * PX
             w, h = inches(sp.width) * PX, inches(sp.height) * PX
