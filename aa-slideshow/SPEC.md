@@ -94,7 +94,27 @@ reproduced in two blocks:
 The margin note closes the slide as a navy callout — it is the takeaway, not a
 footnote.
 
-## Slide 5 onward
+## Slide 5 — Foreword to the First Edition, p. ix
+
+Source photo: two highlight colors on one paragraph, split mid-sentence.
+
+Green block — "We, of Alcoholics Anonymous, are more than **one hundred men and
+women** (circled) who have recovered from a seemingly hopeless state of mind and
+body. To show other alcoholics _precisely how we have recovered_ (underlined) is
+the main purpose of this book. For…"
+
+Blue block — "…them, we hope these pages will prove so convincing that no
+further authentication will be necessary. We think this account of our
+experiences will help everyone to better understand the alcoholic."
+
+The card colors follow the highlighter. The circle is rendered as bold green,
+the underline as bold italic underline.
+
+Margin note: "Authored this book, originally 87 raised to one hundred at
+printing time." Labeled MARGIN NOTE on the slide — it is fellowship history, not
+text from the book, and is marked as such so nobody quotes it as scripture.
+
+## Slide 6 onward
 
 Pending. Next photo.
 

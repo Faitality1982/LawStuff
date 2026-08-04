@@ -78,6 +78,8 @@ def main(path, out):
                     fnt = r.font
                     if fnt.size: st.append("font-size:%.1fpx" % (fnt.size.pt * PX / 72.0))
                     if fnt.bold: st.append("font-weight:700")
+                    if fnt.italic: st.append("font-style:italic")
+                    if fnt.underline: st.append("text-decoration:underline")
                     nm = (fnt.name or "")
                     st.append("font-family:%s" % ("Georgia,serif" if "Cambria" in nm else "Helvetica,Arial,sans-serif"))
                     c = color_of(fnt.color)

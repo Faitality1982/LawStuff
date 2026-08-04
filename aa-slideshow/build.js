@@ -364,5 +364,89 @@ s4.addNotes(
   "have not changed because they did not need to."
 );
 
+// =====================================================================
+// SLIDE 5 — Foreword to the First Edition, p. ix
+// =====================================================================
+const s5 = pres.addSlide();
+s5.background = { color: "FFFFFF" };
+
+s5.addText("Precisely How We Have Recovered", {
+  x: 0.6, y: 0.35, w: 8.9, h: 0.62,
+  fontFace: HEAD, fontSize: 38, bold: true, color: NAVY, margin: 0, valign: "middle",
+});
+s5.addText("The main purpose of this book.", {
+  x: 0.6, y: 1.0, w: 8.9, h: 0.38,
+  fontFace: BODY, fontSize: 17, italic: true, color: MUTED, margin: 0, valign: "middle",
+});
+
+s5.addShape(pres.ShapeType.roundRect, {
+  x: 9.7, y: 0.35, w: 3.03, h: 1.05, fill: { color: GREEN }, rectRadius: 0.1,
+});
+s5.addText(
+  [
+    { text: "FOREWORD", options: { fontFace: HEAD, fontSize: 17, bold: true, color: "FFFFFF", breakLine: true, charSpacing: 1 } },
+    { text: "First Edition  ·  p. ix", options: { fontFace: BODY, fontSize: 13, color: "D5E3CE" } },
+  ],
+  { x: 9.7, y: 0.35, w: 3.03, h: 1.05, align: "center", valign: "middle", margin: 0 }
+);
+
+s5.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 1.5, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s5.addText(
+  [
+    { text: "We, of Alcoholics Anonymous, are more than " },
+    { text: "one hundred men and women", options: { bold: true, color: GREEN } },
+    { text: " who have recovered from a seemingly hopeless state of mind and body. To show other " +
+            "alcoholics " },
+    { text: "precisely how we have recovered", options: { bold: true, italic: true, underline: { style: "sng" } } },
+    { text: " is the main purpose of this book. For…" },
+  ],
+  { x: 1.0, y: 1.55, w: 11.33, h: 1.5, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s5.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.3, w: 12.13, h: 1.5, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s5.addText(
+  "…them, we hope these pages will prove so convincing that no further authentication will be " +
+  "necessary. We think this account of our experiences will help everyone to better understand " +
+  "the alcoholic.",
+  { x: 1.0, y: 3.3, w: 11.33, h: 1.5, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s5.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 5.05, w: 12.13, h: 1.15, fill: { color: NAVY }, rectRadius: 0.08,
+});
+s5.addText("MARGIN NOTE", {
+  x: 1.0, y: 5.18, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+});
+s5.addText("Authored this book — originally 87, raised to one hundred at printing time.", {
+  x: 1.0, y: 5.48, w: 11.33, h: 0.6,
+  fontFace: HEAD, fontSize: 22, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+s5.addText(
+  [
+    { text: "Alcoholics Anonymous", options: { italic: true } },
+    { text: ", 4th ed., Foreword to the First Edition, p. ix." },
+  ],
+  { x: 0.6, y: 6.4, w: 12.13, h: 0.32, fontFace: BODY, fontSize: 12, color: MUTED, valign: "middle", margin: 0 }
+);
+addFooter(s5);
+
+s5.addNotes(
+  "Foreword to the First Edition - the Foreword as it appeared in 1939.\n\n" +
+  "Circled: one hundred men and women. That is who authored this book. The margin note\n" +
+  "is fellowship history, not text from the book - the count was 87 and was raised to one\n" +
+  "hundred by printing time.\n\n" +
+  "Underlined: precisely how we have recovered. Precisely. Not roughly, not our impressions.\n" +
+  "That is the main purpose of the book, stated on page ix before anything else.\n\n" +
+  "And the promise that follows: no further authentication will be necessary."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
