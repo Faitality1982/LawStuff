@@ -1589,5 +1589,125 @@ s28.addNotes(
   "saying medicine could not do it. Something more than human power is needed."
 );
 
+// =====================================================================
+// SLIDE 29 — The five types (p. xxvi)
+// =====================================================================
+const s29 = pres.addSlide();
+s29.background = { color: "FFFFFF" };
+header(s29, "The Classification of Alcoholics", "…seems most difficult, and in much detail is outside the scope of this book.",
+  { fill: NAVY, title: "THE BIG BOOK", sub: "p. xxvi", subColor: ON_NAVY });
+
+const types = [
+  { n: "TYPE I", y: 1.45, h: 1.0, dark: GREEN, tint: GREEN_TINT,
+    text: "There are, of course, the psychopaths who are emotionally unstable. We are all familiar " +
+          "with this type. They are always “going on the wagon for keeps.” They are over-remorseful " +
+          "and make many resolutions, but never a decision." },
+  { n: "TYPE II", y: 2.52, h: 0.86, dark: BLUE, tint: BLUE_TINT,
+    text: "There is the type of man who is unwilling to admit that he cannot take a drink. He plans " +
+          "various ways of drinking. He changes his brand or his environment." },
+  { n: "TYPE III", y: 3.45, h: 0.86, dark: GREEN, tint: GREEN_TINT,
+    text: "There is the type who always believes that after being entirely free from alcohol for a " +
+          "period of time he can take a drink without danger." },
+  { n: "TYPE IV", y: 4.38, h: 0.86, dark: BLUE, tint: BLUE_TINT,
+    text: "There is the manic-depressive type, who is, perhaps, the least understood by his friends, " +
+          "and about whom a whole chapter could be written." },
+  { n: "TYPE V", y: 5.31, h: 0.86, dark: GREEN, tint: GREEN_TINT,
+    text: "Then there are types entirely normal in every respect except in the effect alcohol has " +
+          "upon them. They are often able, intelligent, friendly people." },
+];
+
+types.forEach((t) => {
+  s29.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: t.y, w: 12.13, h: t.h, fill: { color: t.tint }, rectRadius: 0.08,
+  });
+  s29.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: t.y, w: 1.85, h: t.h, fill: { color: t.dark }, rectRadius: 0.08,
+  });
+  s29.addText(t.n, {
+    x: 0.6, y: t.y, w: 1.85, h: t.h,
+    fontFace: HEAD, fontSize: 16, bold: true, color: "FFFFFF",
+    align: "center", valign: "middle", margin: 0,
+  });
+  s29.addText(t.text, {
+    x: 2.68, y: t.y, w: 10.05, h: t.h,
+    fontFace: BODY, fontSize: 16, color: NAVY, valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s29, 6.3, "“The Doctor’s Opinion,” p. xxvi.");
+addFooter(s29);
+
+s29.addNotes(
+  "Five types, and the doctor is not being unkind about any of them. He is showing that the\n" +
+  "illness does not care what sort of person you are.\n\n" +
+  "Type I - over-remorseful, always going on the wagon for keeps. Many resolutions, but never\n" +
+  "a decision. Sit on that difference.\n\n" +
+  "Type II - unwilling to admit he cannot take a drink. Changes his brand, changes his\n" +
+  "environment. Anything but the one admission.\n\n" +
+  "Type III - believes that after enough time off he can drink safely again.\n\n" +
+  "Type IV - the manic-depressive, least understood by his friends.\n\n" +
+  "Type V - entirely normal in every respect except one. Able, intelligent, friendly people.\n" +
+  "That one is on the list so nobody in the room gets to disqualify himself for looking fine."
+);
+
+// =====================================================================
+// SLIDE 30 — One symptom in common (p. xxvi)
+// =====================================================================
+const s30 = pres.addSlide();
+s30.background = { color: "FFFFFF" };
+header(s30, "One Symptom in Common", "What every type shares.",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxvi", subColor: BLUE_SOFT });
+
+s30.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.7, w: 12.13, h: 2.2, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s30.addText(
+  [
+    { text: "All these, and many others, have " },
+    { text: "one symptom in common", options: { bold: true, color: BLUE } },
+    { text: ": they cannot start drinking without developing the phenomenon of craving. This " +
+            "phenomenon, as we have suggested, may be the manifestation of an allergy which " +
+            "differentiates these people, and " },
+    { text: "sets them apart as a distinct entity", options: { bold: true, color: BLUE } },
+    { text: ". It has never been, by any treatment with which we are familiar, " },
+    { text: "permanently eradicated", options: { bold: true, color: BLUE } },
+    { text: "." },
+  ],
+  { x: 1.0, y: 1.7, w: 11.33, h: 2.2, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s30.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 4.2, w: 12.13, h: 1.4, fill: { color: BLUE }, rectRadius: 0.08,
+});
+s30.addText("IMPORTANT", {
+  x: 1.0, y: 4.35, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: BLUE_SOFT, margin: 0, valign: "middle", charSpacing: 2,
+});
+s30.addText(
+  [
+    { text: "The only relief we have to suggest is " },
+    { text: "entire abstinence", options: { underline: { style: "dbl" } } },
+    { text: "." },
+  ],
+  { x: 1.0, y: 4.67, w: 11.33, h: 0.75,
+    fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle" }
+);
+
+cite(s30, 5.85, "“The Doctor’s Opinion,” p. xxvi.");
+addFooter(s30);
+
+s30.addNotes(
+  "This is the paragraph the margin marks IMPORTANT, and it is the one that ties the five\n" +
+  "types together.\n\n" +
+  "Whatever type a man is, one symptom is common to all of them: he cannot start drinking\n" +
+  "without developing the phenomenon of craving. Cannot start.\n\n" +
+  "Sets them apart as a distinct entity - not worse people, a different category.\n\n" +
+  "Never permanently eradicated, by any treatment he knows of. That word is doing a lot of\n" +
+  "work. Not cured. Arrested, at best.\n\n" +
+  "So the only relief he has to suggest is entire abstinence - double underlined in the study\n" +
+  "copy. Entire. Not moderation, not management. And relief, not cure."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));

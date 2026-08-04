@@ -274,7 +274,21 @@ presenter, not content, so it sits in slide 27's speaker notes as "SHOW SHEET
 here" rather than on the slide. Which sheet is meant is still unknown — if it is
 a handout that should live in the deck, it needs its own slide.
 
-## Slide 29 onward
+## Slides 29–30 — The five types (p. xxvi)
+
+- **Slide 29 — The Classification of Alcoholics.** Five labeled rows, alternating
+  green / blue / green / blue / green exactly as the highlighting runs. Label
+  blocks reuse the STEP-block treatment from slide 2.
+- **Slide 30 — One Symptom in Common.** The final blue paragraph, which the
+  margin brace marks **IMPORTANT**. That word becomes the label on a solid blue
+  bar carrying the closing sentence, with **entire abstinence** double-underlined
+  (verified in the photograph: two distinct pen strokes, not one).
+
+Bar-color rule, now explicit: a solid bar takes the color of the highlighter it
+came from — magenta for a pink must, blue here — and navy when the bar carries
+Will's margin note rather than book text.
+
+## Slide 31 onward
 
 Pending. Next photo.
 
