@@ -220,7 +220,38 @@ Will can restore the original dates — the speaker notes say so.
 - **Slide 20 — An Allergy to Alcohol.** The blue paragraph, opening sentence
   underlined.
 
-## Slide 21 onward
+## Slides 21–23 — The Doctor's Opinion continued (p. xxiii)
+
+The green arrow in the margin marks this run — from "The subject presented in
+this book…" down to "…put into practical application at once." Green-tinted
+cards throughout to match.
+
+- **Slide 21 — Of Paramount Importance.** The first three paragraphs. Margin
+  note: "Towns Hospital, New York City."
+- **Slide 22 — Beyond Our Conception.** The moral-psychology paragraph, split in
+  two so the admission about scientific training gets its own beat.
+- **Slide 23 — One of the Leading Contributors.** The last paragraph, with the
+  two circled words resolved in side-by-side cards: **this hospital** → Charles
+  B. Towns Hospital; **he** → Bill W.
+
+Also retrofitted: slide 20 now carries the margin note "Allergy = abnormal
+reaction," which sits at the top of p. xxiii but belongs with the allergy
+paragraph on p. xxii.
+
+### Researched, per Will's request
+
+The circled word is annotated "TOWNES" in the study copy. The hospital is the
+**Charles B. Towns Hospital** — one *e*, named for its founder Charles B. Towns —
+at 293 Central Park West, Manhattan. Silkworth was its medical director.
+
+Its significance to the passage: Bill W. was admitted there four times between
+1933 and 1934. His last drink was 11 December 1934; three days later, still a
+patient, he had the spiritual experience described in "Bill's Story." The ideas
+he "acquired" and "put into practical application at once" were Silkworth's —
+the allergy and the obsession. So the doctor writing this letter is the doctor
+who explained the illness to the man who wrote the book.
+
+## Slide 24 onward
 
 Pending. Next photo.
 

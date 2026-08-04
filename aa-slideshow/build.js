@@ -1166,7 +1166,7 @@ header(s20, "An Allergy to Alcohol", "The doctor’s theory.",
   { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxii", subColor: BLUE_SOFT });
 
 s20.addShape(pres.ShapeType.roundRect, {
-  x: 0.6, y: 2.0, w: 12.13, h: 2.75, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+  x: 0.6, y: 1.75, w: 12.13, h: 2.6, fill: { color: BLUE_TINT }, rectRadius: 0.08,
 });
 s20.addText(
   [
@@ -1176,11 +1176,12 @@ s20.addText(
             "ex-problem drinkers, we can say that his explanation makes good sense. It explains " +
             "many things for which we cannot otherwise account." },
   ],
-  { x: 1.0, y: 2.0, w: 11.33, h: 2.75, fontFace: BODY, fontSize: 21, color: NAVY,
+  { x: 1.0, y: 1.75, w: 11.33, h: 2.6, fontFace: BODY, fontSize: 21, color: NAVY,
     valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
 );
 
-cite(s20, 5.05, "“The Doctor’s Opinion,” p. xxii.");
+marginNote(s20, 4.65, 1.05, "Allergy = abnormal reaction.");
+cite(s20, 5.9, "“The Doctor’s Opinion,” p. xxii.");
 addFooter(s20);
 
 s20.addNotes(
@@ -1189,6 +1190,155 @@ s20.addNotes(
   "and that is the standing that counts in this room - the explanation makes good sense.\n\n" +
   "It explains many things for which we cannot otherwise account. That is the test they are\n" +
   "applying. Not is it proven, but does it account for what happened to me."
+);
+
+// =====================================================================
+// SLIDE 21 — Of paramount importance (p. xxiii)
+// =====================================================================
+const s21 = pres.addSlide();
+s21.background = { color: "FFFFFF" };
+header(s21, "Of Paramount Importance", "The doctor writes:",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "p. xxiii", subColor: GREEN_SOFT });
+
+s21.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 2.9, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s21.addText(
+  [
+    { text: "The subject presented in this book seems to me to be of paramount importance to those " +
+            "afflicted with alcoholic addiction.",
+      options: { breakLine: true, paraSpaceAfter: 10 } },
+    { text: "I say this after many years’ experience as Medical Director of " },
+    { text: "one of the oldest hospitals in the country treating alcoholic and drug addiction",
+      options: { bold: true, color: GREEN } },
+    { text: ".", options: { breakLine: true, paraSpaceAfter: 10 } },
+    { text: "There was, therefore, a sense of real satisfaction when I was asked to contribute a few " +
+            "words on a subject which is covered in such masterly detail in these pages." },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 2.9, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s21, 4.8, 1.05, "Towns Hospital, New York City.");
+cite(s21, 6.05, "“The Doctor’s Opinion,” p. xxiii.");
+addFooter(s21);
+
+s21.addNotes(
+  "The green arrow in the study copy starts here. This is the doctor speaking in his own\n" +
+  "voice, and the first thing he does is establish standing.\n\n" +
+  "The hospital is the Charles B. Towns Hospital, 293 Central Park West in Manhattan.\n" +
+  "Silkworth was its medical director. That is where he saw thousands of alcoholics come\n" +
+  "through, and it is where he met Bill.\n\n" +
+  "Note his word for the book - masterly. A physician calling a book written by drunks\n" +
+  "masterly, in 1939."
+);
+
+// =====================================================================
+// SLIDE 22 — Beyond our conception (p. xxiii)
+// =====================================================================
+const s22 = pres.addSlide();
+s22.background = { color: "FFFFFF" };
+header(s22, "Beyond Our Conception", "What we doctors have realized.",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "p. xxiii", subColor: GREEN_SOFT });
+
+[
+  { y: 1.8, h: 1.6,
+    runs: [
+      { text: "We doctors have realized for a long time that some form of " },
+      { text: "moral psychology", options: { bold: true, color: GREEN } },
+      { text: " was of urgent importance to alcoholics, but its application presented difficulties " +
+              "beyond our conception." },
+    ] },
+  { y: 3.7, h: 1.6,
+    runs: [
+      { text: "What with our ultra-modern standards, our scientific approach to everything, we are " +
+              "perhaps not well equipped to apply the powers of good that lie outside our synthetic " +
+              "knowledge." },
+    ] },
+].forEach((c) => {
+  s22.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: c.y, w: 12.13, h: c.h, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+  });
+  s22.addText(c.runs, {
+    x: 1.0, y: c.y, w: 11.33, h: c.h, fontFace: BODY, fontSize: 21, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s22, 5.6, "“The Doctor’s Opinion,” p. xxiii.");
+addFooter(s22);
+
+s22.addNotes(
+  "A doctor admitting the limits of medicine. Read that second paragraph slowly.\n\n" +
+  "They knew some form of moral psychology was urgently needed. They could not deliver it.\n" +
+  "Its application presented difficulties beyond our conception.\n\n" +
+  "And then he says why - our ultra-modern standards, our scientific approach to everything.\n" +
+  "The training that makes a good physician is the same training that leaves him not well\n" +
+  "equipped to apply powers of good outside his synthetic knowledge.\n\n" +
+  "He is describing the gap that the Twelve Steps walked into."
+);
+
+// =====================================================================
+// SLIDE 23 — One of the leading contributors (p. xxiii)
+// =====================================================================
+const s23 = pres.addSlide();
+s23.background = { color: "FFFFFF" };
+header(s23, "One of the Leading Contributors", "Came under our care in this hospital.",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "p. xxiii", subColor: GREEN_SOFT });
+
+s23.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.7, w: 12.13, h: 1.9, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s23.addText(
+  [
+    { text: "Many years ago " },
+    { text: "one of the leading contributors to this book", options: { bold: true, color: GREEN } },
+    { text: " came under our care in " },
+    { text: "this hospital", options: { bold: true, color: GREEN } },
+    { text: " and while here " },
+    { text: "he", options: { bold: true, color: GREEN } },
+    { text: " acquired some ideas which he put into practical application at once." },
+  ],
+  { x: 1.0, y: 1.7, w: 11.33, h: 1.9, fontFace: BODY, fontSize: 22, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+[
+  { x: 0.6, label: "THIS HOSPITAL", big: "Charles B. Towns Hospital",
+    small: "293 Central Park West, New York City." },
+  { x: 6.78, label: "HE", big: "Bill W.",
+    small: "Admitted four times, 1933–34. Last drink 11 December 1934." },
+].forEach((c) => {
+  s23.addShape(pres.ShapeType.roundRect, {
+    x: c.x, y: 3.9, w: 5.95, h: 1.7, fill: { color: NAVY }, rectRadius: 0.08,
+  });
+  s23.addText(c.label, {
+    x: c.x + 0.4, y: 4.05, w: 5.15, h: 0.28,
+    fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+  });
+  s23.addText(c.big, {
+    x: c.x + 0.4, y: 4.35, w: 5.15, h: 0.5,
+    fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+  });
+  s23.addText(c.small, {
+    x: c.x + 0.4, y: 4.9, w: 5.15, h: 0.55,
+    fontFace: BODY, fontSize: 14, color: ON_NAVY, margin: 0, valign: "top", lineSpacingMultiple: 1.15,
+  });
+});
+
+cite(s23, 5.8, "“The Doctor’s Opinion,” p. xxiii.");
+addFooter(s23);
+
+s23.addNotes(
+  "Silkworth is being discreet. He does not name him. But everyone reading this in 1939 who\n" +
+  "knew anything knew who it was.\n\n" +
+  "One of the leading contributors to this book is Bill W. This hospital is Towns. Bill was\n" +
+  "admitted four times between 1933 and 1934 - his last drink was 11 December 1934, and\n" +
+  "three days later, still in that hospital, he had the experience he describes in his story.\n\n" +
+  "The ideas he acquired came from Silkworth: the allergy, and the obsession. And he put them\n" +
+  "into practical application at once - meaning he went out and started talking to other\n" +
+  "alcoholics.\n\n" +
+  "The doctor who explained the illness to him is the same doctor writing this letter."
 );
 
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
