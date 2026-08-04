@@ -1037,5 +1037,159 @@ s16.addNotes(
   "That is the chain. It is in the doctor's letter before the book even starts."
 );
 
+// =====================================================================
+// SLIDE 17 — The signature (p. xxii)
+// =====================================================================
+const s17 = pres.addSlide();
+s17.background = { color: "FFFFFF" };
+header(s17, "William D. Silkworth, M.D.", "The letter is signed.",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxii", subColor: BLUE_SOFT });
+
+s17.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.8, w: 12.13, h: 2.3, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s17.addText("Very truly yours,", {
+  x: 1.0, y: 2.2, w: 11.33, h: 0.5,
+  fontFace: BODY, fontSize: 22, italic: true, color: NAVY, align: "right", valign: "middle", margin: 0,
+});
+s17.addText("William D. Silkworth, M.D.", {
+  x: 1.0, y: 2.8, w: 11.33, h: 0.75,
+  fontFace: HEAD, fontSize: 34, bold: true, color: BLUE, align: "right", valign: "middle", margin: 0,
+});
+
+marginNote(s17, 4.4, 1.1, "Signed “Anonymous” in the first editions.");
+cite(s17, 5.7, "“The Doctor’s Opinion,” p. xxii.");
+addFooter(s17);
+
+s17.addNotes(
+  "The doctor who wrote this letter is the same Silkworth from the Foreword - the one the\n" +
+  "book calls a medical saint, the one who told the broker the grave nature of alcoholism.\n\n" +
+  "His name is on it now. It was not always. In the first editions the letter was signed\n" +
+  "Anonymous, and the name was added later.\n\n" +
+  "A doctor put his professional reputation behind a book written by drunks, in 1939, when\n" +
+  "there was nothing to gain by it."
+);
+
+// =====================================================================
+// SLIDE 18 — As abnormal as his mind (p. xxii)
+// =====================================================================
+const s18 = pres.addSlide();
+s18.background = { color: "FFFFFF" };
+header(s18, "As Abnormal as His Mind", "What we who have suffered must believe.",
+  { fill: MAGENTA, title: "THE “MUSTS”", sub: "p. xxii", subColor: MAGENTA_SOFT });
+
+s18.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 2.3, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s18.addText(
+  [
+    { text: "The physician who, at our request, gave us this letter, has been kind enough to enlarge " +
+            "upon his views in another statement which follows. In this statement he " },
+    { text: "confirms what we who have suffered alcoholic torture must believe—",
+      options: { bold: true, color: MAGENTA } },
+    { text: "that the body of the alcoholic is quite as abnormal as his mind.",
+      options: { bold: true, color: MAGENTA, underline: { style: "sng" } } },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 2.3, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s18.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 4.2, w: 12.13, h: 1.35, fill: { color: MAGENTA }, rectRadius: 0.08,
+});
+s18.addText("A “MUST”", {
+  x: 1.0, y: 4.33, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: MAGENTA_SOFT, margin: 0, valign: "middle", charSpacing: 2,
+});
+s18.addText("…the body of the alcoholic is quite as abnormal as his mind.", {
+  x: 1.0, y: 4.63, w: 11.33, h: 0.75,
+  fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+cite(s18, 5.8, "“The Doctor’s Opinion,” p. xxii.");
+addFooter(s18);
+
+s18.addNotes(
+  "Body and mind. Both. That is the whole claim, and it is a must - what we who have\n" +
+  "suffered alcoholic torture must believe.\n\n" +
+  "Not a weak mind housed in a healthy body. Not a moral failure a person could think his\n" +
+  "way out of. The body is as abnormal as the mind.\n\n" +
+  "This is Step One territory. If only the mind were the problem, willpower would work."
+);
+
+// =====================================================================
+// SLIDE 19 — The physical factor (p. xxii)
+// =====================================================================
+const s19 = pres.addSlide();
+s19.background = { color: "FFFFFF" };
+header(s19, "The Physical Factor", "It did not satisfy us to be told…",
+  { fill: GREEN, title: "THE BIG BOOK", sub: "p. xxii", subColor: GREEN_SOFT });
+
+s19.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.85, w: 12.13, h: 3.05, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s19.addText(
+  [
+    { text: "It did not satisfy us to be told that we could not " },
+    { text: "control", options: { bold: true, underline: { style: "dbl" } } },
+    { text: " our drinking just because we were maladjusted to life, that we were in full flight from " +
+            "reality, or were outright mental defectives. These things were true to some extent, in " +
+            "fact, to a considerable extent with some of us. But we are sure that our bodies were " +
+            "sickened as well. " },
+    { text: "In our belief, any picture of the alcoholic which leaves out this physical factor is " +
+            "incomplete.", options: { bold: true, color: GREEN, underline: { style: "sng" } } },
+  ],
+  { x: 1.0, y: 1.85, w: 11.33, h: 3.05, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s19, 5.2, "“The Doctor’s Opinion,” p. xxii.");
+addFooter(s19);
+
+s19.addNotes(
+  "Control is double-underlined in the study copy. Sit on that word.\n\n" +
+  "They are not arguing that the psychological picture is wrong. Read it again - these things\n" +
+  "were true to some extent, in fact to a considerable extent with some of us. Maladjusted,\n" +
+  "in flight from reality, all of it. They grant it.\n\n" +
+  "What they will not grant is that it is the whole story. Our bodies were sickened as well.\n\n" +
+  "Any picture that leaves out the physical factor is incomplete. Incomplete, not wrong -\n" +
+  "and an incomplete picture is what keeps a man trying to solve a physical problem with\n" +
+  "resolutions."
+);
+
+// =====================================================================
+// SLIDE 20 — An allergy to alcohol (p. xxii)
+// =====================================================================
+const s20 = pres.addSlide();
+s20.background = { color: "FFFFFF" };
+header(s20, "An Allergy to Alcohol", "The doctor’s theory.",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "p. xxii", subColor: BLUE_SOFT });
+
+s20.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 2.0, w: 12.13, h: 2.75, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s20.addText(
+  [
+    { text: "The doctor’s theory that we have an allergy to alcohol interests us.",
+      options: { bold: true, color: BLUE, underline: { style: "sng" } } },
+    { text: " As laymen, our opinion as to its soundness may, of course, mean little. But as " +
+            "ex-problem drinkers, we can say that his explanation makes good sense. It explains " +
+            "many things for which we cannot otherwise account." },
+  ],
+  { x: 1.0, y: 2.0, w: 11.33, h: 2.75, fontFace: BODY, fontSize: 21, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s20, 5.05, "“The Doctor’s Opinion,” p. xxii.");
+addFooter(s20);
+
+s20.addNotes(
+  "Interests us. Not proves, not settles - interests. They are careful here.\n\n" +
+  "As laymen our opinion means little. They say so themselves. But as ex-problem drinkers -\n" +
+  "and that is the standing that counts in this room - the explanation makes good sense.\n\n" +
+  "It explains many things for which we cannot otherwise account. That is the test they are\n" +
+  "applying. Not is it proven, but does it account for what happened to me."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));

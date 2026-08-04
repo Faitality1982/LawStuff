@@ -206,7 +206,21 @@ he held. The federal office of Surgeon General of the United States dates to
 
 Will can restore the original dates — the speaker notes say so.
 
-## Slide 17 onward
+## Slides 17–20 — The Doctor's Opinion continued (p. xxii)
+
+- **Slide 17 — William D. Silkworth, M.D.** The blue-highlighted signature, set
+  as a signature block. Margin note: "Signed 'Anonymous' in the first editions."
+- **Slide 18 — As Abnormal as His Mind.** First half of the green paragraph. The
+  pink stretch runs in magenta; the underlined tail keeps its underline. Magenta
+  bar pulls the must.
+- **Slide 19 — The Physical Factor.** Second half of the green paragraph.
+  "control" carries a **double** underline (`u="dbl"`, verified in the slide
+  XML — the HTML preview renders it single, PowerPoint will not). The closing
+  sentence keeps its single underline, in green.
+- **Slide 20 — An Allergy to Alcohol.** The blue paragraph, opening sentence
+  underlined.
+
+## Slide 21 onward
 
 Pending. Next photo.
 
