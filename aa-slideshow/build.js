@@ -1709,5 +1709,376 @@ s30.addNotes(
   "copy. Entire. Not moderation, not management. And relief, not cure."
 );
 
+// =====================================================================
+// A card that carries Will's margin note in its right gutter. Used from
+// Bill's Story on, where nearly every highlight is tagged with a "level".
+// =====================================================================
+function markedCard(s, o) {
+  s.addShape(pres.ShapeType.roundRect, {
+    x: 0.6, y: o.y, w: 12.13, h: o.h, fill: { color: o.tint }, rectRadius: 0.08,
+  });
+  s.addText(o.runs, {
+    x: 1.0, y: o.y, w: o.note ? 8.55 : 11.33, h: o.h,
+    fontFace: BODY, fontSize: o.size || 17, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15,
+  });
+  if (o.note) {
+    s.addText(o.note, {
+      x: 9.75, y: o.y, w: 2.6, h: o.h,
+      fontFace: BODY, fontSize: 12.5, bold: true, color: o.dark,
+      align: "right", valign: "middle", margin: 0, lineSpacingMultiple: 1.1,
+    });
+  }
+}
+
+// =====================================================================
+// SLIDE 31 — Close of The Doctor's Opinion
+// =====================================================================
+const s31 = pres.addSlide();
+s31.background = { color: "FFFFFF" };
+header(s31, "He May Remain to Pray", "How the doctor closes his letter.",
+  { fill: BLUE, title: "THE BIG BOOK", sub: "The Doctor’s Opinion", subColor: BLUE_SOFT });
+
+s31.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.8, w: 12.13, h: 2.1, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s31.addText(
+  "I earnestly advise every alcoholic to read this book through, and though perhaps he came to " +
+  "scoff, he may remain to pray.",
+  { x: 1.0, y: 1.8, w: 11.33, h: 2.1, fontFace: BODY, fontSize: 26, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+s31.addText("William D. Silkworth, M.D.", {
+  x: 1.0, y: 4.05, w: 11.33, h: 0.45,
+  fontFace: HEAD, fontSize: 20, bold: true, color: BLUE, align: "right", valign: "middle", margin: 0,
+});
+
+marginNote(s31, 4.75, 1.1,
+  "Some people are alcoholics on their first drink. Others crossed the line.");
+cite(s31, 6.05, "close of “The Doctor’s Opinion.”");
+addFooter(s31);
+
+s31.addNotes(
+  "The last line of the letter, and he is still being careful. He does not promise. He advises.\n\n" +
+  "Came to scoff, may remain to pray. He knows exactly who is picking up this book and in\n" +
+  "what frame of mind.\n\n" +
+  "NOTE: this slide was built from dictation, not from a photograph of the page. Check the\n" +
+  "wording and add the page number before presenting."
+);
+
+// =====================================================================
+// SLIDE 32 — Bill's Story (chapter opener)
+// =====================================================================
+const s32 = pres.addSlide();
+s32.background = { color: NAVY };
+
+s32.addText("Bill’s Story", {
+  x: 0.9, y: 0.95, w: 11.53, h: 0.9,
+  fontFace: HEAD, fontSize: 46, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+s32.addText("Chapter 1   ·   Page 1", {
+  x: 0.9, y: 1.85, w: 11.53, h: 0.4,
+  fontFace: BODY, fontSize: 18, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+});
+
+s32.addShape(pres.ShapeType.roundRect, {
+  x: 0.9, y: 2.75, w: 11.53, h: 1.15, fill: { color: "FFFFFF" }, rectRadius: 0.1,
+});
+s32.addText(
+  [
+    { text: "Identify — " },
+    { text: "don’t", options: { underline: { style: "sng" } } },
+    { text: " compare." },
+  ],
+  { x: 1.3, y: 2.75, w: 10.73, h: 1.15,
+    fontFace: HEAD, fontSize: 30, bold: true, color: NAVY, valign: "middle", margin: 0 }
+);
+
+s32.addShape(pres.ShapeType.roundRect, {
+  x: 0.9, y: 4.2, w: 11.53, h: 1.7, fill: { color: "2A3B54" }, rectRadius: 0.1,
+});
+s32.addText("MARGIN NOTE", {
+  x: 1.3, y: 4.38, w: 10.73, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+});
+s32.addText(
+  "In A.A. the word “bottom” is used a lot, but the only true bottom is death. What there is, " +
+  "is different levels of alcoholism that we can get out at.",
+  { x: 1.3, y: 4.7, w: 10.73, h: 1.05,
+    fontFace: BODY, fontSize: 19, color: "FFFFFF", valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s32.addNotes(
+  "Two instructions before we read a word of it.\n\n" +
+  "Identify, do not compare. The moment you start measuring your drinking against Bill's,\n" +
+  "you are looking for a reason this does not apply to you.\n\n" +
+  "And the bottom. We say it constantly - he had to hit bottom. The only true bottom is\n" +
+  "death. Everything above that is a level, and every level has a door out of it.\n\n" +
+  "Watch for those levels as we read. They are marked all the way down this chapter."
+);
+
+// =====================================================================
+// SLIDE 33 — Ominous warning (p. 1)
+// =====================================================================
+const s33 = pres.addSlide();
+s33.background = { color: "FFFFFF" };
+header(s33, "Ominous Warning", "Which I failed to heed.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 1", subColor: BLUE_SOFT });
+
+s33.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.55, w: 12.13, h: 2.15, fill: { color: "F1F4F7" }, rectRadius: 0.08,
+});
+s33.addText(
+  [
+    { text: "“Here lies a Hampshire Grenadier", options: { breakLine: true } },
+    { text: "Who caught his death", options: { breakLine: true } },
+    { text: "Drinking cold small beer.", options: { breakLine: true } },
+    { text: "A good soldier is ne’er forgot", options: { breakLine: true } },
+    { text: "Whether he dieth by musket", options: { breakLine: true } },
+    { text: "Or by " },
+    { text: "pot", options: { bold: true, color: BLUE } },
+    { text: ".”" },
+  ],
+  { x: 1.0, y: 1.55, w: 8.0, h: 2.15, fontFace: HEAD, fontSize: 17, italic: true, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.1 }
+);
+s33.addText(
+  [
+    { text: "“POT”", options: { fontSize: 11, bold: true, color: MUTED, charSpacing: 2, breakLine: true } },
+    { text: "A pail — a vessel of drink.", options: { fontSize: 15, color: NAVY } },
+  ],
+  { x: 9.3, y: 1.55, w: 3.05, h: 2.15, fontFace: BODY, align: "right", valign: "middle", margin: 0 }
+);
+
+s33.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.95, w: 12.13, h: 2.0, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s33.addText(
+  [
+    { text: "Ominous warning—which I failed to heed.", options: { bold: true, color: BLUE } },
+    { text: " Twenty-two, and a veteran of foreign wars, I went home at last. I fancied myself a " +
+            "leader, for had not the men of my battery given me a special token of appreciation? " +
+            "My talent for leadership, I imagined, would place me at the head of vast enterprises " +
+            "which I would manage with the utmost assurance." },
+  ],
+  { x: 1.0, y: 3.95, w: 11.33, h: 2.0, fontFace: BODY, fontSize: 18, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s33, 6.15, "“Bill’s Story,” p. 1.");
+addFooter(s33);
+
+s33.addNotes(
+  "Read all of this one - the arrow in the margin says so.\n\n" +
+  "The epitaph is real, from Winchester Cathedral. Pot means a drinking vessel, a pail.\n" +
+  "A soldier who survived the muskets and died of the drink.\n\n" +
+  "Bill reads his own obituary on a tombstone at twenty-two and calls it an ominous warning\n" +
+  "he failed to heed. Then in the very next breath: leader, special token of appreciation,\n" +
+  "vast enterprises, utmost assurance.\n\n" +
+  "The warning and the ego, back to back, in one paragraph."
+);
+
+// =====================================================================
+// SLIDE 34 — The drive for success (p. 2)
+// =====================================================================
+const s34 = pres.addSlide();
+s34.background = { color: "FFFFFF" };
+header(s34, "The Drive for Success", "Wall Street, and a law course.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 2", subColor: BLUE_SOFT });
+
+[
+  { y: 1.6, h: 1.15, tint: BLUE_TINT, dark: BLUE, size: 19,
+    runs: [{ text: "The drive for success was on. My work took me about Wall Street and little by " +
+                   "little I became interested in the market." }] },
+  { y: 2.95, h: 1.15, tint: GREEN_TINT, dark: GREEN, size: 19,
+    runs: [{ text: "I nearly failed my law course. At one of the finals I was too drunk to think " +
+                   "or write." }] },
+  { y: 4.3, h: 1.55, tint: GREEN_TINT, dark: GREEN, size: 19,
+    runs: [{ text: "Though my drinking was not yet continuous, it disturbed my wife. We had long " +
+                   "talks when I would still her forebodings by telling her that " },
+           { text: "men of genius conceived their best projects when drunk", options: { bold: true, color: GREEN } },
+           { text: ";" }] },
+].forEach((c) => markedCard(s34, c));
+
+cite(s34, 6.15, "“Bill’s Story,” p. 2.");
+addFooter(s34);
+
+s34.addNotes(
+  "Too drunk to think or write at a final - and he nearly failed the course he was paying for\n" +
+  "with the job that drinking would eventually cost him.\n\n" +
+  "And then the excuse, which is the part to sit on: men of genius conceived their best\n" +
+  "projects when drunk. He is not lying to her. He believes it.\n\n" +
+  "Everyone in this room has had a version of that sentence."
+);
+
+// =====================================================================
+// SLIDE 35 — The weapon (p. 2)
+// =====================================================================
+const s35 = pres.addSlide();
+s35.background = { color: "FFFFFF" };
+header(s35, "Forging the Weapon", "Drink and speculation.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 2", subColor: GREEN_SOFT });
+
+[
+  { y: 1.55, h: 1.1, tint: BLUE_TINT, dark: BLUE, note: "Level —\nquitting projects",
+    runs: [{ text: "By the time I had completed the course, I knew the law was not for me. The " +
+                   "inviting maelstrom of Wall Street had me in its grip." }] },
+  { y: 2.75, h: 1.35, tint: GREEN_TINT, dark: GREEN,
+    runs: [{ text: "Out of this alloy of drink and speculation, I commenced to " },
+           { text: "forge the weapon that one day would turn in its flight like a boomerang and all " +
+                   "but cut me to ribbons", options: { bold: true, color: GREEN } },
+           { text: "." }] },
+  { y: 4.2, h: 0.9, tint: BLUE_TINT, dark: BLUE, note: "Some people’s\nyearly income",
+    runs: [{ text: "I saved $1,000.", options: { bold: true } }] },
+  { y: 5.2, h: 1.05, tint: BLUE_TINT, dark: BLUE, note: "First to write\na prospectus",
+    runs: [{ text: "I failed to persuade my broker friends to send me out looking over factories " +
+                   "and managements." }] },
+].forEach((c) => markedCard(s35, c));
+
+cite(s35, 6.4, "“Bill’s Story,” p. 2.");
+addFooter(s35);
+
+s35.addNotes(
+  "Quitting the law after finishing the course - that is a level. Not a catastrophe yet.\n" +
+  "Just a man walking away from the thing he trained for.\n\n" +
+  "The boomerang is his own image for it, written years later. Drink and speculation, alloyed\n" +
+  "into a weapon that comes back around.\n\n" +
+  "A thousand dollars in the early twenties was a year's income for a lot of people. And the\n" +
+  "idea nobody would fund - going out to look at the factories himself - is the one he was\n" +
+  "right about. He was among the first to write what we would now call a prospectus."
+);
+
+// =====================================================================
+// SLIDE 36 — I had arrived (p. 3)
+// =====================================================================
+const s36 = pres.addSlide();
+s36.background = { color: "FFFFFF" };
+header(s36, "I Had Arrived", "The levels, one after another.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 3", subColor: BLUE_SOFT });
+
+[
+  { y: 1.5, h: 0.9, tint: BLUE_TINT, dark: BLUE, note: "9 people’s\nyearly income",
+    runs: [{ text: "The exercise of an option brought in more money, leaving us with a profit of " +
+                   "several thousand dollars for that year." }] },
+  { y: 2.5, h: 0.8, tint: BLUE_TINT, dark: BLUE, note: "Egotistic", size: 24,
+    runs: [{ text: "I had arrived.", options: { bold: true } }] },
+  { y: 3.4, h: 0.85, tint: BLUE_TINT, dark: BLUE, note: "Another level",
+    runs: [{ text: "My drinking assumed more serious proportions, continuing all day and almost " +
+                   "every night." }] },
+  { y: 4.35, h: 0.95, tint: BLUE_TINT, dark: BLUE, note: "Another level —\ncarousing",
+    runs: [{ text: "There had been no real infidelity, for loyalty to my wife, helped at times by " +
+                   "extreme drunkenness, kept me out of those scrapes." }] },
+  { y: 5.4, h: 0.9, tint: BLUE_TINT, dark: BLUE, note: "Another level",
+    runs: [{ text: "Liquor caught up with me much faster than I came up behind Walter. I began to " +
+                   "be jittery in the morning." }] },
+].forEach((c) => markedCard(s36, c));
+
+cite(s36, 6.45, "“Bill’s Story,” p. 3.");
+addFooter(s36);
+
+s36.addNotes(
+  "Three words: I had arrived. That is the top of the arc, and the book gives it its own\n" +
+  "sentence for a reason.\n\n" +
+  "Then read the levels coming down off it. All day and almost every night. Kept out of the\n" +
+  "scrapes only by being too drunk for them - and notice he counts that as loyalty.\n\n" +
+  "Jittery in the morning. That is the body speaking now, not the ego."
+);
+
+// =====================================================================
+// SLIDE 37 — I would not jump (p. 4)
+// =====================================================================
+const s37 = pres.addSlide();
+s37.background = { color: "FFFFFF" };
+header(s37, "I Would Not Jump", "October 1929.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 4", subColor: GREEN_SOFT });
+
+[
+  { y: 1.7, h: 1.4, tint: GREEN_TINT, dark: GREEN, note: "Insanity", size: 19,
+    runs: [{ text: "The papers reported men jumping to death from the towers of High Finance. " +
+                   "That disgusted me. " },
+           { text: "I would not jump. I went back to the bar.", options: { bold: true, color: GREEN } }] },
+  { y: 3.25, h: 1.3, tint: BLUE_TINT, dark: BLUE, note: "Another level", size: 19,
+    runs: [{ text: "Next morning I telephoned a friend in Montreal. He had plenty of money left " +
+                   "and thought I had better go to Canada." }] },
+].forEach((c) => markedCard(s37, c));
+
+marginNote(s37, 4.85, 1.05, "Level — sponging off of family.");
+cite(s37, 6.1, "“Bill’s Story,” p. 4.");
+addFooter(s37);
+
+s37.addNotes(
+  "Men are going out of windows and his reaction is disgust - and then the bar. He notices\n" +
+  "the insanity in other people and walks straight into his own.\n\n" +
+  "Montreal is the next level: somebody else still has money, so go there.\n\n" +
+  "And when that ends, they move in with his wife's parents. Sponging off family. Nobody\n" +
+  "calls it that at the time. It is always temporary, always somebody being generous."
+);
+
+// =====================================================================
+// SLIDE 38 — I still thought I could control it (p. 5)
+// =====================================================================
+const s38 = pres.addSlide();
+s38.background = { color: "FFFFFF" };
+header(s38, "I Still Thought I Could Control It", "Liquor ceased to be a luxury.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 5", subColor: GREEN_SOFT });
+
+[
+  { y: 1.7, h: 1.0, tint: GREEN_TINT, dark: GREEN, note: "Another level", size: 20,
+    runs: [{ text: "Liquor ceased to be a luxury; it became a necessity.", options: { bold: true } }] },
+  { y: 2.85, h: 1.3, tint: GREEN_TINT, dark: GREEN, note: "Another level", size: 19,
+    runs: [{ text: "Nevertheless, I still thought I could " },
+           { text: "control", options: { bold: true, underline: { style: "dbl" } } },
+           { text: " the situation, and there were periods of sobriety which renewed my wife’s hope." }] },
+  { y: 4.3, h: 1.0, tint: BLUE_TINT, dark: BLUE, note: "Blinded to life", size: 20,
+    runs: [{ text: "Gradually things got worse.", options: { bold: true } }] },
+].forEach((c) => markedCard(s38, c));
+
+cite(s38, 5.55, "“Bill’s Story,” p. 5.");
+addFooter(s38);
+
+s38.addNotes(
+  "Luxury to necessity. One clause, and a whole line has been crossed.\n\n" +
+  "Control is double-underlined here, the same as on page xxii where the book says we could\n" +
+  "not control our drinking. Same word, both places.\n\n" +
+  "And notice what keeps the thing alive: periods of sobriety which renewed my wife's hope.\n" +
+  "The dry stretches are not evidence of control. They are what makes everyone keep believing.\n\n" +
+  "Gradually things got worse. Gradually. Nobody sees it happening, which is the note in the\n" +
+  "margin - blinded to life."
+);
+
+// =====================================================================
+// SLIDE 39 — Was I crazy? (p. 5)
+// =====================================================================
+const s39 = pres.addSlide();
+s39.background = { color: "FFFFFF" };
+header(s39, "Was I Crazy?", "Will power, and what it was worth.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 5", subColor: GREEN_SOFT });
+
+[
+  { y: 1.6, h: 1.75, tint: GREEN_TINT, dark: GREEN, note: "Will\nPower", size: 19,
+    runs: [{ text: "I woke up. This had to be stopped. I saw I could not take so much as one drink. " },
+           { text: "I was through forever.", options: { bold: true, color: GREEN } },
+           { text: " Before then, I had written lots of sweet promises, but my wife happily observed " +
+                   "that this time I meant business. And so I did." }] },
+  { y: 3.55, h: 1.05, tint: BLUE_TINT, dark: BLUE, size: 20,
+    runs: [{ text: "Shortly afterward I came home drunk. There had been no fight.", options: { bold: true } }] },
+  { y: 4.8, h: 1.05, tint: GREEN_TINT, dark: GREEN, note: "Level", size: 26,
+    runs: [{ text: "Was I crazy?", options: { bold: true, underline: { style: "sng" } } }] },
+].forEach((c) => markedCard(s39, c));
+
+cite(s39, 6.05, "“Bill’s Story,” p. 5.");
+addFooter(s39);
+
+s39.addNotes(
+  "This is the will power level, and it is the honest one. He is not lying, he is not\n" +
+  "half-hearted, he is not making a sweet promise. He means it, and his wife can tell the\n" +
+  "difference. And so I did - he actually stopped.\n\n" +
+  "Then: shortly afterward I came home drunk. There had been no fight.\n\n" +
+  "No fight. No reason. No trigger to point at. That is the whole argument for the physical\n" +
+  "factor, told as a story instead of a theory.\n\n" +
+  "Was I crazy? He underlines it. He is asking the question the Doctor's Opinion already\n" +
+  "answered - the body is as abnormal as the mind."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));

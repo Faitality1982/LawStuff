@@ -288,7 +288,42 @@ Bar-color rule, now explicit: a solid bar takes the color of the highlighter it
 came from — magenta for a pink must, blue here — and navy when the bar carries
 Will's margin note rather than book text.
 
-## Slide 31 onward
+## Slides 31–39 — Close of The Doctor's Opinion, and Bill's Story pp. 1–5
+
+New component from here on: `markedCard()` — a tinted card with Will's margin
+note set small and bold in the right gutter. Bill's Story tags nearly every
+highlight with a "level," and full navy bars for each would swamp the slides.
+
+- **Slide 31 — He May Remain to Pray.** Close of the letter, plus the note
+  "Some people are alcoholics on their first drink. Others crossed the line."
+- **Slide 32 — Bill's Story.** Dark chapter-opener, matching slide 1's language
+  so the section break reads. "Identify — <u>don't</u> compare," then the bottom
+  note, which is the organizing frame for everything that follows.
+- **Slide 33 — Ominous Warning.** The Winchester epitaph with "pot" glossed, then
+  the closing paragraph of p. 1 (the blue arrow says "read all of this").
+- **Slides 34–35 — p. 2.** Seven highlights split across two slides.
+- **Slide 36 — p. 3.** Five highlights, five levels.
+- **Slide 37 — p. 4.** Insanity, Montreal, sponging off family.
+- **Slides 38–39 — p. 5.** Six highlights split so "Was I crazy?" lands last.
+  "control" is double-underlined, matching the same word on p. xxii.
+
+### Two items to check before presenting
+
+- **Slide 31 was built from dictation, not a photograph.** Verify the wording and
+  add the page number. Speaker notes carry the same warning.
+- **The gloss on "pot."** Enlarged, the margin word reads **PAIL** — which fits
+  the epitaph, where "pot" is a drinking vessel. The final letter is not
+  perfectly clear; confirm against the book.
+
+### Not built — offered
+
+The margin notes accumulate into a descent: quitting projects → egotistic →
+carousing → insanity → sponging off family → blinded to life → will power →
+"was I crazy?" A single recap slide listing them in order would make the
+"levels" frame visible all at once. Not built, since it is an addition rather
+than something on the page.
+
+## Slide 40 onward
 
 Pending. Next photo.
 
