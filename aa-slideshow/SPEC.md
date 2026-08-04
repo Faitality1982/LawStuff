@@ -75,9 +75,42 @@ reproduced in the order they appear:
 Note: p. 142 falls inside chapter 10, "To Employers" — cited that way on the
 slide, since someone in the room will look it up.
 
-## Slide 4 onward
+## Slide 4 — Preface, p. vii: the basic text
+
+Source photo: Preface, p. vii. "basic text" circled, with a line running to the
+margin note **"Book for transferring knowledge."** Blue-highlighted passage
+reproduced in two blocks:
+
+1. "Because this book has become the **basic text** for our Society and has
+   helped such large numbers of alcoholic men and women to recovery, there
+   exists strong sentiment against any radical changes being made in it.
+   Therefore, the first portion of this volume, describing the A.A. recovery
+   program, has been left largely untouched in the course of revisions made for
+   the second, third, and fourth editions."
+2. "The section called 'The Doctor's Opinion' has been kept intact, just as it
+   was originally written in 1939 by the late Dr. William D. Silkworth, our
+   Society's great medical benefactor."
+
+The margin note closes the slide as a navy callout — it is the takeaway, not a
+footnote.
+
+## Slide 5 onward
 
 Pending. Next photo.
+
+---
+
+## Rebuilding
+
+```bash
+npm install pptxgenjs          # once
+node build.js                  # writes aa-big-book-study.pptx
+python3 render.py aa-big-book-study.pptx preview.html
+# NOTE: headless Chrome's viewport is ~90px shorter than --window-size,
+# so request extra height and crop, or the bottom of each slide is lost.
+chrome --headless --no-sandbox --hide-scrollbars \
+  --window-size=1345,$((750 * NSLIDES + 120)) --screenshot=full.png file://$PWD/preview.html
+```
 
 ---
 

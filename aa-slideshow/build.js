@@ -281,5 +281,88 @@ s3.addNotes(
   "to anyone carrying the message to a newcomer."
 );
 
+// =====================================================================
+// SLIDE 4 — Preface, p. vii: the basic text
+// =====================================================================
+const s4 = pres.addSlide();
+s4.background = { color: "FFFFFF" };
+
+s4.addText("The Basic Text", {
+  x: 0.6, y: 0.35, w: 8.6, h: 0.62,
+  fontFace: HEAD, fontSize: 40, bold: true, color: NAVY, margin: 0, valign: "middle",
+});
+s4.addText("“…the basic text for our Society.”", {
+  x: 0.6, y: 1.0, w: 8.6, h: 0.38,
+  fontFace: BODY, fontSize: 17, italic: true, color: MUTED, margin: 0, valign: "middle",
+});
+
+s4.addShape(pres.ShapeType.roundRect, {
+  x: 9.6, y: 0.35, w: 3.13, h: 1.05, fill: { color: BLUE }, rectRadius: 0.1,
+});
+s4.addText(
+  [
+    { text: "PREFACE", options: { fontFace: HEAD, fontSize: 19, bold: true, color: "FFFFFF", breakLine: true, charSpacing: 2 } },
+    { text: "Page vii", options: { fontFace: BODY, fontSize: 14, color: "C7DEEC" } },
+  ],
+  { x: 9.6, y: 0.35, w: 3.13, h: 1.05, align: "center", valign: "middle", margin: 0 }
+);
+
+s4.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 1.9, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s4.addText(
+  [
+    { text: "Because this book has become the " },
+    { text: "basic text", options: { bold: true } },
+    { text: " for our Society and has helped such large numbers of alcoholic men and women to " +
+            "recovery, there exists strong sentiment against any radical changes being made in it. " +
+            "Therefore, the first portion of this volume, describing the A.A. recovery program, has " +
+            "been left largely untouched in the course of revisions made for the second, third, and " +
+            "fourth editions." },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 1.9, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s4.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.7, w: 12.13, h: 1.2, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s4.addText(
+  "The section called “The Doctor’s Opinion” has been kept intact, just as it was originally " +
+  "written in 1939 by the late Dr. William D. Silkworth, our Society’s great medical benefactor.",
+  { x: 1.0, y: 3.7, w: 11.33, h: 1.2, fontFace: BODY, fontSize: 19, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s4.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 5.15, w: 12.13, h: 1.0, fill: { color: NAVY }, rectRadius: 0.08,
+});
+s4.addText("MARGIN NOTE", {
+  x: 1.0, y: 5.28, w: 11.33, h: 0.28,
+  fontFace: BODY, fontSize: 11, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+});
+s4.addText("A book for transferring knowledge.", {
+  x: 1.0, y: 5.56, w: 11.33, h: 0.45,
+  fontFace: HEAD, fontSize: 24, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+});
+
+s4.addText(
+  [
+    { text: "Alcoholics Anonymous", options: { italic: true } },
+    { text: ", 4th ed., Preface, p. vii." },
+  ],
+  { x: 0.6, y: 6.3, w: 12.13, h: 0.32, fontFace: BODY, fontSize: 12, color: MUTED, valign: "middle", margin: 0 }
+);
+addFooter(s4);
+
+s4.addNotes(
+  "Preface, page vii. Why this book is the one we work from.\n\n" +
+  "It is the basic text - that word is circled for a reason. The first portion, the part\n" +
+  "that describes the recovery program, has been left largely untouched through three\n" +
+  "revisions. The Doctor's Opinion is exactly as Dr. Silkworth wrote it in 1939.\n\n" +
+  "So: this is a book for transferring knowledge. Not a memoir, not history. The directions\n" +
+  "have not changed because they did not need to."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
