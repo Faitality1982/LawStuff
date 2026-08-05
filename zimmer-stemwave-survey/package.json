@@ -6,13 +6,14 @@
   "type": "module",
   "scripts": {
     "test": "node tools/test_api.mjs",
-    "dev": "wrangler pages dev public --d1=DB=stemwave-survey --local",
-    "db:init:local": "wrangler d1 execute stemwave-survey --local --file=./schema.sql",
-    "db:init:remote": "wrangler d1 execute stemwave-survey --remote --file=./schema.sql",
-    "deploy": "wrangler pages deploy public --project-name=zimmer-stemwave-survey",
-    "tail": "wrangler pages deployment tail --project-name=zimmer-stemwave-survey"
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod",
+    "export": "node tools/fetch_export.mjs"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0"
+    "netlify-cli": "^23.0.0"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.0"
   }
 }

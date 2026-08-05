@@ -1,221 +1,142 @@
-# Deploy runbook
+# Deploy runbook — Netlify
 
-Everything here has to run from a machine with your Cloudflare login. The build
-session had no Cloudflare credentials, so none of this has been executed yet —
-treat every step as unverified until you've run it.
+Everything here runs from a machine logged into Netlify. The build session had
+no Netlify credentials, so **none of this has been executed** — treat every step
+as unverified until you've run it.
 
-Budget about 40 minutes for the first deploy, most of it waiting on DNS.
-
----
-
-## 0. Where this lives
-
-The target is **`logicloomllc.com`**, which is already fully on Cloudflare:
-
-```
-NS   alice.ns.cloudflare.com, mark.ns.cloudflare.com
-A    logicloomllc.com -> 172.67.199.21, 104.21.21.135   (Cloudflare proxy)
-MX   route1/2/3.mx.cloudflare.net                        (Email Routing)
-TXT  v=spf1 include:_spf.mx.cloudflare.net ~all
-```
-
-That makes this easy. The zone is in the same Cloudflare account as the Pages
-project, so **Pages creates the DNS record itself** — there is no external DNS
-panel to touch, and mail is Cloudflare Email Routing rather than an outside
-provider, so nothing here can endanger it.
-
-> Note for anyone reading old notes: `logicloom.com` (no `llc`) is a *different*
-> domain, sitting on Microsoft nameservers. It is not the target and should not
-> be touched.
-
-**Plan: `stemwave.logicloomllc.com`.**
-
-Path routing (`logicloomllc.com/stemwave`) is technically possible now that the
-zone is on Cloudflare, but it needs a Worker route sitting in front of the live
-root site. That's more moving parts on something already working, for a survey
-with a six-week life. The subdomain is zero-touch and deletes cleanly.
+About 20 minutes end to end.
 
 ---
 
-## 1. Create the D1 database
+## What you're deploying
+
+| | |
+|---|---|
+| Static site | `public/` — the survey, plain HTML/CSS/JS, no build step |
+| Functions | `netlify/functions/` — `submit` and `export`, Netlify Functions v2 |
+| Database | **Netlify Blobs** — one JSON record per response, built in, free |
+| URL | `https://zimmerstemwave.netlify.app` (the QR codes encode this) |
+
+There is no separate database service to sign up for. Blobs is part of
+Netlify and is enabled automatically the first time a function writes to it.
+
+---
+
+## 1. Deploy
 
 ```bash
 cd zimmer-stemwave-survey
 npm install
-npx wrangler login
-
-npx wrangler d1 create stemwave-survey
+npx netlify login
+npx netlify init      # "Create & configure a new site"
 ```
 
-Copy the `database_id` it prints into `wrangler.toml`, replacing
-`REPLACE_WITH_DATABASE_ID`. Then create the tables:
+When it asks for a **site name, enter `zimmerstemwave`** — the QR codes already
+encode `zimmerstemwave.netlify.app`. If that name is taken, pick another and
+regenerate the codes (step 3); it's a 10-second job, just don't print anything
+first.
+
+Then:
 
 ```bash
-npm run db:init:remote
+npm run deploy
 ```
 
-Verify:
-
-```bash
-npx wrangler d1 execute stemwave-survey --remote \
-  --command "SELECT name FROM sqlite_master WHERE type='table'"
-```
-
-You want a single table: `responses`.
+`netlify.toml` already sets the publish directory, the functions directory, and
+the security headers, so there is nothing to configure in the UI for the build.
 
 ---
 
-## 2. Run it locally first
+## 2. Set the export key
+
+This is the password that protects the response data. Without it the export
+endpoint refuses to serve anything.
 
 ```bash
-npm run db:init:local
-npm run dev
+openssl rand -base64 32          # generate one
+npx netlify env:set EXPORT_KEY 'paste-the-value-here'
+npm run deploy                   # env vars apply to new deploys
 ```
 
-Open <http://localhost:8788/?src=counter>. **Use your phone's viewport**, not a
-desktop window — this is a phone-only survey in practice.
+Keep a copy in your password manager. There is no way to recover it from
+Netlify's UI later — you'd just set a new one.
 
-Walk the whole thing once and confirm:
+Check it works:
+
+```bash
+curl -sI "https://zimmerstemwave.netlify.app/api/export?key=WRONG" | head -1
+# expect: HTTP/2 404   (a wrong key looks like a missing page, on purpose)
+
+curl -sI "https://zimmerstemwave.netlify.app/api/export?key=YOUR_KEY" | head -1
+# expect: HTTP/2 200
+```
+
+---
+
+## 3. Walk the survey once, on a phone
+
+Open <https://zimmerstemwave.netlify.app/?src=counter> **on an actual phone**,
+not a desktop window. Confirm:
 
 - [ ] Answering "No" to the first question skips the pain and pricing blocks
 - [ ] The four price questions appear **before** the $2,809 reveal
 - [ ] Entering the price boxes out of order warns you once, then lets you pass
 - [ ] Choosing "Monthly payments" reveals the follow-up amount question
 - [ ] The counter never counts *upward* (it may shrink from 21 to 9)
+- [ ] Nothing anywhere asks for your name
 - [ ] After submitting, closing and reopening gives a **fresh** survey
 
-Then check the row landed:
+Then confirm the response actually landed:
 
 ```bash
-npx wrangler d1 execute stemwave-survey --local \
-  --command "SELECT id, src, completed, vw_valid, path FROM responses"
+EXPORT_KEY='your-key' npm run export
 ```
+
+It writes `responses-YYYY-MM-DD.csv` and prints the record count. If that's 1,
+the whole pipeline works.
+
+**If the count is 0 but the survey said thank-you**, the write failed silently —
+check `npx netlify logs:function submit`.
 
 ---
 
-## 3. Deploy to Pages
+## 4. Regenerate the QR codes (only if the site name changed)
 
 ```bash
-npx wrangler pages project create zimmer-stemwave-survey \
-  --production-branch main
-npm run deploy
+pip install segno zxing-cpp opencv-python-headless
+python3 tools/make_qr.py --base https://YOUR-SITE.netlify.app
 ```
 
-Bind the database in the dashboard — **this is the step people forget**, and
-without it every submission returns a 500:
+It reads every code back and confirms it decodes to the right URL before
+printing the summary. Also update the printed URL in
+`print/counter-card.html`.
 
-> Workers & Pages → zimmer-stemwave-survey → Settings → Bindings →
-> Add → D1 database → variable name `DB` → database `stemwave-survey`
-
-Set it for **both** Production and Preview. Then set the export secret:
-
-```bash
-npx wrangler pages secret put EXPORT_KEY
-# paste a long random string; keep a copy in your password manager
-```
-
-Generate one with:
-
-```bash
-openssl rand -base64 32
-```
-
-Redeploy after adding bindings (`npm run deploy`) — bindings only attach to
-deployments created after them.
+**Then test the print physically.** Print the card at its real size, tape it
+where it's going to live, and scan it with an iPhone, an Android, and the
+oldest phone you can borrow — from where a patient actually stands, in the
+light that's actually there. Front-desk lighting is usually bad and often has
+window glare. Matte stock, no lamination: gloss is the most common reason a
+card that scanned on your desk fails at the counter.
 
 ---
 
-## 4. Custom domain
-
-Because `logicloomllc.com` is in the same Cloudflare account, this is one
-screen and no manual DNS:
-
-> Workers & Pages → zimmer-stemwave-survey → Custom domains →
-> Set up a custom domain → `stemwave.logicloomllc.com` → Activate domain
-
-Cloudflare recognises the zone, **adds the CNAME for you**, and issues the
-certificate automatically. Usually live in a couple of minutes.
-
-Confirm:
-
-```bash
-dig +short stemwave.logicloomllc.com
-curl -sSI https://stemwave.logicloomllc.com | head -3
-```
-
-Two things to leave alone while you're in the DNS tab: the root `A` records and
-anything under `route*.mx.cloudflare.net` / `_spf.mx.cloudflare.net`. Those are
-the live site and Email Routing. Adding a subdomain doesn't affect either — just
-don't edit them by accident.
-
-**Fallback:** ship `zimmer-stemwave-survey.pages.dev` as-is. It works
-immediately. A branded domain reads as more legitimate on a printed card, so
-prefer the subdomain, but don't let it block the pilot.
-
----
-
-## 5. Generate the QR codes
-
-Only after the URL is final and loading:
-
-```bash
-pip install segno
-python3 tools/make_qr.py --base https://stemwave.logicloomllc.com
-```
-
-Writes SVG (print) and PNG (screen) per placement into `qr/`.
-
-**Then test them physically.** Print the counter card at its real size, tape it
-where it's going to live, and scan it with:
-
-- [ ] an iPhone
-- [ ] an Android phone
-- [ ] the oldest phone you can borrow
-- [ ] from where a patient actually stands, in the light that's actually there
-
-Front-desk lighting is usually bad and often has glare from a window. A code
-that scans on your desk can fail on a glossy laminated card under a downlight.
-Matte stock, no lamination.
-
----
-
-## 6. Before it goes live
+## 5. Before it goes live
 
 - [ ] **Dr. Zimmer has signed off on the concept copy.** The description in
       `questions.js` (screen `concept`) is deliberately conservative — mechanism
       and logistics, no outcome claims. If he wants regenerative or stem-cell
       language added, that's his call to make knowingly: it's the kind of claim
       that draws FTC and state-board attention in chiropractic marketing.
-- [ ] Confirm the pricing in `config.js` still matches what he's considering.
+- [ ] Confirm the pricing in `config.js` matches what he's considering.
 - [ ] Confirm a monthly payment plan is genuinely on the table
       (`config.enableMonthlyPlanQuestion`). If he'd never offer financing, turn
       it off — but that question is the highest-value one in the survey, so
       turn it off only if the answer really is never.
 - [ ] Brief the front desk (script below).
-- [ ] Optionally add anti-abuse (below). Skippable — the survey works without it.
-
-### Optional: anti-abuse
-
-The survey is deliberately open to anyone who scans the code, so this is about
-raising the effort, not sealing it. Both options are free and neither collects
-anything about the respondent.
-
-**Turnstile** — create a widget in the Cloudflare dashboard (Turnstile → Add
-site → `stemwave.logicloomllc.com`), then put the site key in
-`config.turnstileSiteKey`. It challenges browsers, not people.
-
-**Rate limiting** — Security → WAF → Rate limiting rules:
-
-> If URI Path equals `/api/submit` → more than **5** requests per **1 minute**
-> from the same IP → Block for 10 minutes
-
-Cloudflare evaluates this at the edge, so no IP address ever reaches the
-application or the database. Five per minute is far above a real respondent
-(the survey takes ~3 minutes) and well below a useful flood.
 
 ---
 
-## 7. Front desk script
+## 6. Front desk script
 
 Print this and stick it by the terminal. The ask is the whole ballgame — a
 receptionist who sounds unsure gets a 10% scan rate, one who sounds like it
@@ -231,35 +152,54 @@ Points that matter, in order:
 1. **"Dr. Zimmer wants to know what you think"** — it's a favour to someone
    they know, not a marketing funnel.
 2. **"Completely anonymous"** — say it every time, it's the main objection.
+   It's also literally true: there is no name field anywhere.
 3. **"About three minutes"** — and it's true, so it stays true.
 4. **"You can finish it in the car"** — answers save on their phone. This
    rescues everyone who says "I'm in a rush."
 
-Do **not** say it's about a specific new machine, and don't describe the
-therapy — the survey does that in controlled wording, and an off-the-cuff
-description in the lobby is exactly the claims risk we designed around.
+Do **not** describe the therapy off the cuff — the survey does that in
+controlled wording, and an improvised description in the lobby is exactly the
+claims risk the copy was written to avoid.
 
 ---
 
-## 8. Getting the data out
+## 7. Getting the data out
 
 ```bash
-curl -sS "https://stemwave.logicloomllc.com/api/export?key=YOUR_EXPORT_KEY" \
-  -o responses.csv
+EXPORT_KEY='your-key' npm run export
+python3 tools/analyze.py responses-2026-09-15.csv
 ```
 
-Wrong or missing key returns a plain 404, so the endpoint doesn't advertise
-itself. Then:
-
-```bash
-python3 tools/analyze.py responses.csv
-```
-
-Prints the price curves, the intersections, where $2,760 falls, Juster intent,
-and the key segment. Writes `price-sensitivity.png` if matplotlib is installed.
+The analyser prints the price curves, the four Van Westendorp intersections,
+where $2,760 falls relative to them, Juster purchase intent, and the key
+segment (tried 3+ things, still dissatisfied). It writes
+`price-sensitivity.png` if matplotlib is installed.
 
 **Don't analyse before ~50 responses.** Van Westendorp curves need the sample;
 below 30 the script says so and you should believe it.
+
+Raw JSON instead of CSV:
+
+```bash
+curl -sS "https://zimmerstemwave.netlify.app/api/export?key=YOUR_KEY&format=json" | less
+```
+
+---
+
+## 8. Optional: a branded URL
+
+`zimmerstemwave.netlify.app` is fine and works immediately. If you'd rather the
+card read `stemwave.logicloomllc.com`, that domain is on Cloudflare and it's one
+record:
+
+> Cloudflare DNS → logicloomllc.com → Add record
+> Type `CNAME`, Name `stemwave`, Target `zimmerstemwave.netlify.app`,
+> Proxy status **DNS only** (grey cloud — Netlify needs to terminate TLS itself)
+
+Then in Netlify: Domain management → Add a domain → `stemwave.logicloomllc.com`.
+
+Regenerate the QR codes afterwards (step 4). Don't print anything until the
+final URL is decided.
 
 ---
 
@@ -267,13 +207,10 @@ below 30 the script says so and you should believe it.
 
 It's a temporary survey. When it's done:
 
-1. Export the responses and save the CSV somewhere durable — the D1 database
-   is the only copy.
+1. Export the responses and check the CSV opens. **Netlify Blobs is the only
+   copy.**
 2. Pull the printed QR codes off the counter.
-3. Delete the Pages project and the D1 database:
-   ```bash
-   npx wrangler d1 delete stemwave-survey
-   ```
-4. Remove the `stemwave` record from the Cloudflare DNS tab.
+3. Delete the site in the Netlify UI (Site configuration → Danger zone), which
+   deletes the blob store with it.
 
-Step 1 first, and check the file opens before you delete anything.
+Step 1 first, and open the file before you delete anything.

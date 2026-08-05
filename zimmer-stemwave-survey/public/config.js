@@ -28,12 +28,6 @@ window.SURVEY_CONFIG = {
   // never offer financing under any circumstances.
   enableMonthlyPlanQuestion: true,
 
-  // Cloudflare Turnstile. Leave null to disable (the honeypot still applies).
-  // Set to the site key from the Turnstile dashboard to enable. Turnstile is
-  // the one anti-abuse measure that costs nothing in anonymity — it identifies
-  // browsers, not people, and stores nothing about the respondent.
-  turnstileSiteKey: null,
-
   // ---- Behaviour ----------------------------------------------------------
   // Resume a partially completed survey from localStorage.
   enableResume: true,

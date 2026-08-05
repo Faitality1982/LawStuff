@@ -6,6 +6,9 @@ package = $2,809**, non-covered, paid up front.
 
 Reached by QR code at the front desk. Nothing links to it.
 
+**Stack:** Netlify — static site in `public/`, two Netlify Functions, and
+Netlify Blobs for storage. No separate database service, no build step.
+
 - **Deploy steps:** [DEPLOY.md](DEPLOY.md)
 - **Methodology and reasoning:** the plan doc this was built from
 
@@ -48,13 +51,13 @@ Enterprise) — anonymous health data isn't PHI.
 An earlier revision had an optional "call me about the Discovery Visit" screen
 writing names into a second `leads` table. It was **deleted rather than disabled**.
 A front-end flag that hides the form does not make a live endpoint safe: anything
-POSTing to `/api/lead` directly would still have written names into D1. The only
-way to make the anonymity claim structural rather than configurable was to remove
-the endpoint. It's in git history if it's ever wanted back.
+POSTing to `/api/lead` directly would still have stored names. The only way to
+make the anonymity claim structural rather than configurable was to delete the
+endpoint. It's in git history if it's ever wanted back.
 
-`submit.js` also rejects any answer key named `name`, `email`, `phone`,
-`contact`, `dob`, or `address`, so a future edit to `questions.js` can't quietly
-reintroduce the problem.
+`submit.mjs` also rejects any answer key named `name`, `email`, `phone`,
+`contact`, `dob`, `address`, or `ssn`, so a future edit to `questions.js` can't
+quietly reintroduce the problem. `npm test` asserts this.
 
 Do not add a column, endpoint, or question that identifies a respondent.
 
@@ -71,36 +74,46 @@ separately from the mean. **Only 9s and 10s are real intent.** Verbal scales
 
 ```
 public/
-  index.html      shell
-  styles.css      accessibility rules are load-bearing — see the file header
-  config.js       branding, pricing, feature flags     <- edit here
-  questions.js    the question bank, as data           <- and here
-  survey.js       the engine (shouldn't need touching)
-functions/api/
-  submit.js       POST anonymous responses (the only write path)
-  export.js       GET  CSV/JSON, gated by EXPORT_KEY secret
+  index.html        shell
+  styles.css        accessibility rules are load-bearing — see the file header
+  config.js         branding, pricing, feature flags     <- edit here
+  questions.js      the question bank, as data           <- and here
+  survey.js         the engine (shouldn't need touching)
+netlify/
+  functions/
+    submit.mjs      POST anonymous responses (the only write path)
+    export.mjs      GET  CSV/JSON, gated by the EXPORT_KEY env var
+  lib/records.mjs   blob keys, CSV building, row flattening
 tools/
-  make_qr.py      QR codes per placement, ECC-H
-  analyze.py      Van Westendorp + Juster + segments
-  make_fixture.py synthetic data for testing the analyser
-schema.sql        D1 tables
+  make_qr.py        QR codes per placement, ECC-H, with read-back verification
+  analyze.py        Van Westendorp + Juster + segments
+  make_fixture.py   synthetic data for testing the analyser
+  fetch_export.mjs  pull the CSV down
+  test_api.mjs      runs both functions against an in-memory blob store
+netlify.toml        publish dir, functions dir, security headers
 ```
 
 Vanilla HTML/CSS/JS. No framework, no build step, no dependencies. One page,
 ~20 screens of show/hide — React here would be a build pipeline in exchange for
 nothing, and this needs to still run untouched in a year.
 
-### Why not GitHub Pages
+### Where the data lives
 
-It was considered, and it can't work alone: GitHub Pages serves static files
-only, with no server-side execution, so a submitted response has nowhere to
-land. Any static host needs a separate backend for the write path — which puts
-you back on Cloudflare (or an equivalent) regardless. Since the target domain
-is already on Cloudflare, Pages + D1 is both fewer moving parts and free.
+**Netlify Blobs.** One JSON record per response, keyed
+`<ISO timestamp>__<uuid>` so listings come back in chronological order for
+free and two submissions in the same millisecond can't collide.
 
-Netlify was rejected for a different reason: its free tier silently drops form
-submissions past 100/month, and a survey that stops recording without telling
-you is worse than one that never started.
+It's part of Netlify — no separate database to provision, no connection string,
+free at this volume. The trade is that it's key-value rather than SQL, so an
+export is one read per response; `export.mjs` fetches them in concurrent
+batches of 25 to stay inside the 10-second function timeout.
+
+Deliberately **not** Netlify Forms, which is the obvious-looking choice: its
+free tier silently drops submissions past 100/month. A survey that stops
+recording without telling you is worse than one that never started.
+
+GitHub Pages was considered and can't work at all — static files only, no
+server-side execution, so a submitted response has nowhere to land.
 
 ## Data integrity
 
@@ -111,16 +124,13 @@ costs nothing in anonymity:
 - **Honeypot** — an off-screen field in `index.html`. Filled means automation;
   the submission is dropped client-side and the bot still sees a thank-you, so
   it has no signal to adapt to.
-- **Turnstile** — set `config.turnstileSiteKey` to enable. It fingerprints
-  browsers, not people, and stores nothing about the respondent.
 - **Duration filtering** — `analyze.py` drops anything under 45 seconds as
   straight-lining, and the client caps per-screen time at 2 minutes so a phone
   left in a pocket doesn't inflate the figure.
-- **Cloudflare rate limiting** — an edge rule on `/api/submit` needs no
-  application code and stores no IP. See DEPLOY.md.
 
-None of this makes the data unpoisonable. It makes casual poisoning tedious,
-which is the realistic bar for a six-week survey in a chiropractic waiting room.
+That's the lot, deliberately. The codes are handed out by a receptionist to
+known patients, so the realistic threat is a bored teenager, not a botnet — and
+every stronger measure trades away either anonymity or completion rate.
 
 ---
 
@@ -152,23 +162,28 @@ are miserable with a tremor, a splint, or cold hands.
 
 ## Testing
 
-The API handlers run against a stub D1 binding — no network, no wrangler:
+The functions run against an in-memory blob store — no network, no Netlify
+login:
 
 ```bash
 npm test
 ```
 
-This executes `submit.js` and `export.js` for real. `node --check` is not
-enough: it parses without resolving references, so it will pass a file that
-throws `ReferenceError` on an undefined variable inside a template literal.
-That exact bug shipped into the export filename once and `npm test` is what
-caught it.
+30 checks. It executes `submit.mjs` and `export.mjs` for real, including
+rejection of identifying keys, the export-key gate (an *unset* key must refuse
+rather than default open), CSV escaping, chronological ordering when the store
+returns keys out of order, batching past the 25-record chunk, and the Excel BOM
+checked on the wire bytes.
 
-Local dev with a real D1 database:
+`node --check` is not a substitute: it parses without resolving references, so
+it will pass a file that throws `ReferenceError` on an undefined variable in a
+template literal. That exact bug reached the export filename once, and this
+suite is what caught it.
+
+Local dev against the real Netlify runtime:
 
 ```bash
 npm install
-npm run db:init:local
 npm run dev
 ```
 
@@ -192,4 +207,4 @@ payload shape, and that a submitted survey can't be resumed into.
 ## Status
 
 Built and tested locally. **Not yet deployed** — the build environment had no
-Cloudflare credentials. See [DEPLOY.md](DEPLOY.md).
+Netlify credentials. See [DEPLOY.md](DEPLOY.md).

@@ -3,7 +3,7 @@
 Generate the QR codes for the Stem Wave survey.
 
     pip install segno
-    python3 tools/make_qr.py --base https://stemwave.logicloomllc.com
+    python3 tools/make_qr.py --base https://zimmerstemwave.netlify.app
 
 Produces, per placement, an SVG for print and a PNG for screen/email.
 
@@ -39,11 +39,41 @@ PLACEMENTS = {
 }
 
 
+def verify(paths: list[tuple[str, pathlib.Path, str]]) -> bool:
+    """Read every generated code back and confirm it carries the right URL.
+
+    Uses zxing-cpp, the decoder family Android and most scanning apps are built
+    on. Optional -- skipped with a note if it isn't installed.
+
+    A note on OpenCV: its QR detector fails outright on some perfectly valid
+    symbols (it could not even *locate* the room1 code, at any resolution,
+    while zxing read it fine and it survived blur/rotation/downscale testing
+    exactly as well as its siblings). Do not use cv2 as the arbiter here.
+    """
+    try:
+        import cv2
+        import zxingcpp
+    except ImportError:
+        print("  (skipping read-back check: pip install zxing-cpp opencv-python-headless)\n")
+        return True
+
+    ok = True
+    for name, png, expected in paths:
+        res = zxingcpp.read_barcodes(cv2.imread(str(png)))
+        got = res[0].text if res else ""
+        if got != expected:
+            ok = False
+            print(f"  VERIFY FAILED  {name}: expected {expected!r}, decoded {got!r}")
+    print("  Read-back check: all codes decode to the correct URL.\n" if ok else "")
+    return ok
+
+
 def build(base: str, outdir: pathlib.Path, only: list[str] | None) -> None:
     outdir.mkdir(parents=True, exist_ok=True)
     base = base.rstrip("/")
 
     rows = []
+    made: list[tuple[str, pathlib.Path, str]] = []
     for name, (src, purpose, inches) in PLACEMENTS.items():
         if only and name not in only:
             continue
@@ -60,9 +90,11 @@ def build(base: str, outdir: pathlib.Path, only: list[str] | None) -> None:
         qr.save(png, scale=20, border=4, dark="#000000", light="#ffffff")
 
         rows.append((name, url, purpose, inches, qr.version, qr.symbol_size(scale=1)[0]))
+        made.append((name, png, url))
 
     w = max(max(len(r[0]) for r in rows) + 2, len("PLACEMENT") + 2)
     print(f"\nWrote {len(rows) * 2} files to {outdir}/\n")
+    verify(made)
     print(f"{'PLACEMENT'.ljust(w)}{'PRINT AT'.ljust(11)}URL")
     print("-" * 78)
     for name, url, purpose, inches, ver, mods in rows:
@@ -81,7 +113,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Generate survey QR codes.")
     ap.add_argument(
         "--base",
-        default="https://stemwave.logicloomllc.com",
+        default="https://zimmerstemwave.netlify.app",
         help="Base URL of the deployed survey (default: %(default)s)",
     )
     ap.add_argument(

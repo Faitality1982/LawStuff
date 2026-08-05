@@ -1,0 +1,20 @@
+[build]
+  # Static site — nothing to compile. `public` ships as-is.
+  publish = "public"
+  command = ""
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Routes come from each function's `export const config = { path }`, so no
+# redirects are needed for /api/*.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    # QR-code access only; nothing links here and it must not be indexed.
+    X-Robots-Tag = "noindex, nofollow"
