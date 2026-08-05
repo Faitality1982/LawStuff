@@ -323,7 +323,31 @@ carousing → insanity → sponging off family → blinded to life → will powe
 "levels" frame visible all at once. Not built, since it is an addition rather
 than something on the page.
 
-## Slide 40 onward
+## Slides 40–49 — Bill's Story pp. 6–11
+
+Adds `idCard()` — a compact navy card that resolves a word circled on the page.
+Page 7 circles three things the book never names, and footnoting them in prose
+would bury the point.
+
+- **Slide 40 — Gin Would Fix That.** p. 6. Note: "Sickest reason to drink."
+- **Slide 41 — Forty Pounds Under Weight.** p. 7. The green highlight, then three
+  id cards: brother-in-law → Dr. Leonard Strong; the nationally-known hospital →
+  Towns (first visit); the doctor → Dr. Silkworth. Plus the belladonna note.
+- **Slide 42 — Surely This Was the Answer.** p. 7 blue paragraph, "self-knowledge"
+  underlined, then "But it was not." on its own with the second-visit note.
+- **Slide 43 — Alcohol Was My Master.** p. 8. "Beginning of Step One — Bill's."
+- **Slide 44 — He Was Sober.** p. 9. The escape line underlined, "I've got
+  religion," and the Ebby Thatcher identification.
+- **Slide 45 — An Idea and a Program.** p. 9. Step 2 / Steps 3 thru 12.
+- **Slide 46 — I Had to Be.** p. 10. "Bill completes Step One."
+- **Slides 47–49 — p. 11.** The Solution (green), "this was none at all" (blue),
+  and the unhighlighted miracle paragraph, which earns its slide from the margin
+  note alone.
+
+Belladonna: the margin note is right. *Atropa belladonna* is deadly nightshade,
+family Solanaceae, and the Towns–Lambert cure used it as a deliriant.
+
+## Slide 50 onward
 
 Pending. Next photo.
 

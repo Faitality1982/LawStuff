@@ -2080,5 +2080,378 @@ s39.addNotes(
   "answered - the body is as abnormal as the mind."
 );
 
+// A compact navy card that resolves a circled word on the page.
+function idCard(s, o) {
+  s.addShape(pres.ShapeType.roundRect, {
+    x: o.x, y: o.y, w: o.w, h: o.h, fill: { color: NAVY }, rectRadius: 0.08,
+  });
+  s.addText(o.label, {
+    x: o.x + 0.32, y: o.y + 0.18, w: o.w - 0.64, h: 0.26,
+    fontFace: BODY, fontSize: 10.5, bold: true, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+  });
+  s.addText(o.name, {
+    x: o.x + 0.32, y: o.y + 0.48, w: o.w - 0.64, h: 0.5,
+    fontFace: HEAD, fontSize: 20, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+  });
+  if (o.sub) {
+    s.addText(o.sub, {
+      x: o.x + 0.32, y: o.y + 1.0, w: o.w - 0.64, h: 0.4,
+      fontFace: BODY, fontSize: 13, color: ON_NAVY, margin: 0, valign: "top", lineSpacingMultiple: 1.1,
+    });
+  }
+}
+
+// =====================================================================
+// SLIDE 40 — Gin would fix that (p. 6)
+// =====================================================================
+const s40 = pres.addSlide();
+s40.background = { color: "FFFFFF" };
+header(s40, "Gin Would Fix That", "Remorse, horror and hopelessness.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 6", subColor: BLUE_SOFT });
+
+[
+  { y: 1.9, h: 1.3, tint: BLUE_TINT, dark: BLUE, note: "Sickest reason\nto drink", size: 24,
+    runs: [{ text: "Gin would fix that. So two bottles, and—oblivion.", options: { bold: true } }] },
+  { y: 3.5, h: 1.4, tint: BLUE_TINT, dark: BLUE, size: 20,
+    runs: [{ text: "Sometimes I stole from my wife’s slender purse when the morning terror and " +
+                   "madness were on me." }] },
+].forEach((c) => markedCard(s40, c));
+
+cite(s40, 5.2, "“Bill’s Story,” p. 6.");
+addFooter(s40);
+
+s40.addNotes(
+  "Read what comes right before it - the remorse, the horror, the hopelessness of the next\n" +
+  "morning. And the answer to all of that is gin.\n\n" +
+  "The sickest reason to drink: not to feel good. To go out. Two bottles and oblivion.\n\n" +
+  "Then the purse. A grown man taking coins from his wife's handbag because the terror is\n" +
+  "on him. He does not dress it up."
+);
+
+// =====================================================================
+// SLIDE 41 — Forty pounds under weight (p. 7)
+// =====================================================================
+const s41 = pres.addSlide();
+s41.background = { color: "FFFFFF" };
+header(s41, "Forty Pounds Under Weight", "Who is who on this page.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 7", subColor: GREEN_SOFT });
+
+markedCard(s41, {
+  y: 1.55, h: 1.0, tint: GREEN_TINT, dark: GREEN, note: "Level", size: 20,
+  runs: [{ text: "I could eat little or nothing when drinking, and I was forty pounds under weight.",
+           options: { bold: true } }],
+});
+
+idCard(s41, { x: 0.6, y: 2.85, w: 3.89, h: 1.6, label: "MY BROTHER-IN-LAW",
+  name: "Dr. Leonard Strong", sub: "The physician who got him in." });
+idCard(s41, { x: 4.72, y: 2.85, w: 3.89, h: 1.6, label: "A NATIONALLY-KNOWN HOSPITAL",
+  name: "Towns", sub: "First visit." });
+idCard(s41, { x: 8.84, y: 2.85, w: 3.89, h: 1.6, label: "A DOCTOR",
+  name: "Dr. Silkworth", sub: "Who explained I had been seriously ill, bodily and mentally." });
+
+s41.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 4.7, w: 12.13, h: 0.95, fill: { color: "F1F4F7" }, rectRadius: 0.08,
+});
+s41.addText(
+  [
+    { text: "BELLADONNA TREATMENT   ", options: { fontSize: 11, bold: true, color: MUTED, charSpacing: 2 } },
+    { text: "The nightshade family — a hallucinogenic.", options: { fontSize: 17, color: NAVY } },
+  ],
+  { x: 1.0, y: 4.7, w: 11.33, h: 0.95, fontFace: BODY, valign: "middle", margin: 0 }
+);
+
+cite(s41, 5.9, "“Bill’s Story,” p. 7.");
+addFooter(s41);
+
+s41.addNotes(
+  "Forty pounds under weight. That is not a figure of speech, it is a man starving.\n\n" +
+  "Three people get circled on this page and none of them are named in the book.\n" +
+  "The brother-in-law is Dr. Leonard Strong. The nationally-known hospital is Towns -\n" +
+  "this is the first of the visits. The doctor is Silkworth, the same man who wrote\n" +
+  "the letter we just read.\n\n" +
+  "And the belladonna treatment - deadly nightshade. They were treating delirium with a\n" +
+  "hallucinogen. That was the state of the art in 1934."
+);
+
+// =====================================================================
+// SLIDE 42 — Surely this was the answer (p. 7)
+// =====================================================================
+const s42 = pres.addSlide();
+s42.background = { color: "FFFFFF" };
+header(s42, "Surely This Was the Answer", "Self-knowledge.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 7", subColor: BLUE_SOFT });
+
+s42.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 2.5, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s42.addText(
+  [
+    { text: "It relieved me somewhat to learn that in alcoholics the will is amazingly weakened when " +
+            "it comes to combating liquor, though it often remains strong in other respects. My " +
+            "incredible behavior in the face of a desperate desire to stop was explained. Understanding " +
+            "myself now, I fared forth in high hope. For three or four months the goose hung high. I " +
+            "went to town regularly and even made a little money. Surely this was the answer—" },
+    { text: "self-knowledge", options: { bold: true, color: BLUE, underline: { style: "sng" } } },
+    { text: "." },
+  ],
+  { x: 1.0, y: 1.6, w: 11.33, h: 2.5, fontFace: BODY, fontSize: 18, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+markedCard(s42, {
+  y: 4.3, h: 1.15, tint: BLUE_TINT, dark: BLUE, note: "Second visit —\nTowns", size: 28,
+  runs: [{ text: "But it was not.", options: { bold: true, underline: { style: "sng" } } }],
+});
+
+cite(s42, 5.7, "“Bill’s Story,” p. 7.");
+addFooter(s42);
+
+s42.addNotes(
+  "Three or four months. The goose hung high. He is going to work, making money, and he\n" +
+  "understands his own condition for the first time in his life.\n\n" +
+  "Surely this was the answer - self-knowledge. Underlined, because it is the trap.\n\n" +
+  "But it was not. Four words, underlined, on its own.\n\n" +
+  "Knowing exactly what is wrong with you does not fix what is wrong with you. He goes back\n" +
+  "to the same hospital a second time. This is the argument against 'if I just understood\n" +
+  "myself better,' and Bill made it with his own life before the book ever made it in print."
+);
+
+// =====================================================================
+// SLIDE 43 — Alcohol was my master (p. 8)
+// =====================================================================
+const s43 = pres.addSlide();
+s43.background = { color: "FFFFFF" };
+header(s43, "Alcohol Was My Master", "No words can tell.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 8", subColor: GREEN_SOFT });
+
+s43.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.8, w: 12.13, h: 2.4, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s43.addText(
+  [
+    { text: "No words can tell of the loneliness and despair I found in that bitter morass of " +
+            "self-pity. Quicksand stretched around me in all directions. I had met my match. I had " +
+            "been overwhelmed. " },
+    { text: "Alcohol was my master.", options: { bold: true, color: GREEN } },
+  ],
+  { x: 1.0, y: 1.8, w: 11.33, h: 2.4, fontFace: BODY, fontSize: 22, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s43, 4.5, 1.1, "The beginning of Step One — Bill’s.");
+cite(s43, 5.85, "“Bill’s Story,” p. 8.");
+addFooter(s43);
+
+s43.addNotes(
+  "This is where Step One starts for him, and notice it is not a decision. It is a report.\n\n" +
+  "I had met my match. I had been overwhelmed. Alcohol was my master. Three flat statements\n" +
+  "of fact, past tense.\n\n" +
+  "Nobody talks him into this. He arrives at it in a bitter morass of self-pity with\n" +
+  "quicksand in all directions - which is exactly where most people arrive at it."
+);
+
+// =====================================================================
+// SLIDE 44 — Ebby Thatcher (p. 9)
+// =====================================================================
+const s44 = pres.addSlide();
+s44.background = { color: "FFFFFF" };
+header(s44, "He Was Sober", "An old school friend comes to the door.",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 9", subColor: BLUE_SOFT });
+
+s44.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.6, w: 12.13, h: 1.35, fill: { color: "F1F4F7" }, rectRadius: 0.08,
+});
+s44.addText(
+  "Rumor had it that he had been committed for alcoholic insanity. I wondered how he had escaped.",
+  { x: 1.0, y: 1.6, w: 11.33, h: 1.35, fontFace: BODY, fontSize: 20, color: NAVY,
+    underline: { style: "sng" }, valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+s44.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 3.15, w: 12.13, h: 1.35, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s44.addText("“I’ve got religion.”", {
+  x: 1.0, y: 3.15, w: 11.33, h: 1.35,
+  fontFace: HEAD, fontSize: 30, bold: true, color: BLUE, valign: "middle", margin: 0,
+});
+
+marginNote(s44, 4.8, 1.1, "Ebby Thatcher — Bill’s sponsor.");
+cite(s44, 6.15, "“Bill’s Story,” p. 9.");
+addFooter(s44);
+
+s44.addNotes(
+  "The man at the door is Ebby Thatcher - the alcoholic friend from the Foreword, the one\n" +
+  "Roland carried it to. Bill's sponsor, before the word existed.\n\n" +
+  "Bill had heard he was locked up for alcoholic insanity. And here he is at the door, sober,\n" +
+  "fresh-skinned and glowing, refusing a drink.\n\n" +
+  "I've got religion. Bill is aghast. Watch what he does with that in the next paragraph -\n" +
+  "he pours himself a drink and lets the old boy rant."
+);
+
+// =====================================================================
+// SLIDE 45 — Idea and action (p. 9)
+// =====================================================================
+const s45 = pres.addSlide();
+s45.background = { color: "FFFFFF" };
+header(s45, "An Idea and a Program", "What they had told him.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 9", subColor: GREEN_SOFT });
+
+[
+  { y: 1.9, h: 1.5, tint: GREEN_TINT, dark: GREEN, note: "STEP 2", size: 24,
+    runs: [{ text: "They had told of a simple religious idea…", options: { bold: true } }] },
+  { y: 3.6, h: 1.5, tint: BLUE_TINT, dark: BLUE, note: "STEPS 3 THRU 12", size: 24,
+    runs: [{ text: "…and a practical program of action.", options: { bold: true } }] },
+].forEach((c) => markedCard(s45, c));
+
+cite(s45, 5.4, "“Bill’s Story,” p. 9.");
+addFooter(s45);
+
+s45.addNotes(
+  "One sentence, and the whole program is in it.\n\n" +
+  "A simple religious idea - that is Step Two. Not a doctrine, not a denomination. An idea.\n\n" +
+  "And a practical program of action - Steps Three through Twelve. Practical. Action.\n\n" +
+  "The idea without the action is a conversation. The action without the idea is willpower,\n" +
+  "and we already watched that fail on page five."
+);
+
+// =====================================================================
+// SLIDE 46 — I was hopeless (p. 10)
+// =====================================================================
+const s46 = pres.addSlide();
+s46.background = { color: "FFFFFF" };
+header(s46, "I Had to Be", "Certainly I was interested.",
+  { fill: NAVY, title: "BILL’S STORY", sub: "p. 10", subColor: ON_NAVY });
+
+s46.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 2.2, w: 12.13, h: 1.8, fill: { color: "F1F4F7" }, rectRadius: 0.08,
+});
+s46.addText(
+  [
+    { text: "Certainly I was interested. " },
+    { text: "I had to be, for I was hopeless.", options: { bold: true, color: NAVY } },
+  ],
+  { x: 1.0, y: 2.2, w: 11.33, h: 1.8, fontFace: BODY, fontSize: 28, color: MUTED,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s46, 4.3, 1.1, "Bill completes Step One.");
+cite(s46, 5.65, "“Bill’s Story,” p. 10.");
+addFooter(s46);
+
+s46.addNotes(
+  "Circled in the study copy, and rightly. This is where Step One closes for him.\n\n" +
+  "He is not interested because it sounds good. He is interested because he has run out of\n" +
+  "everything else. I had to be, for I was hopeless.\n\n" +
+  "Hopeless is not despair here. It is an accurate description of his position, and it is\n" +
+  "the only thing that got him to listen to a man he thought was a crackpot."
+);
+
+// =====================================================================
+// SLIDE 47 — The solution (p. 11)
+// =====================================================================
+const s47 = pres.addSlide();
+s47.background = { color: "FFFFFF" };
+header(s47, "The Solution", "My friend sat before me.",
+  { fill: GREEN, title: "BILL’S STORY", sub: "p. 11", subColor: GREEN_SOFT });
+
+s47.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.7, w: 12.13, h: 3.2, fill: { color: GREEN_TINT }, rectRadius: 0.08,
+});
+s47.addText(
+  [
+    { text: "But my friend sat before me, and he made the point-blank declaration that " },
+    { text: "God had done for him what he could not do for himself", options: { bold: true, color: GREEN } },
+    { text: ". His human will had failed. Doctors had pronounced him incurable. Society was about to " +
+            "lock him up. Like myself, he had admitted complete defeat. Then he had, in effect, been " +
+            "raised from the dead, suddenly taken from the scrap heap to a level of life better than " +
+            "the best he had ever known!" },
+  ],
+  { x: 1.0, y: 1.7, w: 11.33, h: 3.2, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s47, 5.2, "“Bill’s Story,” p. 11.");
+addFooter(s47);
+
+s47.addNotes(
+  "The margin marks this whole paragraph The Solution, and that is what it is.\n\n" +
+  "Count what had already failed: his human will, the doctors, and society, which was about\n" +
+  "to lock him up. Everything available had been tried and had lost.\n\n" +
+  "Like myself, he had admitted complete defeat. That is the entry requirement, stated plainly.\n\n" +
+  "And what follows defeat is not managing better. Raised from the dead. Scrap heap to a level\n" +
+  "of life better than the best he had ever known. Better than his best, not back to average."
+);
+
+// =====================================================================
+// SLIDE 48 — None at all (p. 11)
+// =====================================================================
+const s48 = pres.addSlide();
+s48.background = { color: "FFFFFF" };
+header(s48, "This Was None at All", "Had this power originated in him?",
+  { fill: BLUE, title: "BILL’S STORY", sub: "p. 11", subColor: BLUE_SOFT });
+
+s48.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 2.0, w: 12.13, h: 2.5, fill: { color: BLUE_TINT }, rectRadius: 0.08,
+});
+s48.addText(
+  [
+    { text: "Had this power originated in him? Obviously it had not. There had been no more power " +
+            "in him than there was in me at that minute; and " },
+    { text: "this was none at all", options: { bold: true, color: BLUE } },
+    { text: "." },
+  ],
+  { x: 1.0, y: 2.0, w: 11.33, h: 2.5, fontFace: BODY, fontSize: 24, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+cite(s48, 4.8, "“Bill’s Story,” p. 11.");
+addFooter(s48);
+
+s48.addNotes(
+  "Bill checks the obvious explanation first. Maybe Ebby just found something in himself.\n\n" +
+  "Obviously it had not. He had known Ebby for years. There was no more power in that man\n" +
+  "than there was in Bill sitting across the table - and Bill knew exactly how much that was.\n\n" +
+  "None at all.\n\n" +
+  "So whatever did it came from somewhere else. That is the reasoning, and he does it cold,\n" +
+  "as a skeptic, at his own kitchen table."
+);
+
+// =====================================================================
+// SLIDE 49 — A miracle across the kitchen table (p. 11)
+// =====================================================================
+const s49 = pres.addSlide();
+s49.background = { color: "FFFFFF" };
+header(s49, "Across the Kitchen Table", "That floored me.",
+  { fill: NAVY, title: "BILL’S STORY", sub: "p. 11", subColor: ON_NAVY });
+
+s49.addShape(pres.ShapeType.roundRect, {
+  x: 0.6, y: 1.7, w: 12.13, h: 2.6, fill: { color: "F1F4F7" }, rectRadius: 0.08,
+});
+s49.addText(
+  [
+    { text: "That floored me. It began to look as though religious people were right after all. " +
+            "Here was something at work in a human heart which had done the impossible. My ideas " +
+            "about miracles were drastically revised right then. Never mind the musty past; " },
+    { text: "here sat a miracle directly across the kitchen table", options: { bold: true, color: NAVY } },
+    { text: ". He shouted great tidings." },
+  ],
+  { x: 1.0, y: 1.7, w: 11.33, h: 2.6, fontFace: BODY, fontSize: 20, color: NAVY,
+    valign: "middle", margin: 0, lineSpacingMultiple: 1.15 }
+);
+
+marginNote(s49, 4.6, 1.1, "Bill sees a miracle in front of him.");
+cite(s49, 5.95, "“Bill’s Story,” p. 11.");
+addFooter(s49);
+
+s49.addNotes(
+  "Nothing is highlighted in this paragraph, but the margin says why it is here: Bill sees a\n" +
+  "miracle in front of him.\n\n" +
+  "Never mind the musty past. He is not being asked to believe something that happened two\n" +
+  "thousand years ago to somebody he never met. The evidence is sitting across the kitchen\n" +
+  "table drinking coffee.\n\n" +
+  "That is still how it works. Nobody gets argued into this. They watch somebody they knew\n" +
+  "when he was drinking, and they cannot account for what they are looking at."
+);
+
 pres.writeFile({ fileName: __dirname + "/aa-big-book-study.pptx" })
   .then((f) => console.log("wrote " + f));
