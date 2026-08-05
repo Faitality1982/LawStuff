@@ -1,0 +1,31 @@
+# Netlify configuration for the Stem Wave survey.
+#
+# This lives at the repository root so that Netlify picks it up automatically
+# when the repo is imported through the UI — "Add new project → Import from
+# GitHub → LawStuff" needs no further configuration. `base` points Netlify at
+# the subdirectory; `publish` and the functions directory are resolved relative
+# to it.
+#
+# The survey has no build step: `public/` is plain HTML/CSS/JS. Netlify still
+# runs `npm install` in the base directory, which is what the functions need
+# for @netlify/blobs.
+#
+# Deploy branch is selected in the UI at import time.
+
+[build]
+  base = "zimmer-stemwave-survey"
+  publish = "public"
+  command = "echo 'no build step — static site'"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    # QR-code access only; nothing links here and it must not be indexed.
+    X-Robots-Tag = "noindex, nofollow"

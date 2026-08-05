@@ -24,26 +24,40 @@ Netlify and is enabled automatically the first time a function writes to it.
 
 ## 1. Deploy
 
+Two ways. Pick one.
+
+### A. From the Netlify UI, no terminal
+
+A `netlify.toml` at the **root of the LawStuff repo** points Netlify at this
+subdirectory, so the import needs no configuration:
+
+1. app.netlify.com → **Add new project** → **Import an existing project**
+2. GitHub → **LawStuff**
+3. Branch: `claude/new-session-9smud0`
+4. Leave every build setting alone — the root `netlify.toml` fills them in
+5. **Deploy**
+
+Then rename the site to `zimmerstemwave` under Project configuration → Change
+site name, so it matches the URL the QR codes encode.
+
+Every push to that branch redeploys automatically.
+
+### B. From the CLI
+
 ```bash
 cd zimmer-stemwave-survey
 npm install
 npx netlify login
-npx netlify init      # "Create & configure a new site"
+npx netlify sites:create --name zimmerstemwave
+npx netlify deploy --prod
 ```
 
-When it asks for a **site name, enter `zimmerstemwave`** — the QR codes already
-encode `zimmerstemwave.netlify.app`. If that name is taken, pick another and
-regenerate the codes (step 3); it's a 10-second job, just don't print anything
-first.
+Use `sites:create`, not `netlify init` — `init` wires up git-based CI builds,
+which duplicates option A and means debugging a build that doesn't need to
+exist.
 
-Then:
-
-```bash
-npm run deploy
-```
-
-`netlify.toml` already sets the publish directory, the functions directory, and
-the security headers, so there is nothing to configure in the UI for the build.
+If the name `zimmerstemwave` is taken, pick another and regenerate the QR
+codes (step 4). Ten-second job — just don't print anything first.
 
 ---
 

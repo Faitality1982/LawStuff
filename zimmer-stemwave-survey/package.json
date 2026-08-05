@@ -6,12 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "node tools/test_api.mjs",
-    "dev": "netlify dev",
-    "deploy": "netlify deploy --prod",
+    "dev": "npx netlify dev",
+    "deploy": "npx netlify deploy --prod",
     "export": "node tools/fetch_export.mjs"
-  },
-  "devDependencies": {
-    "netlify-cli": "^23.0.0"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.0"
