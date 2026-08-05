@@ -32,6 +32,15 @@
        since we swap content without a page navigation. -->
   <div class="sr-only" aria-live="polite" id="announce"></div>
   <div id="screen" class="screen"></div>
+
+  <!-- Honeypot. Positioned off-screen rather than display:none — a fair number
+       of bots skip display:none fields but happily fill positioned ones. A
+       human never sees or tabs to it, so anything in here means automation and
+       the submission is dropped client-side. Costs nothing in anonymity. -->
+  <div class="hp" aria-hidden="true">
+    <label for="hp_website">Website</label>
+    <input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off">
+  </div>
 </main>
 
 <footer class="nav" role="navigation">

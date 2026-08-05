@@ -9,18 +9,26 @@
  *   - usable at 200% zoom
  */
 
+/* Palette taken from zimmerchiro.com: the gold call-to-action, the warm grey
+   wordmark, and the cream section background.
+
+   Note on the gold: at ~#E0980C it carries dark text at about 7:1 but WHITE
+   text at only ~2.2:1, which fails badly. So --accent-ink is deep brown, not
+   white, and gold is never used for text on a light background — only as a
+   fill behind dark text, or as a border. */
 :root {
-  --ink:        #16202b;
-  --ink-soft:   #4a5a6a;
-  --line:       #d3dce4;
-  --line-soft:  #e8eef3;
+  --ink:        #2b241b;   /* warm charcoal, matches the wordmark */
+  --ink-soft:   #6d6155;
+  --line:       #ded5c8;
+  --line-soft:  #eee8de;
   --bg:         #ffffff;
-  --bg-soft:    #f5f8fa;
-  --accent:     #1b3a5c;
-  --accent-ink: #ffffff;
-  --accent-soft:#e6eef6;
+  --bg-soft:    #f6f1e8;   /* cream section background */
+  --accent:     #e0980c;   /* the CTA gold */
+  --accent-ink: #241a06;   /* dark text ON gold — never white */
+  --accent-soft:#fdf3dd;   /* pale gold fill for selected rows */
   --danger:     #a3352a;
-  --focus:      #2563eb;
+  --focus:      #1f6feb;   /* deliberately outside the palette so the focus
+                              ring is never mistaken for a selection */
   --radius:     10px;
   --tap:        52px;
   --maxw:       34rem;
@@ -28,15 +36,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ink:        #e9eef3;
-    --ink-soft:   #a3b1bf;
-    --line:       #3a4854;
-    --line-soft:  #2a353f;
-    --bg:         #131a21;
-    --bg-soft:    #1b242c;
-    --accent:     #6ea8dc;
-    --accent-ink: #0d1319;
-    --accent-soft:#22323f;
+    --ink:        #f0e9df;
+    --ink-soft:   #b3a695;
+    --line:       #4a4136;
+    --line-soft:  #332c24;
+    --bg:         #17140f;
+    --bg-soft:    #211c15;
+    --accent:     #f0ae28;
+    --accent-ink: #1a1204;
+    --accent-soft:#2e2413;
     --danger:     #ef8b7e;
     --focus:      #8ab4f8;
   }
@@ -84,11 +92,16 @@ body {
   padding: 12px 20px 10px;
   display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
 }
-.brand {
-  font-weight: 650; font-size: 16px; letter-spacing: 0.01em;
-  color: var(--ink);
-}
+.brand { display: flex; flex-direction: column; line-height: 1.2; }
 .brand img { max-height: 34px; width: auto; display: block; }
+.brand-name {
+  font-weight: 700; font-size: 16px; letter-spacing: 0.055em;
+  text-transform: uppercase; color: var(--ink);
+}
+.brand-tag {
+  font-size: 9.5px; letter-spacing: 0.085em; text-transform: uppercase;
+  color: var(--ink-soft); margin-top: 2px;
+}
 .counter { font-size: 14px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
 .progress { height: 4px; background: var(--line-soft); }

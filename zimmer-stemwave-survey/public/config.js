@@ -7,8 +7,9 @@
 window.SURVEY_CONFIG = {
   // ---- Branding -----------------------------------------------------------
   practiceName: 'Zimmer Chiropractic',
+  practiceTagline: 'Chiropractic & Integrative Health',
   // Optional: drop a file in public/ and set the filename, e.g. 'logo.png'.
-  // Leave null to show the practice name as text.
+  // Leave null to render the practice name as text.
   logoFile: null,
 
   // ---- Pricing (single source of truth; questions.js interpolates these) ---
@@ -22,18 +23,15 @@ window.SURVEY_CONFIG = {
   },
 
   // ---- Feature flags ------------------------------------------------------
-  // Optional contact-capture screen at the end. Posts to a SEPARATE endpoint
-  // and a SEPARATE table with no linkage to survey answers. If Dr. Zimmer
-  // would rather the front desk handle follow-up, set this to false.
-  enableLeadCapture: true,
-
   // Tests appetite for a monthly payment plan that is NOT currently offered.
-  // Highest-value question in the survey. Turn off only if he would never
-  // offer financing under any circumstances.
+  // Highest-value question in the survey. Turn off only if Dr. Zimmer would
+  // never offer financing under any circumstances.
   enableMonthlyPlanQuestion: true,
 
-  // Cloudflare Turnstile. Leave null to disable (honeypot still applies).
-  // Set to the site key from the Turnstile dashboard to enable.
+  // Cloudflare Turnstile. Leave null to disable (the honeypot still applies).
+  // Set to the site key from the Turnstile dashboard to enable. Turnstile is
+  // the one anti-abuse measure that costs nothing in anonymity — it identifies
+  // browsers, not people, and stores nothing about the respondent.
   turnstileSiteKey: null,
 
   // ---- Behaviour ----------------------------------------------------------

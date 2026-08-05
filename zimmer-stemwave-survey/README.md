@@ -37,22 +37,26 @@ an expensive way to learn nothing.
 
 If you reorder anything in `questions.js`, keep `vw` before `reveal`.
 
-### 2. The survey is anonymous; leads are separate
+### 2. The survey is anonymous, structurally
 
-Neither Netlify nor Cloudflare will sign a HIPAA BAA below Enterprise. So no
-identifiable health information may land in this datastore. The design:
+No name, no contact details, no chart number, no IP address, no user-agent
+string. Pain sites are broad checkboxes, not diagnoses. There is nothing in the
+database that identifies a respondent, which is what keeps this off ordinary
+non-BAA hosting (neither Cloudflare nor Netlify signs a HIPAA BAA below
+Enterprise) — anonymous health data isn't PHI.
 
-- `responses` — anonymous. No name, contact, DOB, or chart number. Broad pain
-  checkboxes, not diagnoses. Anonymous health data isn't PHI.
-- `leads` — the optional callback request. Separate endpoint, separate table,
-  **no key linking it to a response**, and a day-only date so the two can't be
-  rejoined by timestamp.
+An earlier revision had an optional "call me about the Discovery Visit" screen
+writing names into a second `leads` table. It was **deleted rather than disabled**.
+A front-end flag that hides the form does not make a live endpoint safe: anything
+POSTing to `/api/lead` directly would still have written names into D1. The only
+way to make the anonymity claim structural rather than configurable was to remove
+the endpoint. It's in git history if it's ever wanted back.
 
-`submit.js` actively rejects any answer key named `name`, `email`, `phone`,
+`submit.js` also rejects any answer key named `name`, `email`, `phone`,
 `contact`, `dob`, or `address`, so a future edit to `questions.js` can't quietly
-break this.
+reintroduce the problem.
 
-Do not add a foreign key. Do not "improve" `leads.created_day` into a timestamp.
+Do not add a column, endpoint, or question that identifies a respondent.
 
 ### 3. Intent is measured on an 11-point probability scale
 
@@ -73,8 +77,7 @@ public/
   questions.js    the question bank, as data           <- and here
   survey.js       the engine (shouldn't need touching)
 functions/api/
-  submit.js       POST anonymous responses
-  lead.js         POST optional contact, separate table
+  submit.js       POST anonymous responses (the only write path)
   export.js       GET  CSV/JSON, gated by EXPORT_KEY secret
 tools/
   make_qr.py      QR codes per placement, ECC-H
@@ -86,6 +89,38 @@ schema.sql        D1 tables
 Vanilla HTML/CSS/JS. No framework, no build step, no dependencies. One page,
 ~20 screens of show/hide — React here would be a build pipeline in exchange for
 nothing, and this needs to still run untouched in a year.
+
+### Why not GitHub Pages
+
+It was considered, and it can't work alone: GitHub Pages serves static files
+only, with no server-side execution, so a submitted response has nowhere to
+land. Any static host needs a separate backend for the write path — which puts
+you back on Cloudflare (or an equivalent) regardless. Since the target domain
+is already on Cloudflare, Pages + D1 is both fewer moving parts and free.
+
+Netlify was rejected for a different reason: its free tier silently drops form
+submissions past 100/month, and a survey that stops recording without telling
+you is worse than one that never started.
+
+## Data integrity
+
+The survey is open to anyone who scans the code — that's the accepted trade for
+keeping it anonymous, and no amount of validation changes it. What's in place
+costs nothing in anonymity:
+
+- **Honeypot** — an off-screen field in `index.html`. Filled means automation;
+  the submission is dropped client-side and the bot still sees a thank-you, so
+  it has no signal to adapt to.
+- **Turnstile** — set `config.turnstileSiteKey` to enable. It fingerprints
+  browsers, not people, and stores nothing about the respondent.
+- **Duration filtering** — `analyze.py` drops anything under 45 seconds as
+  straight-lining, and the client caps per-screen time at 2 minutes so a phone
+  left in a pocket doesn't inflate the figure.
+- **Cloudflare rate limiting** — an edge rule on `/api/submit` needs no
+  application code and stores no IP. See DEPLOY.md.
+
+None of this makes the data unpoisonable. It makes casual poisoning tedious,
+which is the realistic bar for a six-week survey in a chiropractic waiting room.
 
 ---
 
@@ -116,6 +151,18 @@ are miserable with a tremor, a splint, or cold hands.
 ---
 
 ## Testing
+
+The API handlers run against a stub D1 binding — no network, no wrangler:
+
+```bash
+npm test
+```
+
+This executes `submit.js` and `export.js` for real. `node --check` is not
+enough: it parses without resolving references, so it will pass a file that
+throws `ReferenceError` on an undefined variable inside a template literal.
+That exact bug shipped into the export filename once and `npm test` is what
+caught it.
 
 Local dev with a real D1 database:
 

@@ -24,8 +24,8 @@
   body {
     font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
-    color: #16202b;
-    background: #6b7684;
+    color: #2b241b;
+    background: #6f6558;
   }
 
   .card {
@@ -45,8 +45,12 @@
     font-size: 10.5pt;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: #5c6b7a;
-    font-weight: 600;
+    color: #9a7212;          /* gold, darkened for contrast on white */
+    font-weight: 700;
+  }
+  .rule {
+    width: 2.1in; height: 3px; background: #e0980c;
+    border-radius: 2px; margin: 0.13in 0 0;
   }
 
   h1 {
@@ -58,7 +62,7 @@
 
   .sub {
     font-size: 11.5pt;
-    color: #45535f;
+    color: #6d6155;
     margin: 0.11in 0 0;
     max-width: 2.9in;
   }
@@ -82,29 +86,37 @@
 
   .url-note {
     font-size: 8.5pt;
-    color: #6b7684;
+    color: #857a6c;
     margin: 0.04in 0 0;
   }
 
   .facts {
     margin-top: auto;
     padding-top: 0.16in;
-    border-top: 1px solid #dde4ea;
+    border-top: 1px solid #ded5c8;
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 0.26in;
     font-size: 10pt;
-    color: #45535f;
+    color: #6d6155;
   }
-  .facts b { display: block; font-size: 12pt; color: #16202b; }
+  .facts b { display: block; font-size: 12pt; color: #2b241b; }
 
   .practice {
-    margin-top: 0.16in;
-    font-size: 9.5pt;
-    color: #6b7684;
+    margin-top: 0.15in;
+    font-size: 10.5pt;
+    color: #2b241b;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+  }
+  .practice small {
+    display: block;
+    font-size: 7.2pt;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    color: #857a6c;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
   }
 
   @media screen {
@@ -117,6 +129,7 @@
 
 <div class="card">
   <div class="eyebrow">We'd value your opinion</div>
+  <div class="rule"></div>
 
   <h1>Dr. Zimmer is considering a new therapy.</h1>
 
@@ -135,7 +148,7 @@
     <div><b>Anonymous</b>not in your chart</div>
   </div>
 
-  <div class="practice">ZIMMER CHIROPRACTIC</div>
+  <div class="practice">ZIMMER CHIROPRACTIC<small>CHIROPRACTIC &amp; INTEGRATIVE HEALTH</small></div>
 </div>
 
 </body>

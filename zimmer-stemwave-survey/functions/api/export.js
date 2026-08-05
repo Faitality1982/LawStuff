@@ -1,5 +1,5 @@
 /*
- * GET /api/export?key=…&table=responses|leads&format=csv|json
+ * GET /api/export?key=…&format=csv|json
  *
  * Gated by the EXPORT_KEY secret:
  *   npx wrangler pages secret put EXPORT_KEY
@@ -78,14 +78,11 @@ export async function onRequestGet({ request, env }) {
   }
   if (!env.DB) return new Response('database not bound', { status: 500 });
 
-  const table = url.searchParams.get('table') === 'leads' ? 'leads' : 'responses';
   const format = url.searchParams.get('format') === 'json' ? 'json' : 'csv';
 
-  const sql = table === 'leads'
-    ? `SELECT id, created_day, name, contact, best_time, src FROM leads
-       ORDER BY created_day DESC LIMIT ${MAX_ROWS}`
-    : `SELECT id, created_at, src, duration_ms, completed, vw_valid, path, payload
-       FROM responses ORDER BY created_at DESC LIMIT ${MAX_ROWS}`;
+  // One table, by design. There is no identifiable data to export.
+  const sql = `SELECT id, created_at, src, duration_ms, completed, vw_valid, path, payload
+               FROM responses ORDER BY created_at DESC LIMIT ${MAX_ROWS}`;
 
   let rows;
   try {
@@ -95,7 +92,7 @@ export async function onRequestGet({ request, env }) {
     return new Response('query failed: ' + String(e).slice(0, 200), { status: 500 });
   }
 
-  const flat = table === 'leads' ? rows : rows.map(flattenResponse);
+  const flat = rows.map(flattenResponse);
 
   if (format === 'json') {
     return new Response(JSON.stringify(flat, null, 2), {
@@ -105,12 +102,11 @@ export async function onRequestGet({ request, env }) {
 
   // Union of keys across all rows, so a question added mid-run still exports.
   // Meta columns are pinned to the front in a fixed order for readability.
-  const lead = table === 'leads'
-    ? ['id', 'created_day', 'name', 'contact', 'best_time', 'src']
-    : ['id', 'created_at', 'src', 'duration_ms', 'duration_s', 'completed', 'vw_valid', 'path'];
+  const pinned = ['id', 'created_at', 'src', 'duration_ms', 'duration_s',
+                  'completed', 'vw_valid', 'path'];
 
-  const seen = new Set(lead);
-  const columns = lead.slice();
+  const seen = new Set(pinned);
+  const columns = pinned.slice();
   for (const r of flat) {
     for (const k of Object.keys(r)) {
       if (!seen.has(k)) { seen.add(k); columns.push(k); }
@@ -121,7 +117,7 @@ export async function onRequestGet({ request, env }) {
   return new Response(toCsv(flat, columns), {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': `attachment; filename="stemwave-${table}-${stamp}.csv"`,
+      'Content-Disposition': `attachment; filename="stemwave-responses-${stamp}.csv"`,
       'Cache-Control': 'no-store',
       'X-Robots-Tag': 'noindex',
     },

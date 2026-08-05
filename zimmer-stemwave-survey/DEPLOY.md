@@ -61,7 +61,7 @@ npx wrangler d1 execute stemwave-survey --remote \
   --command "SELECT name FROM sqlite_master WHERE type='table'"
 ```
 
-You want `responses` and `leads`.
+You want a single table: `responses`.
 
 ---
 
@@ -187,14 +187,31 @@ Matte stock, no lamination.
       language added, that's his call to make knowingly: it's the kind of claim
       that draws FTC and state-board attention in chiropractic marketing.
 - [ ] Confirm the pricing in `config.js` still matches what he's considering.
-- [ ] Decide whether the contact-capture screen stays
-      (`config.enableLeadCapture`). If the front desk would rather handle
-      follow-up by hand, set it to `false`.
 - [ ] Confirm a monthly payment plan is genuinely on the table
       (`config.enableMonthlyPlanQuestion`). If he'd never offer financing, turn
       it off — but that question is the highest-value one in the survey, so
       turn it off only if the answer really is never.
 - [ ] Brief the front desk (script below).
+- [ ] Optionally add anti-abuse (below). Skippable — the survey works without it.
+
+### Optional: anti-abuse
+
+The survey is deliberately open to anyone who scans the code, so this is about
+raising the effort, not sealing it. Both options are free and neither collects
+anything about the respondent.
+
+**Turnstile** — create a widget in the Cloudflare dashboard (Turnstile → Add
+site → `stemwave.logicloomllc.com`), then put the site key in
+`config.turnstileSiteKey`. It challenges browsers, not people.
+
+**Rate limiting** — Security → WAF → Rate limiting rules:
+
+> If URI Path equals `/api/submit` → more than **5** requests per **1 minute**
+> from the same IP → Block for 10 minutes
+
+Cloudflare evaluates this at the edge, so no IP address ever reaches the
+application or the database. Five per minute is far above a real respondent
+(the survey takes ~3 minutes) and well below a useful flood.
 
 ---
 
@@ -229,9 +246,6 @@ description in the lobby is exactly the claims risk we designed around.
 ```bash
 curl -sS "https://stemwave.logicloomllc.com/api/export?key=YOUR_EXPORT_KEY" \
   -o responses.csv
-
-curl -sS "https://stemwave.logicloomllc.com/api/export?key=YOUR_EXPORT_KEY&table=leads" \
-  -o leads.csv
 ```
 
 Wrong or missing key returns a plain 404, so the endpoint doesn't advertise
@@ -253,13 +267,13 @@ below 30 the script says so and you should believe it.
 
 It's a temporary survey. When it's done:
 
-1. Export both tables and save them somewhere durable.
+1. Export the responses and save the CSV somewhere durable — the D1 database
+   is the only copy.
 2. Pull the printed QR codes off the counter.
 3. Delete the Pages project and the D1 database:
    ```bash
    npx wrangler d1 delete stemwave-survey
    ```
-4. Remove the `stemwave` CNAME from Microsoft DNS.
+4. Remove the `stemwave` record from the Cloudflare DNS tab.
 
-Step 1 first. The leads table has real people's phone numbers in it and it is
-the only place they exist.
+Step 1 first, and check the file opens before you delete anything.

@@ -35,7 +35,7 @@
     activeMs: 0,        // accumulated on-screen time, idle-capped
     vwWarned: false,    // Van Westendorp ordering warned once already
     vwValid: 1,
-    phase: 'survey',    // survey | lead | done
+    phase: 'survey',    // survey | done
     submittedId: null,
   };
 
@@ -106,9 +106,9 @@
   // ------------------------------------------------------------- persistence
   function save() {
     if (!C.enableResume) return;
-    // Never persist a post-submit state. Without this guard the
-    // visibilitychange handler rewrites phase 'lead' back into localStorage
-    // the moment the respondent backgrounds the tab on the contact screen.
+    // Never persist a post-submit state, or the visibilitychange handler
+    // writes a finished survey back into localStorage when the tab is
+    // backgrounded, blocking the next scan on that phone.
     if (state.phase !== 'survey') return;
     try {
       localStorage.setItem(C.storageKey, JSON.stringify({
@@ -132,11 +132,9 @@
       var d = JSON.parse(raw);
       // Stale partials are worse than none — a week-old resume is a different person.
       if (!d || !d.t || Date.now() - d.t > 7 * 24 * 3600 * 1000) { clearSaved(); return; }
-      // An already-submitted survey must never resurrect. Both 'lead' and
-      // 'done' mean the response is on the server; resuming into either would
-      // show the next person to scan this phone a stale contact form instead
-      // of a fresh survey, and would block them from taking it at all.
-      if (d.phase === 'done' || d.phase === 'lead') { clearSaved(); return; }
+      // An already-submitted survey must never resurrect: the next person to
+      // scan this phone at the counter would be blocked from taking it.
+      if (d.phase !== 'survey') { clearSaved(); return; }
       state.answers  = d.answers || {};
       state.currentId= d.currentId || QS[0].id;
       state.stack    = d.stack || [];
@@ -171,7 +169,6 @@
 
     el.screen.innerHTML = '';
 
-    if (state.phase === 'lead') { renderLead(); progress(1, 1, true); return; }
     if (state.phase === 'done') { renderDone(); progress(1, 1, true); return; }
 
     var node;
@@ -415,69 +412,6 @@
   }
 
   // --------------------------------------------------------- lead & done
-  function renderLead() {
-    el.back.hidden = true;
-    el.next.textContent = 'Send';
-    el.next.disabled = false;
-
-    var wrap = h('div');
-    wrap.appendChild(h('h1', null, 'That’s it — thank you.'));
-    wrap.appendChild(h('div', 'body-copy',
-      '<p>Your survey has been submitted anonymously.</p>' +
-      '<p>If you’d like someone from the office to call you about the ' +
-      '$' + C.price.discovery + ' Discovery Visit, leave your info below.</p>'));
-    wrap.appendChild(h('div', 'note',
-      'This is optional and kept separate from your survey answers — we can’t connect the two.'));
-
-    var f1 = h('div', 'field');
-    f1.innerHTML = '<label for="ld_name">Your name</label>';
-    var n1 = document.createElement('input');
-    n1.type = 'text'; n1.id = 'ld_name'; n1.autocomplete = 'name';
-    f1.appendChild(n1); wrap.appendChild(f1);
-
-    var f2 = h('div', 'field');
-    f2.innerHTML = '<label for="ld_contact">Phone or email</label>';
-    var n2 = document.createElement('input');
-    n2.type = 'tel'; n2.id = 'ld_contact'; n2.autocomplete = 'tel';
-    f2.appendChild(n2); wrap.appendChild(f2);
-
-    var f3 = h('div', 'field');
-    f3.innerHTML = '<label>Best time to reach you</label>';
-    var choices = h('div', 'choices');
-    [['morning', 'Morning'], ['afternoon', 'Afternoon'], ['evening', 'Evening']].forEach(function (o) {
-      var lab = h('label', 'choice');
-      var inp = document.createElement('input');
-      inp.type = 'radio'; inp.name = 'ld_time'; inp.value = o[0];
-      inp.addEventListener('change', function () {
-        Array.prototype.forEach.call(choices.querySelectorAll('.choice'), function (c) {
-          c.classList.remove('on');
-        });
-        lab.classList.add('on');
-      });
-      lab.appendChild(inp);
-      lab.appendChild(h('span', null, o[1]));
-      choices.appendChild(lab);
-    });
-    f3.appendChild(choices); wrap.appendChild(f3);
-
-    // Honeypot. Off-screen rather than display:none — a fair number of bots
-    // skip fields that are display:none but happily fill positioned ones.
-    var hp = h('div', 'hp');
-    hp.innerHTML = '<label for="ld_website">Website</label>' +
-      '<input type="text" id="ld_website" tabindex="-1" autocomplete="off">';
-    wrap.appendChild(hp);
-
-    var skip = document.createElement('button');
-    skip.type = 'button'; skip.className = 'btn-link';
-    skip.textContent = 'No thanks, I’m done';
-    skip.addEventListener('click', function () {
-      state.phase = 'done'; clearSaved(); render();
-    });
-    wrap.appendChild(skip);
-
-    el.screen.appendChild(wrap);
-  }
-
   function renderDone() {
     el.back.hidden = true;
     el.next.hidden = true;
@@ -560,6 +494,16 @@
     el.next.disabled = true;
     el.next.textContent = 'Sending…';
 
+    // Honeypot tripped: show the thank-you, send nothing. Returning a normal
+    // success keeps a bot from noticing it was caught and adapting.
+    var hp = document.getElementById('hp_website');
+    if (hp && hp.value) {
+      state.phase = 'done';
+      clearSaved();
+      render();
+      return Promise.resolve();
+    }
+
     return fetch('/api/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -569,12 +513,10 @@
       return r.json();
     }).then(function (j) {
       state.submittedId = j && j.id || null;
-      state.phase = C.enableLeadCapture ? 'lead' : 'done';
+      state.phase = 'done';
       // The response is on the server now, so the local copy has no value and
-      // keeping it only risks a stale resume on a shared phone. Clear it here
-      // rather than at the end -- the respondent may well close the tab on the
-      // optional contact screen, and the visibilitychange handler would
-      // otherwise write the submitted state straight back to localStorage.
+      // keeping it only risks a stale resume when the next patient scans the
+      // same phone at the counter.
       clearSaved();
       render();
     }).catch(function () {
@@ -582,40 +524,6 @@
       el.next.textContent = 'Finish';
       flash('We couldn’t send that — check your signal and tap Finish again. ' +
             'Your answers are saved on this phone either way.');
-    });
-  }
-
-  function submitLead() {
-    var name = (document.getElementById('ld_name') || {}).value || '';
-    var contact = (document.getElementById('ld_contact') || {}).value || '';
-    var timeEl = document.querySelector('input[name="ld_time"]:checked');
-    var hp = (document.getElementById('ld_website') || {}).value || '';
-
-    if (hp) { state.phase = 'done'; clearSaved(); render(); return; } // bot
-    if (!name.trim() || !contact.trim()) {
-      flash('Please add a name and a phone or email, or tap “No thanks, I’m done”.');
-      return;
-    }
-
-    el.next.disabled = true;
-    el.next.textContent = 'Sending…';
-
-    fetch('/api/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: name.trim(),
-        contact: contact.trim(),
-        best_time: timeEl ? timeEl.value : null,
-        src: srcParam(),
-        website: hp,
-      }),
-    }).then(function () {
-      state.phase = 'done'; clearSaved(); render();
-    }).catch(function () {
-      el.next.disabled = false;
-      el.next.textContent = 'Send';
-      flash('We couldn’t send that. Please tell the front desk instead — sorry about that.');
     });
   }
 
@@ -627,7 +535,6 @@
   }
 
   el.next.addEventListener('click', function () {
-    if (state.phase === 'lead') { submitLead(); return; }
     if (state.phase === 'done') return;
 
     var vis = visible();
@@ -662,13 +569,18 @@
 
   // ------------------------------------------------------------------ boot
   function boot() {
-    el.brand.textContent = C.practiceName;
     if (C.logoFile) {
       var img = document.createElement('img');
       img.src = '/' + C.logoFile;
-      img.alt = C.practiceName;
+      img.alt = C.practiceName + (C.practiceTagline ? ' — ' + C.practiceTagline : '');
       el.brand.innerHTML = '';
       el.brand.appendChild(img);
+    } else {
+      el.brand.innerHTML = '';
+      el.brand.appendChild(h('span', 'brand-name', esc(C.practiceName)));
+      if (C.practiceTagline) {
+        el.brand.appendChild(h('span', 'brand-tag', esc(C.practiceTagline)));
+      }
     }
     document.title = C.practiceName + ' — Patient Survey';
 
