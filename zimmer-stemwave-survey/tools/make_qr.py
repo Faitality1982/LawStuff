@@ -3,7 +3,7 @@
 Generate the QR codes for the Stem Wave survey.
 
     pip install segno
-    python3 tools/make_qr.py --base https://stemwave.logicloom.com
+    python3 tools/make_qr.py --base https://stemwave.logicloomllc.com
 
 Produces, per placement, an SVG for print and a PNG for screen/email.
 
@@ -81,7 +81,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Generate survey QR codes.")
     ap.add_argument(
         "--base",
-        default="https://stemwave.logicloom.com",
+        default="https://stemwave.logicloomllc.com",
         help="Base URL of the deployed survey (default: %(default)s)",
     )
     ap.add_argument(

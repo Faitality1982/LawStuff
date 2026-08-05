@@ -8,27 +8,32 @@ Budget about 40 minutes for the first deploy, most of it waiting on DNS.
 
 ---
 
-## 0. The one thing that shaped this design
+## 0. Where this lives
 
-`logicloom.com` is **not on Cloudflare.** Its nameservers are Microsoft's:
+The target is **`logicloomllc.com`**, which is already fully on Cloudflare:
 
 ```
-ns1.bdm.microsoftonline.com  ...  ns4.bdm.microsoftonline.com
-A     logicloom.com  ->  81.20.84.157
-TXT   v=spf1 include:spf.protection.outlook.com -all
+NS   alice.ns.cloudflare.com, mark.ns.cloudflare.com
+A    logicloomllc.com -> 172.67.199.21, 104.21.21.135   (Cloudflare proxy)
+MX   route1/2/3.mx.cloudflare.net                        (Email Routing)
+TXT  v=spf1 include:_spf.mx.cloudflare.net ~all
 ```
 
-That matters two ways:
+That makes this easy. The zone is in the same Cloudflare account as the Pages
+project, so **Pages creates the DNS record itself** — there is no external DNS
+panel to touch, and mail is Cloudflare Email Routing rather than an outside
+provider, so nothing here can endanger it.
 
-1. **You cannot host this at `logicloom.com/stemwave`.** Serving a path from a
-   different origin than the root needs the zone on Cloudflare. It isn't.
-2. **Do not move the nameservers to Cloudflare just for this.** The SPF record
-   shows the domain handles Outlook mail. Moving nameservers means recreating
-   every MX, SPF, DKIM, and autodiscover record, and getting one wrong silently
-   breaks email. Not worth it for a temporary survey.
+> Note for anyone reading old notes: `logicloom.com` (no `llc`) is a *different*
+> domain, sitting on Microsoft nameservers. It is not the target and should not
+> be touched.
 
-**So: a subdomain.** One CNAME added at Microsoft, pointing at the Pages
-project. Root site untouched, mail untouched.
+**Plan: `stemwave.logicloomllc.com`.**
+
+Path routing (`logicloomllc.com/stemwave`) is technically possible now that the
+zone is on Cloudflare, but it needs a Worker route sitting in front of the live
+root site. That's more moving parts on something already working, for a survey
+with a six-week life. The subdomain is zero-touch and deletes cleanly.
 
 ---
 
@@ -122,41 +127,30 @@ deployments created after them.
 
 ## 4. Custom domain
 
-**In Cloudflare:**
+Because `logicloomllc.com` is in the same Cloudflare account, this is one
+screen and no manual DNS:
 
 > Workers & Pages → zimmer-stemwave-survey → Custom domains →
-> Set up a custom domain → `stemwave.logicloom.com`
+> Set up a custom domain → `stemwave.logicloomllc.com` → Activate domain
 
-Cloudflare will say the domain isn't in your account and give you a CNAME
-target that looks like `zimmer-stemwave-survey.pages.dev`. Leave that screen open.
-
-**In the Microsoft 365 admin centre** (where logicloom.com's DNS lives):
-
-> Settings → Domains → logicloom.com → DNS records → Add record
-
-| Field | Value |
-|---|---|
-| Type | CNAME |
-| Host / Name | `stemwave` |
-| Points to | `zimmer-stemwave-survey.pages.dev` |
-| TTL | 1 hour (or default) |
-
-Add **only** that record. Do not touch MX, SPF, TXT, or autodiscover.
-
-Back in Cloudflare, the custom domain flips to Active once it sees the CNAME —
-usually a few minutes, occasionally up to an hour. Certificate issuance is
-automatic.
+Cloudflare recognises the zone, **adds the CNAME for you**, and issues the
+certificate automatically. Usually live in a couple of minutes.
 
 Confirm:
 
 ```bash
-dig +short stemwave.logicloom.com
-curl -sSI https://stemwave.logicloom.com | head -3
+dig +short stemwave.logicloomllc.com
+curl -sSI https://stemwave.logicloomllc.com | head -3
 ```
 
-**Fallback if DNS is a fight:** ship `zimmer-stemwave-survey.pages.dev` as-is.
-It works immediately. A practice-owned domain reads as more legitimate on a
-printed card, so prefer the subdomain, but don't let it block the pilot.
+Two things to leave alone while you're in the DNS tab: the root `A` records and
+anything under `route*.mx.cloudflare.net` / `_spf.mx.cloudflare.net`. Those are
+the live site and Email Routing. Adding a subdomain doesn't affect either — just
+don't edit them by accident.
+
+**Fallback:** ship `zimmer-stemwave-survey.pages.dev` as-is. It works
+immediately. A branded domain reads as more legitimate on a printed card, so
+prefer the subdomain, but don't let it block the pilot.
 
 ---
 
@@ -166,7 +160,7 @@ Only after the URL is final and loading:
 
 ```bash
 pip install segno
-python3 tools/make_qr.py --base https://stemwave.logicloom.com
+python3 tools/make_qr.py --base https://stemwave.logicloomllc.com
 ```
 
 Writes SVG (print) and PNG (screen) per placement into `qr/`.
@@ -233,10 +227,10 @@ description in the lobby is exactly the claims risk we designed around.
 ## 8. Getting the data out
 
 ```bash
-curl -sS "https://stemwave.logicloom.com/api/export?key=YOUR_EXPORT_KEY" \
+curl -sS "https://stemwave.logicloomllc.com/api/export?key=YOUR_EXPORT_KEY" \
   -o responses.csv
 
-curl -sS "https://stemwave.logicloom.com/api/export?key=YOUR_EXPORT_KEY&table=leads" \
+curl -sS "https://stemwave.logicloomllc.com/api/export?key=YOUR_EXPORT_KEY&table=leads" \
   -o leads.csv
 ```
 
