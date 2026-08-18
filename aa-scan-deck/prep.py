@@ -13,7 +13,7 @@ import io, json, os, re, sys
 import pymupdf
 from PIL import Image
 
-DPI = 200
+DPI = 130
 OUT = "pages"
 
 def hole_side(im):
@@ -49,7 +49,7 @@ def main(pdfs):
             im = Image.open(io.BytesIO(pm.tobytes("png"))).convert("RGB")
             side, dl, dr = hole_side(im)
             name = "p%04d.jpg" % seq
-            im.save(os.path.join(OUT, name), quality=88, optimize=True)
+            im.save(os.path.join(OUT, name), quality=82, optimize=True)
             # OCR-free page-number guess from the PDF text layer, if any
             txt = page.get_text().strip()
             m = re.match(r"^\s*(\d{1,3})\b", txt) or re.search(r"\b(\d{1,3})\s*$", txt[:200])

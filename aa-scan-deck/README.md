@@ -1,0 +1,64 @@
+# Big Book Study — scanned page spreads
+
+Displays the group's annotated Big Book two pages at a time, as an open spread,
+for the Wednesday Big Book Study at 903 Court Street, Port Huron (A.A. District 23).
+
+## The decks
+
+| File | Covers | Spreads |
+|---|---|---|
+| `big-book-1-front-matter.pptx` | Title page through page 16 | 22 |
+| `big-book-2-there-is-a-solution.pptx` | Pages 17–72 | 29 |
+| `big-book-3-into-action.pptx` | Pages 73–140 | 35 |
+| `big-book-4-to-employers.pptx` | Pages 141 to the end | 27 |
+
+Split by section because a single deck runs 72 MB. Each one opens with the title
+slide and the A.A.W.S. copyright notice, then the spreads. Every spread carries
+the copyright line as a footer.
+
+216 scanned pages, all accounted for.
+
+## Rebuilding
+
+```bash
+npm install pptxgenjs
+pip install pymupdf pillow numpy
+python3 prep.py scans/*.pdf     # PDFs -> pages/*.jpg + pages.json
+python3 classify.py             # verso/recto from the punch-hole edge
+node build.js                   # four section decks
+COMBINED=1 node build.js        # one 72 MB deck instead
+```
+
+`pages/` and `scans/` are gitignored — only the generators are tracked.
+
+## How pages are ordered
+
+Each scan is one physical page including the punched margin. In a spiral book the
+holes sit on the binding edge, so hole position says which side of the spread a
+page belongs on:
+
+- holes on the **right** → verso (left-hand page, even page number)
+- holes on the **left** → recto (right-hand page, odd page number)
+
+`classify.py` reads the outer 3.5% of each edge and measures how much the row
+brightness swings down the strip. A punched edge alternates hole/paper and swings
+hard; a plain margin is flat. All 216 pages classified; the sequence alternates
+verso/recto almost perfectly, breaking only where an unscanned blank verso leaves
+two rectos back to back — which is what the book actually does.
+
+Two pages (seq 44, 45) needed the fallback rule because handwritten margin notes
+run down the *outer* edge and made both sides busy. Both were checked by eye
+against their printed page numbers (20 and 21) and are correct. They are flagged
+`"weak": true` in `pages.json`.
+
+A verso followed by a recto becomes a spread. Anything else stands alone — the
+title page, and rectos whose blank verso was not scanned.
+
+## Permission
+
+A.A.W.S. granted permission by email (Drew Deetz, Intellectual Property
+Administrator, General Service Office) to screen-share A.A. literature during an
+A.A. meeting, provided their copyright notice is displayed. It is on slide 2 of
+every deck and in the footer of every spread.
+
+Intended for use inside the group's own class. Not for distribution.
