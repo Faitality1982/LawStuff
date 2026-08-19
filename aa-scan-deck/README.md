@@ -18,6 +18,33 @@ the copyright line as a footer.
 
 216 scanned pages, all accounted for.
 
+## Layout and margins
+
+Slide is 13.33 x 7.50 in. The pages are 0.675 as wide as they are tall, so height
+is the binding constraint and the spread comes out **8.75 in wide**, leaving:
+
+| Where | Free |
+|---|---|
+| Each side | **2.29 in** |
+| Above | 0.35 in |
+| Below | 0.65 in (footer uses 0.30) |
+
+That side margin cannot be recovered by scaling — squeezing the top and bottom to
+almost nothing only takes it from 2.29 to 2.02 in. So it is permanent space, and
+the printed folio now sits in it, on the outer edge of each page the way a book
+sets it. Roughly 1.6 in per side is still clear if more belongs there later.
+
+## Page numbers
+
+Derived, not OCR'd — the scans have no text layer. Anchored on four points read
+off the pages themselves: seq 2 is `v` (Contents), seq 3 is `vii` (Preface),
+seq 24 is `xxviii`, seq 25 is `1` (Chapter 1). Front matter runs contiguously in
+roman numerals from seq 3; arabic runs contiguously from seq 25 to `191` at the
+end. Title and copyright pages carry no printed number and get none.
+
+Every derived label agrees with its detected side — odd numbers land on rectos,
+even on versos, all 216 of them.
+
 ## Rebuilding
 
 ```bash

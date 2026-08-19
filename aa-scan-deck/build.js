@@ -5,6 +5,7 @@ const path = require("path");
 const NAVY = "1B2A41";
 const ON_NAVY = "A9B8CC";
 const MUTED = "6B7A8C";
+const FOLIO = "9AAABC";
 const MAGENTA = "9E1B60";
 const HEAD = "Cambria";
 const BODY = "Calibri";
@@ -105,11 +106,31 @@ function buildDeck(pairs, outName, subtitle) {
     const h = BAND * scale;
     const y = TOP + (BAND - h) / 2;
     let x = (13.33 - total * scale) / 2;
+    const x0 = x;
     pair.forEach((p, i) => {
       const w = widths[i] * scale;
       s.addImage({ path: path.join(__dirname, "pages", p.file), x, y, w, h });
       x += w;
     });
+    const x1 = x;
+
+    // Printed folios out in the margins, where a book puts them.
+    const left = pair[0], right = pair.length > 1 ? pair[1] : null;
+    if (left && left.label && left.side === "verso") {
+      s.addText(left.label, {
+        x: 0.45, y: y + h / 2 - 0.4, w: x0 - 0.8, h: 0.8,
+        fontFace: HEAD, fontSize: 34, bold: true, color: FOLIO,
+        align: "right", valign: "middle", margin: 0,
+      });
+    }
+    const outer = right || (left && left.side === "recto" ? left : null);
+    if (outer && outer.label) {
+      s.addText(outer.label, {
+        x: x1 + 0.35, y: y + h / 2 - 0.4, w: 13.333 - x1 - 0.8, h: 0.8,
+        fontFace: HEAD, fontSize: 34, bold: true, color: FOLIO,
+        align: "left", valign: "middle", margin: 0,
+      });
+    }
     s.addText(FOOTER, {
       x: 0.6, y: 6.98, w: 12.13, h: 0.3,
       fontFace: BODY, fontSize: 9, color: MUTED, valign: "middle", margin: 0,
