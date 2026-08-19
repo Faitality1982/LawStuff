@@ -33,18 +33,27 @@ def roman(n):
             n -= v
     return out
 
+# Two blank versos were never scanned, so the run is contiguous in three
+# stretches rather than one. Every boundary below was read off the pages.
 def label(seq):
-    """Printed folio for each scan, anchored on four verified points:
-    seq 2 = v (Contents), seq 3 = vii (Preface), seq 24 = xxviii, seq 25 = 1.
-    Front matter runs contiguously from seq 3; arabic runs contiguously from
-    seq 25 to the end. Title and copyright pages carry no printed number."""
+    """Page position for each scan.
+
+    Verified against the printed folios on all 216 pages:
+      seq 2   = v      (Contents; vi is its blank back, not scanned)
+      seq 3   = vii    through seq 24 = xxviii, contiguous
+      seq 25  = 1      through seq 199 = 175, contiguous
+      seq 200 = 177    (APPENDICES divider; 176 is blank, not scanned)
+                       through seq 215, contiguous
+    Title and copyright pages print no folio and get none."""
     if seq <= 1:
         return ""
     if seq == 2:
         return "v"
     if seq <= 24:
         return roman(seq + 4)      # seq 3 -> vii
-    return str(seq - 24)           # seq 25 -> 1
+    if seq <= 199:
+        return str(seq - 24)       # seq 25 -> 1
+    return str(seq - 23)           # seq 200 -> 177
 
 
 def main():

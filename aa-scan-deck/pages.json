@@ -3215,7 +3215,7 @@
   "side": "recto",
   "edgeL": 52.78,
   "edgeR": 0.07,
-  "label": "176"
+  "label": "177"
  },
  {
   "seq": 201,
@@ -3231,7 +3231,7 @@
   "side": "verso",
   "edgeL": 0.0,
   "edgeR": 58.52,
-  "label": "177"
+  "label": "178"
  },
  {
   "seq": 202,
@@ -3247,7 +3247,7 @@
   "side": "recto",
   "edgeL": 53.27,
   "edgeR": 0.0,
-  "label": "178"
+  "label": "179"
  },
  {
   "seq": 203,
@@ -3263,7 +3263,7 @@
   "side": "verso",
   "edgeL": 0.0,
   "edgeR": 50.88,
-  "label": "179"
+  "label": "180"
  },
  {
   "seq": 204,
@@ -3279,7 +3279,7 @@
   "side": "recto",
   "edgeL": 55.7,
   "edgeR": 0.0,
-  "label": "180"
+  "label": "181"
  },
  {
   "seq": 205,
@@ -3295,7 +3295,7 @@
   "side": "verso",
   "edgeL": 0.35,
   "edgeR": 57.31,
-  "label": "181"
+  "label": "182"
  },
  {
   "seq": 206,
@@ -3311,7 +3311,7 @@
   "side": "recto",
   "edgeL": 22.3,
   "edgeR": 0.85,
-  "label": "182"
+  "label": "183"
  },
  {
   "seq": 207,
@@ -3327,7 +3327,7 @@
   "side": "verso",
   "edgeL": 0.77,
   "edgeR": 25.3,
-  "label": "183"
+  "label": "184"
  },
  {
   "seq": 208,
@@ -3343,7 +3343,7 @@
   "side": "recto",
   "edgeL": 53.13,
   "edgeR": 0.0,
-  "label": "184"
+  "label": "185"
  },
  {
   "seq": 209,
@@ -3359,7 +3359,7 @@
   "side": "verso",
   "edgeL": 0.04,
   "edgeR": 57.59,
-  "label": "185"
+  "label": "186"
  },
  {
   "seq": 210,
@@ -3375,7 +3375,7 @@
   "side": "recto",
   "edgeL": 53.72,
   "edgeR": 0.0,
-  "label": "186"
+  "label": "187"
  },
  {
   "seq": 211,
@@ -3391,7 +3391,7 @@
   "side": "verso",
   "edgeL": 0.0,
   "edgeR": 56.51,
-  "label": "187"
+  "label": "188"
  },
  {
   "seq": 212,
@@ -3407,7 +3407,7 @@
   "side": "recto",
   "edgeL": 52.79,
   "edgeR": 0.0,
-  "label": "188"
+  "label": "189"
  },
  {
   "seq": 213,
@@ -3423,7 +3423,7 @@
   "side": "verso",
   "edgeL": 0.29,
   "edgeR": 46.27,
-  "label": "189"
+  "label": "190"
  },
  {
   "seq": 214,
@@ -3439,7 +3439,7 @@
   "side": "recto",
   "edgeL": 55.15,
   "edgeR": 0.0,
-  "label": "190"
+  "label": "191"
  },
  {
   "seq": 215,
@@ -3455,6 +3455,6 @@
   "side": "verso",
   "edgeL": 0.0,
   "edgeR": 57.9,
-  "label": "191"
+  "label": "192"
  }
 ]

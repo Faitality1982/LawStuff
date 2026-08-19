@@ -43,7 +43,26 @@ roman numerals from seq 3; arabic runs contiguously from seq 25 to `191` at the
 end. Title and copyright pages carry no printed number and get none.
 
 Every derived label agrees with its detected side — odd numbers land on rectos,
-even on versos, all 216 of them.
+even on versos, all 216 of them. That check is the proof of completeness: a
+missing page would flip the parity of everything after it and show up at once.
+
+### Audit: all 216 pages verified
+
+Every folio was read off the scans directly (corner crops, four contact sheets).
+The run is contiguous in three stretches, broken only by two blank versos that
+were never scanned:
+
+| Stretch | Pages | Note |
+|---|---|---|
+| seq 2 | `v` | Contents. **`vi` is its blank back — not scanned.** |
+| seq 3–24 | `vii`–`xxviii` | contiguous |
+| seq 25–199 | `1`–`175` | contiguous |
+| seq 200–215 | `177`–`192` | **`176` is blank — not scanned.** seq 200 is the APPENDICES divider. |
+
+Nothing is missing from the book itself. The two absent numbers are blank pages.
+
+Note the scan runs well past page 164 — 164 ends "A Vision for You," then Doctor
+Bob's Nightmare (165–175) and the Appendices follow, all present.
 
 ## Rebuilding
 
