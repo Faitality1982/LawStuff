@@ -12,7 +12,13 @@ for the Wednesday Big Book Study at 903 Court Street, Port Huron (A.A. District 
 | `big-book-3-into-action.pptx` | Pages 73–140 | 35 |
 | `big-book-4-to-employers.pptx` | Pages 141 to the end | 27 |
 
-Split by section because a single deck runs 72 MB. Each one opens with the title
+Plus `aa-big-book-spreads.pptx` — the whole book in one file, 112 slides.
+It is built from a lighter set of page images (`slim.py`, 100 dpi) so it lands at
+24.5 MB, under both Gmail's 25 MB attachment cap and the 30 MiB chat limit. At
+projection size it is indistinguishable from the section decks; those keep the
+full 130 dpi renders.
+
+Split by section because a full-quality combined deck runs 48 MB. Each one opens with the title
 slide and the A.A.W.S. copyright notice, then the spreads. Every spread carries
 the copyright line as a footer.
 
@@ -70,7 +76,8 @@ pip install pymupdf pillow numpy
 python3 prep.py scans/*.pdf     # PDFs -> pages/*.jpg + pages.json
 python3 classify.py             # verso/recto from the punch-hole edge
 node build.js                   # four section decks
-COMBINED=1 node build.js        # one 72 MB deck instead
+python3 slim.py 100 70          # lighter images for the combined deck
+PAGES_DIR=pages-slim COMBINED=1 node build.js   # the whole book, 24.5 MB
 ```
 
 `pages/` and `scans/` are gitignored — only the generators are tracked.

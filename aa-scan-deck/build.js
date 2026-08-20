@@ -110,7 +110,7 @@ function buildDeck(pairs, outName, subtitle) {
     const x0 = x;
     pair.forEach((p, i) => {
       const w = widths[i] * scale;
-      s.addImage({ path: path.join(__dirname, "pages", p.file), x, y, w, h });
+      s.addImage({ path: path.join(__dirname, process.env.PAGES_DIR || "pages", p.file), x, y, w, h });
       x += w;
     });
     const x1 = x;
