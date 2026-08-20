@@ -43,23 +43,23 @@ function pairUp(pages) {
 
 function buildDeck(pairs, outName, subtitle) {
   const pres = new pptxgen();
-  pres.layout = "LAYOUT_WIDE"; // 13.33 x 7.5
+  pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5
 
   // ---- title ----
   const s1 = pres.addSlide();
   s1.background = { color: NAVY };
-  s1.addText("Big Book Study", {
-    x: 0.9, y: 2.0, w: 11.53, h: 1.1,
-    fontFace: HEAD, fontSize: 54, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
+  s1.addText("Big Book Study Group", {
+    x: 0.9, y: 2.05, w: 11.53, h: 1.1,
+    fontFace: HEAD, fontSize: 52, bold: true, color: "FFFFFF", margin: 0, valign: "middle",
   });
-  s1.addText("Presented by A.A. District 23", {
-    x: 0.9, y: 3.15, w: 11.53, h: 0.5,
-    fontFace: BODY, fontSize: 22, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
+  s1.addText("by District 23", {
+    x: 0.9, y: 3.18, w: 11.53, h: 0.45,
+    fontFace: BODY, fontSize: 20, color: ON_NAVY, margin: 0, valign: "middle", charSpacing: 2,
   });
   if (subtitle) {
     s1.addText(subtitle, {
       x: 0.9, y: 3.68, w: 11.53, h: 0.45,
-      fontFace: BODY, fontSize: 17, italic: true, color: "7E92AC", margin: 0, valign: "middle",
+      fontFace: BODY, fontSize: 16, italic: true, color: "7E92AC", margin: 0, valign: "middle",
     });
   }
   s1.addShape(pres.ShapeType.roundRect, {
@@ -95,17 +95,18 @@ function buildDeck(pairs, outName, subtitle) {
       margin: 0, valign: "top", lineSpacingMultiple: 1.2 }
   );
 
-  // ---- spreads ----
-  const TOP = 0.35, BOT = 6.85, BAND = BOT - TOP;
+  // ---- spreads: pages run the full height of the slide ----
+  const TOP = 0.06, BOT = 7.44, BAND = BOT - TOP;
+  const SW = 13.333;
   pairs.forEach((pair) => {
     const s = pres.addSlide();
     s.background = { color: "FFFFFF" };
     const widths = pair.map((p) => (p.w / p.h) * BAND);
     const total = widths.reduce((a, b) => a + b, 0);
-    const scale = total > 12.5 ? 12.5 / total : 1;
+    const scale = total > 11.4 ? 11.4 / total : 1;   // keep room for the margins
     const h = BAND * scale;
     const y = TOP + (BAND - h) / 2;
-    let x = (13.33 - total * scale) / 2;
+    let x = (SW - total * scale) / 2;
     const x0 = x;
     pair.forEach((p, i) => {
       const w = widths[i] * scale;
@@ -114,26 +115,33 @@ function buildDeck(pairs, outName, subtitle) {
     });
     const x1 = x;
 
-    // Printed folios out in the margins, where a book puts them.
+    // Printed folios, out in the margins where a book sets them.
     const left = pair[0], right = pair.length > 1 ? pair[1] : null;
     if (left && left.label && left.side === "verso") {
       s.addText(left.label, {
-        x: 0.45, y: y + h / 2 - 0.4, w: x0 - 0.8, h: 0.8,
-        fontFace: HEAD, fontSize: 34, bold: true, color: FOLIO,
+        x: x0 - 1.05, y: y + h / 2 - 0.35, w: 0.85, h: 0.7,
+        fontFace: HEAD, fontSize: 28, bold: true, color: FOLIO,
         align: "right", valign: "middle", margin: 0,
       });
     }
     const outer = right || (left && left.side === "recto" ? left : null);
     if (outer && outer.label) {
       s.addText(outer.label, {
-        x: x1 + 0.35, y: y + h / 2 - 0.4, w: 13.333 - x1 - 0.8, h: 0.8,
-        fontFace: HEAD, fontSize: 34, bold: true, color: FOLIO,
+        x: x1 + 0.2, y: y + h / 2 - 0.35, w: 0.85, h: 0.7,
+        fontFace: HEAD, fontSize: 28, bold: true, color: FOLIO,
         align: "left", valign: "middle", margin: 0,
       });
     }
+
+    // Copyright, set on its side up the left edge. The box is defined
+    // horizontally and rotated about its centre, so x is deliberately
+    // negative - after the 270 turn it lands in the left margin.
+    const CW = 7.2, CH = 0.46, CX = 0.32, CY = 3.75;
     s.addText(FOOTER, {
-      x: 0.6, y: 6.98, w: 12.13, h: 0.3,
-      fontFace: BODY, fontSize: 9, color: MUTED, valign: "middle", margin: 0,
+      x: CX - CW / 2, y: CY - CH / 2, w: CW, h: CH,
+      rotate: 270,
+      fontFace: BODY, fontSize: 7, color: MUTED,
+      align: "center", valign: "middle", margin: 0,
     });
   });
 

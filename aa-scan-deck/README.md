@@ -20,19 +20,17 @@ the copyright line as a footer.
 
 ## Layout and margins
 
-Slide is 13.33 x 7.50 in. The pages are 0.675 as wide as they are tall, so height
-is the binding constraint and the spread comes out **8.75 in wide**, leaving:
+Slide is 13.33 x 7.50 in. The pages run the full height — a 7.38 in band, 0.06 in
+clear top and bottom — because in a room the size of the page is the whole point.
 
-| Where | Free |
-|---|---|
-| Each side | **2.29 in** |
-| Above | 0.35 in |
-| Below | 0.65 in (footer uses 0.30) |
+The pages are 0.675 as wide as they are tall, so height is the binding constraint
+and the spread comes out **9.96 in wide**, leaving **1.69 in on each side**. That
+side margin is permanent; it cannot be traded away for a taller page.
 
-That side margin cannot be recovered by scaling — squeezing the top and bottom to
-almost nothing only takes it from 2.29 to 2.02 in. So it is permanent space, and
-the printed folio now sits in it, on the outer edge of each page the way a book
-sets it. Roughly 1.6 in per side is still clear if more belongs there later.
+It carries two things: the printed folio, set on the outer edge of each page the
+way a book sets it, and the copyright notice, turned on its side and running up
+the far left edge. Nothing sits along the bottom any more, which is what let the
+pages grow.
 
 ## Page numbers
 
