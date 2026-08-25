@@ -5,7 +5,10 @@ Avery 8371: US Letter (8.5" x 11"), 10 cards per sheet laid out
 2 columns x 5 rows, each card 3.5" x 2", no gutters between cards,
 0.75" side margins and 0.5" top/bottom margins.
 
-Each input PDF's first page is placed 10-up on its own output sheet.
+Every page of each input PDF is placed 10-up on its own output sheet, so
+a two-page (front/back) card yields a front sheet followed by a back
+sheet — print duplex "flip on long edge" and the sides line up, because
+the 8371 grid is centered on the sheet.
 Print-shop files with a standard bleed (e.g. OvernightPrints
 3.75" x 2.25" = 1/8" per side) are detected and center-cropped to the
 3.5" x 2" trim size; anything else is scaled to fit. Portrait-oriented
@@ -121,26 +124,31 @@ def add_guides(sheet):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Tile business cards onto Avery 8371 sheets (10-up).")
-    ap.add_argument("cards", nargs="+", help="Business card PDF(s); first page of each is used")
+    ap.add_argument("cards", nargs="+", help="Business card PDF(s); each page becomes a sheet")
     ap.add_argument("-o", "--output", default="avery8371-sheets.pdf", help="Output PDF path")
     ap.add_argument("--guides", action="store_true", help="Add faint cut guides in the margins")
+    ap.add_argument("--front-only", action="store_true", help="Use only page 1 of each input")
     args = ap.parse_args(argv)
 
     writer = PdfWriter()
+    sheets = 0
     for path in args.cards:
         p = Path(path)
         if not p.exists():
             sys.exit(f"error: file not found: {p}")
         reader = PdfReader(str(p))
-        card = reader.pages[0]
-        sheet, kind = make_sheet(writer, card)
-        if args.guides:
-            add_guides(sheet)
-        print(f"  {p.name}: 10-up sheet added ({kind})")
+        pages = reader.pages[:1] if args.front_only else reader.pages
+        for n, card in enumerate(pages, 1):
+            sheet, kind = make_sheet(writer, card)
+            if args.guides:
+                add_guides(sheet)
+            sheets += 1
+            side = "" if len(pages) == 1 else f" side {n}/{len(pages)}"
+            print(f"  {p.name}{side}: 10-up sheet added ({kind})")
 
     with open(args.output, "wb") as f:
         writer.write(f)
-    print(f"wrote {args.output} ({len(args.cards)} sheet(s))")
+    print(f"wrote {args.output} ({sheets} sheet(s))")
 
 
 if __name__ == "__main__":
