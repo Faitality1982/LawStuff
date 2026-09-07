@@ -41,6 +41,63 @@ function pairUp(pages) {
   return pairs;
 }
 
+
+// Chris Zimmer's placement list, from his notebook. Each entry becomes a slide
+// inserted straight after the spread carrying that page. Images are dropped in
+// by hand - see README.
+const PHOTOS = [
+  { at: "xi",   title: "Rowland Hazard",            kind: "photo",   note: "Photograph, with a brief history." },
+  { at: "xii",  title: "The Oxford Group",          kind: "photo",   note: "Photograph." },
+  { at: "xiii", title: "A.A. Number Three",         kind: "photo",   note: "Bill D. \u2014 the man in the bed, Akron City Hospital, 1935." },
+  { at: "xvii", title: "Clarence Snyder",           kind: "photo",   note: "Photograph." },
+  { at: "xxii", title: "William D. Silkworth, M.D.",kind: "photo",   note: "Photograph." },
+  { at: "xxiii",title: "Towns Hospital",            kind: "photo",   note: "293 Central Park West, New York City." },
+  { at: "xxv",  title: "Alcohol Metabolism",        kind: "diagram", note: "Diagram." },
+  { at: "1",    title: "Bill W.",                   kind: "photo",   note: "Photograph." },
+  { at: "1",    title: "The Tombstone",             kind: "photo",   note: "Thomas Thetcher, Winchester Cathedral \u2014 \u201cOr by pot.\u201d" },
+  { at: "7",    title: "Dr. Leonard Strong, M.D.",  kind: "photo",   note: "Bill\u2019s brother-in-law." },
+  { at: "9",    title: "Ebby Thatcher",             kind: "photo",   note: "Bill\u2019s sponsor." },
+  { at: "17",   title: "The Fellowship",            kind: "diagram", note: "Diagram." },
+  { at: "26",   title: "Dr. Carl Jung",             kind: "photo",   note: "Photograph." },
+  { at: "28",   title: "William James",             kind: "photo",   note: "Photograph." },
+  { at: "63",   title: "Handout Sheet",             kind: "handout", note: "Handout." },
+  { at: "64",   title: "Inventory Handouts",        kind: "handout", note: "Handout." },
+  { at: "86",   title: "Eleventh Step Inventory",   kind: "handout", note: "Handout." },
+  { at: "136",  title: "Hank Parkhurst",            kind: "photo",   note: "Chapter 10, To Employers." },
+  { at: "165",  title: "Dr. Bob",                   kind: "photo",   note: "Photograph." },
+];
+
+function addPlaceholder(pres, s, item, ref) {
+  s.background = { color: "FFFFFF" };
+  s.addText(item.title, {
+    x: 0.6, y: 0.42, w: 9.0, h: 0.7,
+    fontFace: HEAD, fontSize: 38, bold: true, color: NAVY, margin: 0, valign: "middle",
+  });
+  s.addText(ref, {
+    x: 0.6, y: 1.08, w: 9.0, h: 0.4,
+    fontFace: BODY, fontSize: 16, italic: true, color: MUTED, margin: 0, valign: "middle",
+  });
+  s.addShape(pres.ShapeType.roundRect, {
+    x: 3.05, y: 1.75, w: 7.2, h: 4.45,
+    fill: { color: "F7F9FB" }, rectRadius: 0.08,
+    line: { color: "AEBBC9", width: 1.5, dashType: "dash" },
+  });
+  s.addText(
+    [
+      { text: item.kind.toUpperCase(), options: { fontSize: 11, bold: true, color: MUTED, charSpacing: 2, breakLine: true } },
+      { text: "\n", options: { fontSize: 8, breakLine: true } },
+      { text: item.note, options: { fontSize: 17, color: NAVY, breakLine: true } },
+      { text: "\n", options: { fontSize: 8, breakLine: true } },
+      { text: "Drop the image into this frame in PowerPoint.", options: { fontSize: 13, italic: true, color: MUTED } },
+    ],
+    { x: 3.45, y: 1.75, w: 6.4, h: 4.45, fontFace: BODY, align: "center", valign: "middle", margin: 0 }
+  );
+  s.addText("Credit:", {
+    x: 3.05, y: 6.35, w: 7.2, h: 0.35,
+    fontFace: BODY, fontSize: 12, color: MUTED, margin: 0, valign: "middle",
+  });
+}
+
 function buildDeck(pairs, outName, subtitle) {
   const pres = new pptxgen();
   pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5
@@ -142,6 +199,15 @@ function buildDeck(pairs, outName, subtitle) {
       rotate: 270,
       fontFace: BODY, fontSize: 7, color: MUTED,
       align: "center", valign: "middle", margin: 0,
+    });
+
+    // Zimmer's photo slides, straight after the spread carrying that page.
+    pair.forEach((p) => {
+      PHOTOS.filter((it) => it.at === p.label).forEach((it) => {
+        const ps = pres.addSlide();
+        const roman = !/^[0-9]+$/.test(p.label);
+        addPlaceholder(pres, ps, it, (roman ? "Page " : "Page ") + p.label);
+      });
     });
   });
 

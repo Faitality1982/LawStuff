@@ -105,6 +105,35 @@ against their printed page numbers (20 and 21) and are correct. They are flagged
 A verso followed by a recto becomes a spread. Anything else stands alone — the
 title page, and rectos whose blank verso was not scanned.
 
+## Photo slides
+
+Chris Zimmer's placement list (his notebook, two pages) is in `PHOTOS` in
+`build.js`. Each entry inserts a slide immediately after the spread carrying that
+page, with a dashed frame sized for the image, a caption, and a `Credit:` line.
+
+Nineteen of them: Rowland Hazard (xi), Oxford Group (xii), A.A. Number Three
+(xiii), Clarence Snyder (xvii), Silkworth (xxii), Towns Hospital (xxiii),
+alcohol-metabolism diagram (xxv), Bill W. and the Thetcher tombstone (1),
+Leonard Strong (7), Ebby Thatcher (9), Fellowship diagram (17), Carl Jung (26),
+William James (28), handout sheet (63), inventory handouts (64), Eleventh Step
+inventory (86), Hank Parkhurst (136), Dr. Bob (165).
+
+**The frames are empty.** Zimmer's emails are links to web pages, not attached
+photos, and this build environment blocks all outbound web access by policy, so
+the images cannot be fetched here. They get dropped in by hand.
+
+Three spellings were corrected against the record: Dotson (not Dodson), Snyder
+(not Synder), Carl Jung (not Karl).
+
+Five of the nineteen are not photographs at all — the two diagrams and the three
+handouts. Those are original artwork and could be built rather than sourced.
+
+## Recovering the page images
+
+`pages/` and `pages-slim/` are gitignored, so a fresh container has the decks but
+not the JPEGs. `recover.py` pulls every page image back out of the committed
+section decks in slide order and rewrites `pages/`. No need for the source PDFs.
+
 ## Permission
 
 A.A.W.S. granted permission by email (Drew Deetz, Intellectual Property
