@@ -142,3 +142,48 @@ A.A. meeting, provided their copyright notice is displayed. It is on slide 2 of
 every deck and in the footer of every spread.
 
 Intended for use inside the group's own class. Not for distribution.
+
+---
+
+## Next step (picking this up in a new session)
+
+The deck is complete and correct. The only outstanding work is filling the 19
+photo frames.
+
+1. `pip install python-pptx pillow numpy pymupdf && npm install pptxgenjs`
+2. `python3 recover.py` — rebuilds `pages/` from the committed section decks
+3. Source the 14 photographs (list below), drop each into `photos/` named by its
+   slug, then wire them into `PHOTOS` in `build.js` and rebuild.
+4. `node build.js` for the four section decks;
+   `python3 slim.py 98 66 && PAGES_DIR=pages-slim COMBINED=1 node build.js`
+   for the single combined file (keep it under 25 MB so it can be emailed).
+
+### The 14 photographs still needed
+
+| Slug | Subject | Page |
+|---|---|---|
+| `rowland-hazard` | Rowland Hazard | xi |
+| `oxford-group` | The Oxford Group | xii |
+| `aa-number-three` | A.A. Number Three, the man in the bed | xiii |
+| `clarence-snyder` | Clarence Snyder | xvii |
+| `silkworth` | Dr. William D. Silkworth | xxii |
+| `towns-hospital` | Towns Hospital | xxiii |
+| `bill-w` | Bill W. | 1 |
+| `thetcher-tombstone` | Thomas Thetcher's tombstone | 1 |
+| `leonard-strong` | Dr. Leonard Strong | 7 |
+| `ebby-thatcher` | Ebby Thatcher | 9 |
+| `carl-jung` | Dr. Carl Jung | 26 |
+| `william-james` | William James | 28 |
+| `hank-parkhurst` | Hank Parkhurst | 136 |
+| `dr-bob` | Dr. Bob | 165 |
+
+Chris Zimmer emailed links rather than files; his iPhone shares send the page
+address, not the picture. Several point at Google *search results*, so there is
+no single image at the other end — those need a human to pick the right one.
+
+### Still to be made (no sourcing required)
+
+Two diagrams and three handouts from Zimmer's list are original artwork, not
+photographs: alcohol metabolism (xxv), the Fellowship (17), handout sheet (63),
+inventory handouts (64), Eleventh Step inventory (86). Frames are in place;
+content to be specified.
