@@ -46,28 +46,44 @@ function pairUp(pages) {
 // inserted straight after the spread carrying that page. Images are dropped in
 // by hand - see README.
 const PHOTOS = [
-  { at: "xi",   title: "Rowland Hazard",            kind: "photo",   note: "Photograph, with a brief history." },
-  { at: "xii",  title: "The Oxford Group",          kind: "photo",   note: "Photograph." },
-  { at: "xiii", title: "A.A. Number Three",         kind: "photo",   note: "Bill D. \u2014 the man in the bed, Akron City Hospital, 1935." },
-  { at: "xvii", title: "Clarence Snyder",           kind: "photo",   note: "Photograph." },
-  { at: "xxii", title: "William D. Silkworth, M.D.",kind: "photo",   note: "Photograph." },
-  { at: "xxiii",title: "Towns Hospital",            kind: "photo",   note: "293 Central Park West, New York City." },
-  { at: "xxv",  title: "Alcohol Metabolism",        kind: "diagram", note: "Diagram." },
-  { at: "1",    title: "Bill W.",                   kind: "photo",   note: "Photograph." },
-  { at: "1",    title: "The Tombstone",             kind: "photo",   note: "Thomas Thetcher, Winchester Cathedral \u2014 \u201cOr by pot.\u201d" },
-  { at: "7",    title: "Dr. Leonard Strong, M.D.",  kind: "photo",   note: "Bill\u2019s brother-in-law." },
-  { at: "9",    title: "Ebby Thatcher",             kind: "photo",   note: "Bill\u2019s sponsor." },
-  { at: "17",   title: "The Fellowship",            kind: "diagram", note: "Diagram." },
-  { at: "26",   title: "Dr. Carl Jung",             kind: "photo",   note: "Photograph." },
-  { at: "28",   title: "William James",             kind: "photo",   note: "Photograph." },
-  { at: "63",   title: "Handout Sheet",             kind: "handout", note: "Handout." },
-  { at: "64",   title: "Inventory Handouts",        kind: "handout", note: "Handout." },
-  { at: "86",   title: "Eleventh Step Inventory",   kind: "handout", note: "Handout." },
-  { at: "136",  title: "Hank Parkhurst",            kind: "photo",   note: "Chapter 10, To Employers." },
-  { at: "165",  title: "Dr. Bob",                   kind: "photo",   note: "Photograph." },
+  { slug: "rowland-hazard",          at: "xi",   title: "Rowland Hazard",            kind: "photo",   note: "Photograph, with a brief history." },
+  { slug: "oxford-group",            at: "xii",  title: "The Oxford Group",          kind: "photo",   note: "Frank N. D. Buchman, the group\u2019s founder." },
+  { slug: "aa-number-three",         at: "xiii", title: "A.A. Number Three",         kind: "photo",   note: "Bill D. \u2014 the man in the bed, Akron City Hospital, 1935." },
+  { slug: "clarence-snyder",         at: "xvii", title: "Clarence Snyder",           kind: "photo",   note: "Photograph." },
+  { slug: "silkworth",               at: "xxii", title: "William D. Silkworth, M.D.",kind: "photo",   note: "Photograph." },
+  { slug: "towns-hospital",          at: "xxiii",title: "Towns Hospital",            kind: "photo",   note: "293 Central Park West, New York City \u2014 the building today." },
+  { slug: "alcohol-metabolism",      at: "xxv",  title: "Alcohol Metabolism",        kind: "diagram", note: "Diagram." },
+  { slug: "bill-w",                  at: "1",    title: "Bill W.",                   kind: "photo",   note: "Photograph." },
+  { slug: "thetcher-tombstone",      at: "1",    title: "The Tombstone",             kind: "photo",   note: "Thomas Thetcher, Winchester Cathedral \u2014 \u201cOr by pot.\u201d" },
+  { slug: "leonard-strong",          at: "7",    title: "Dr. Leonard V. Strong, Jr.",kind: "photo",   note: "Bill\u2019s brother-in-law, an osteopath." },
+  { slug: "ebby-thatcher",           at: "9",    title: "Ebby Thatcher",             kind: "photo",   note: "Bill\u2019s sponsor." },
+  { slug: "fellowship",              at: "17",   title: "The Fellowship",            kind: "diagram", note: "Diagram." },
+  { slug: "carl-jung",               at: "26",   title: "Dr. Carl Jung",             kind: "photo",   note: "Photograph." },
+  { slug: "william-james",           at: "28",   title: "William James",             kind: "photo",   note: "Photograph." },
+  { slug: "handout-sheet",           at: "63",   title: "Handout Sheet",             kind: "handout", note: "Handout." },
+  { slug: "inventory-handouts",      at: "64",   title: "Inventory Handouts",        kind: "handout", note: "Handout." },
+  { slug: "eleventh-step-inventory", at: "86",   title: "Eleventh Step Inventory",   kind: "handout", note: "Handout." },
+  { slug: "hank-parkhurst",          at: "136",  title: "Hank Parkhurst",            kind: "photo",   note: "Chapter 10, To Employers." },
+  { slug: "dr-bob",                  at: "165",  title: "Dr. Bob",                   kind: "photo",   note: "Photograph." },
 ];
 
-function addPlaceholder(pres, s, item, ref) {
+// Provenance for every image dropped into a photo frame. Written by
+// fetch_photos.py, read here so the credit line on a slide and the licence
+// record in the repo can never drift apart.
+const MANIFEST = (() => {
+  const f = path.join(__dirname, "photos.json");
+  return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
+})();
+
+function photoFile(slug) {
+  const rec = MANIFEST[slug];
+  if (!rec || !rec.file) return null;
+  const f = path.join(__dirname, "photos", rec.file);
+  return fs.existsSync(f) ? f : null;
+}
+
+// Title and page reference, shared by the filled and unfilled forms.
+function addPhotoHeading(s, item, ref) {
   s.background = { color: "FFFFFF" };
   s.addText(item.title, {
     x: 0.6, y: 0.42, w: 9.0, h: 0.7,
@@ -77,8 +93,14 @@ function addPlaceholder(pres, s, item, ref) {
     x: 0.6, y: 1.08, w: 9.0, h: 0.4,
     fontFace: BODY, fontSize: 16, italic: true, color: MUTED, margin: 0, valign: "middle",
   });
+}
+
+const FRAME = { x: 3.05, y: 1.75, w: 7.2, h: 4.45 };
+
+function addPlaceholder(pres, s, item, ref) {
+  addPhotoHeading(s, item, ref);
   s.addShape(pres.ShapeType.roundRect, {
-    x: 3.05, y: 1.75, w: 7.2, h: 4.45,
+    x: FRAME.x, y: FRAME.y, w: FRAME.w, h: FRAME.h,
     fill: { color: "F7F9FB" }, rectRadius: 0.08,
     line: { color: "AEBBC9", width: 1.5, dashType: "dash" },
   });
@@ -90,12 +112,65 @@ function addPlaceholder(pres, s, item, ref) {
       { text: "\n", options: { fontSize: 8, breakLine: true } },
       { text: "Drop the image into this frame in PowerPoint.", options: { fontSize: 13, italic: true, color: MUTED } },
     ],
-    { x: 3.45, y: 1.75, w: 6.4, h: 4.45, fontFace: BODY, align: "center", valign: "middle", margin: 0 }
+    { x: 3.45, y: FRAME.y, w: 6.4, h: FRAME.h, fontFace: BODY, align: "center", valign: "middle", margin: 0 }
   );
   s.addText("Credit:", {
-    x: 3.05, y: 6.35, w: 7.2, h: 0.35,
+    x: FRAME.x, y: 6.35, w: FRAME.w, h: 0.35,
     fontFace: BODY, fontSize: 12, color: MUTED, margin: 0, valign: "middle",
   });
+}
+
+// A frame with its photograph in it.
+//
+// The archival portraits are small - several are under 250 px on their long
+// edge, which is simply how they survive. Blown up to fill the frame they go
+// to mush on a projector, so the image is never drawn larger than MIN_DPI
+// would justify: a small sharp portrait reads from the back of the room, a
+// big soft one does not. Aspect ratio is preserved either way - these are
+// photographs of real people and a stretched face reads as a mistake.
+const MIN_DPI = 72;
+const PHOTO_BAND = { y: 1.72, h: 4.5, w: 9.6 };
+
+function addPhoto(pres, s, item, ref, file) {
+  addPhotoHeading(s, item, ref);
+  const rec = MANIFEST[item.slug] || {};
+  const px = rec.px || [];
+  const band = PHOTO_BAND;
+
+  let w, h;
+  if (px.length === 2 && px[0] > 0 && px[1] > 0) {
+    const nw = px[0] / MIN_DPI, nh = px[1] / MIN_DPI;      // biggest honest size
+    const fit = Math.min(band.w / nw, band.h / nh, 1);
+    w = nw * fit; h = nh * fit;
+  } else {
+    h = band.h; w = band.h;                                 // no dimensions: be conservative
+  }
+  const x = (13.333 - w) / 2, y = band.y + (band.h - h) / 2;
+
+  s.addImage({ path: file, x, y, w, h });
+  s.addShape(pres.ShapeType.rect, {
+    x, y, w, h, fill: { type: "none" }, line: { color: "D3DAE2", width: 0.75 },
+  });
+
+  // "Photograph." earns its place on an empty frame - it says what is meant to
+  // go there. Above the photograph itself it says nothing, so it is dropped.
+  if (item.note && !/^(Photograph|Diagram|Handout)\.$/.test(item.note)) {
+    s.addText(item.note, {
+      x: 0.6, y: 1.52, w: 9.0, h: 0.4,
+      fontFace: BODY, fontSize: 14, color: NAVY, margin: 0, valign: "middle",
+    });
+  }
+  s.addText("Credit: " + (rec.credit || "\u2014"), {
+    x: 1.0, y: 6.42, w: 11.33, h: 0.6,
+    fontFace: BODY, fontSize: 9, color: MUTED, margin: 0,
+    align: "center", valign: "middle", lineSpacingMultiple: 1.15,
+  });
+}
+
+function addPhotoSlide(pres, s, item, ref) {
+  const file = photoFile(item.slug);
+  if (file) addPhoto(pres, s, item, ref, file);
+  else addPlaceholder(pres, s, item, ref);
 }
 
 function buildDeck(pairs, outName, subtitle) {
@@ -206,7 +281,7 @@ function buildDeck(pairs, outName, subtitle) {
       PHOTOS.filter((it) => it.at === p.label).forEach((it) => {
         const ps = pres.addSlide();
         const roman = !/^[0-9]+$/.test(p.label);
-        addPlaceholder(pres, ps, it, (roman ? "Page " : "Page ") + p.label);
+        addPhotoSlide(pres, ps, it, "Page " + p.label);
       });
     });
   });
@@ -218,6 +293,16 @@ function buildDeck(pairs, outName, subtitle) {
 const pages = JSON.parse(fs.readFileSync(path.join(__dirname, "pages.json"), "utf8"));
 
 (async () => {
+  // Proof sheet: the photo slides on their own. Checking a frame, an image
+  // size or a credit line should not cost a rebuild of 216 page images.
+  if (process.env.PHOTOS_ONLY) {
+    const pres = new pptxgen();
+    pres.layout = "LAYOUT_WIDE";
+    PHOTOS.forEach((it) => addPhotoSlide(pres, pres.addSlide(), it, "Page " + it.at));
+    await pres.writeFile({ fileName: path.join(__dirname, "photo-slides-proof.pptx") });
+    console.log("  photo-slides-proof.pptx  (" + PHOTOS.length + " slides)");
+    return;
+  }
   if (process.env.COMBINED) {
     await buildDeck(pairUp(pages), "aa-big-book-spreads.pptx", null);
   } else {

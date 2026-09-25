@@ -12,9 +12,13 @@ for the Wednesday Big Book Study at 903 Court Street, Port Huron (A.A. District 
 | `big-book-3-into-action.pptx` | Pages 73–140 | 35 |
 | `big-book-4-to-employers.pptx` | Pages 141 to the end | 27 |
 
-Plus `aa-big-book-spreads.pptx` — the whole book in one file, 112 slides.
-It is built from a lighter set of page images (`slim.py`, 100 dpi) so it lands at
-24.5 MB, under both Gmail's 25 MB attachment cap and the 30 MiB chat limit. At
+Each section deck also carries the photo slides that fall inside its pages, so
+they run 35, 36, 39 and 30 slides respectively.
+
+Plus `aa-big-book-spreads.pptx` — the whole book in one file, 131 slides
+(110 spreads, the title and copyright slides, and the 19 photo slides).
+It is built from a lighter set of page images (`slim.py`, 98 dpi) so it lands at
+24.1 MB, under both Gmail's 25 MB attachment cap and the 30 MiB chat limit. At
 projection size it is indistinguishable from the section decks; those keep the
 full 130 dpi renders.
 
@@ -70,17 +74,29 @@ Bob's Nightmare (165–175) and the Appendices follow, all present.
 
 ## Rebuilding
 
+The scan PDFs are gone, so a rebuild starts from `recover.py`, which pulls the
+216 page images back out of the committed section decks. `prep.py` and
+`classify.py` are kept for the record but need `scans/`, which no longer exists.
+
 ```bash
 npm install pptxgenjs
-pip install pymupdf pillow numpy
-python3 prep.py scans/*.pdf     # PDFs -> pages/*.jpg + pages.json
-python3 classify.py             # verso/recto from the punch-hole edge
+pip install pymupdf pillow numpy python-pptx
+python3 recover.py              # committed decks -> pages/*.jpg
+python3 fetch_photos.py         # photo-slide images -> photos/ + photos.json
 node build.js                   # four section decks
-python3 slim.py 100 70          # lighter images for the combined deck
-PAGES_DIR=pages-slim COMBINED=1 node build.js   # the whole book, 24.5 MB
+python3 slim.py 98 66           # lighter page images for the combined deck
+PAGES_DIR=pages-slim COMBINED=1 node build.js   # the whole book, under 25 MB
 ```
 
-`pages/` and `scans/` are gitignored — only the generators are tracked.
+`PHOTOS_ONLY=1 node build.js` writes `photo-slides-proof.pptx` — the 19 photo
+slides on their own. Checking a frame, an image size or a credit line should not
+cost a rebuild of 216 page images.
+
+`slim.py` rescales `pages/` rather than re-rendering the PDFs, for the same
+reason: `pages/` is the only surviving copy of the scans.
+
+`pages/`, `pages-slim/` and `scans/` are gitignored. `photos/` is tracked — the
+images are small and the deck cannot be rebuilt without them.
 
 ## How pages are ordered
 
@@ -109,7 +125,7 @@ title page, and rectos whose blank verso was not scanned.
 
 Chris Zimmer's placement list (his notebook, two pages) is in `PHOTOS` in
 `build.js`. Each entry inserts a slide immediately after the spread carrying that
-page, with a dashed frame sized for the image, a caption, and a `Credit:` line.
+page, with a caption and a `Credit:` line.
 
 Nineteen of them: Rowland Hazard (xi), Oxford Group (xii), A.A. Number Three
 (xiii), Clarence Snyder (xvii), Silkworth (xxii), Towns Hospital (xxiii),
@@ -118,15 +134,66 @@ Leonard Strong (7), Ebby Thatcher (9), Fellowship diagram (17), Carl Jung (26),
 William James (28), handout sheet (63), inventory handouts (64), Eleventh Step
 inventory (86), Hank Parkhurst (136), Dr. Bob (165).
 
-**The frames are empty.** Zimmer's emails are links to web pages, not attached
-photos, and this build environment blocks all outbound web access by policy, so
-the images cannot be fetched here. They get dropped in by hand.
+**All fourteen photographs are in.** The five remaining frames are the two
+diagrams and the three handouts — original artwork, to be drawn rather than
+sourced.
 
-Three spellings were corrected against the record: Dotson (not Dodson), Snyder
-(not Synder), Carl Jung (not Karl).
+Zimmer's emails are links to web pages rather than attached images, so the
+photographs were taken from the pages he sent (and, where a better-licensed copy
+existed, from Wikimedia Commons or the Library of Congress instead).
 
-Five of the nineteen are not photographs at all — the two diagrams and the three
-handouts. Those are original artwork and could be built rather than sourced.
+### Where each photograph came from
+
+`fetch_photos.py` downloads them and writes `photos.json`, which `build.js` reads
+to print the credit under each frame. The manifest is the provenance record: an
+image in `photos/` that is not in the manifest never reaches a slide. Exact
+source titles, never a search — Commons holds three other Rowland Hazards, and
+the Library of Congress item captioned "[William James, half-length portrait]"
+is a Hogarth painting of an 18th-century namesake, not the psychologist.
+
+| Slug | Source | Licence |
+|---|---|---|
+| `carl-jung` | Wikimedia Commons (ETH-Bibliothek) | Public Domain Mark |
+| `william-james` | Wikimedia Commons (National Portrait Gallery) | Public domain |
+| `thetcher-tombstone` | Wikimedia Commons | CC BY-SA 3.0 |
+| `oxford-group` | Library of Congress, Harris & Ewing | No known restrictions |
+| `towns-hospital` | Flickr, Eden/Janine/Jim | CC BY 2.0 |
+| `bill-w` | aamidsurrey.org.uk | not cleared |
+| `dr-bob` | aamidsurrey.org.uk | not cleared |
+| `silkworth` | aamidsurrey.org.uk | not cleared |
+| `ebby-thatcher` | aamidsurrey.org.uk | not cleared |
+| `rowland-hazard` | aamidsurrey.org.uk | not cleared |
+| `clarence-snyder` | aamidsurrey.org.uk | not cleared |
+| `aa-number-three` | aamidsurrey.org.uk | not cleared |
+| `hank-parkhurst` | aamidsurrey.org.uk | not cleared |
+| `leonard-strong` | aalkies.wordpress.com | not cleared |
+
+The nine marked *not cleared* are early A.A. archival photographs. The sites
+hosting them are not the rights holders and grant no licence; the rights almost
+certainly sit with A.A. archives. `photos.json` records that on every one rather
+than implying a permission nobody gave. **This is a separate question from the
+A.A.W.S. literature permission below, which covers the scanned pages and not
+these photographs.** They are in the deck because they are the pictures Zimmer
+picked, for display inside the group's own class.
+
+`oxford-group` is a portrait of Frank Buchman, the group's founder, and the slide
+says so — there is no properly-sourced photograph of the group itself.
+`towns-hospital` is the building as it stands today, and the slide says that too.
+
+### Two corrections
+
+- The Leonard Strong slide read "Dr. Leonard Strong, M.D." He was an osteopath,
+  not a physician; it now reads "Dr. Leonard V. Strong, Jr."
+- Earlier passes corrected three spellings against the record: Dotson (not
+  Dodson), Snyder (not Synder), Carl Jung (not Karl).
+
+### Sizing
+
+The archival portraits are small — several are under 250 px on the long edge,
+which is simply how they survive. `build.js` never draws one larger than
+`MIN_DPI` (72) would justify, so a 173 px portrait lands at 2.4 in rather than
+being stretched across the frame. A small sharp photograph reads from the back of
+the room; a big soft one does not.
 
 ## Recovering the page images
 
@@ -143,47 +210,47 @@ every deck and in the footer of every spread.
 
 Intended for use inside the group's own class. Not for distribution.
 
+That permission covers the scanned pages. It does not cover the nine early A.A.
+photographs marked *not cleared* above, whose rights sit elsewhere — see the
+photo-slide section.
+
 ---
 
 ## Next step (picking this up in a new session)
 
-The deck is complete and correct. The only outstanding work is filling the 19
-photo frames.
+The deck is complete and correct, and all fourteen photographs are in. The only
+outstanding work is the five artwork frames.
 
 1. `pip install python-pptx pillow numpy pymupdf && npm install pptxgenjs`
 2. `python3 recover.py` — rebuilds `pages/` from the committed section decks
-3. Source the 14 photographs (list below), drop each into `photos/` named by its
-   slug, then wire them into `PHOTOS` in `build.js` and rebuild.
+3. `python3 fetch_photos.py` — rebuilds `photos/` (only needed on a fresh clone
+   if `photos/` is somehow missing; it is tracked)
 4. `node build.js` for the four section decks;
    `python3 slim.py 98 66 && PAGES_DIR=pages-slim COMBINED=1 node build.js`
    for the single combined file (keep it under 25 MB so it can be emailed).
 
-### The 14 photographs still needed
-
-| Slug | Subject | Page |
-|---|---|---|
-| `rowland-hazard` | Rowland Hazard | xi |
-| `oxford-group` | The Oxford Group | xii |
-| `aa-number-three` | A.A. Number Three, the man in the bed | xiii |
-| `clarence-snyder` | Clarence Snyder | xvii |
-| `silkworth` | Dr. William D. Silkworth | xxii |
-| `towns-hospital` | Towns Hospital | xxiii |
-| `bill-w` | Bill W. | 1 |
-| `thetcher-tombstone` | Thomas Thetcher's tombstone | 1 |
-| `leonard-strong` | Dr. Leonard Strong | 7 |
-| `ebby-thatcher` | Ebby Thatcher | 9 |
-| `carl-jung` | Dr. Carl Jung | 26 |
-| `william-james` | William James | 28 |
-| `hank-parkhurst` | Hank Parkhurst | 136 |
-| `dr-bob` | Dr. Bob | 165 |
-
-Chris Zimmer emailed links rather than files; his iPhone shares send the page
-address, not the picture. Several point at Google *search results*, so there is
-no single image at the other end — those need a human to pick the right one.
+Use `PHOTOS_ONLY=1 node build.js` while working on a photo or artwork frame —
+it writes `photo-slides-proof.pptx`, the 19 slides on their own, in a second.
 
 ### Still to be made (no sourcing required)
 
 Two diagrams and three handouts from Zimmer's list are original artwork, not
 photographs: alcohol metabolism (xxv), the Fellowship (17), handout sheet (63),
 inventory handouts (64), Eleventh Step inventory (86). Frames are in place;
-content to be specified.
+content to be specified. Zimmer's notebook gives no detail beyond the titles, so
+what each one should say still has to come from him or from the group.
+
+A drawn frame needs no change to `build.js`: save the artwork as
+`photos/<slug>.jpg`, add an entry to `photos.json` with its `file`, `px` and a
+`credit`, and it renders like any photograph. The slugs are
+`alcohol-metabolism`, `fellowship`, `handout-sheet`, `inventory-handouts` and
+`eleventh-step-inventory`.
+
+### Size budget
+
+The combined deck sits at 24.1 MB against the 25 MB mail cap. The page images
+are the bulk of that; `slim.py 98 66` is what holds it down. The photographs are
+about 1 MB of the total — `MAXPX` in `fetch_photos.py` caps them at 1000 px,
+which is already more than a 1080p projector can show at the size they are drawn.
+If the artwork frames push it over, drop `slim.py` to 95 dpi before touching the
+photographs.
